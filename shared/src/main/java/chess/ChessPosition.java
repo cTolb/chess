@@ -31,4 +31,31 @@ public class ChessPosition {
     public int getColumn() {
         return col;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = row * 31;
+        hash = hash + col * 31;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (obj == this) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        ChessPosition other = (ChessPosition) obj;
+        return row == other.row && col == other.col;
+    }
+
+    @Override
+    public String toString() {
+        return "Board Position{" + "row = " + row + "col = " + col + "}";
+    }
 }
