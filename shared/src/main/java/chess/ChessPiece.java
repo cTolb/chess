@@ -52,15 +52,79 @@ public class ChessPiece {
      * @return Collection of valid moves
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
-        //Create empty collection to store moves
+        //get piece type
+        PieceType pieceType = getPieceType();
+
+        //call move function depending on piece type, else return null
+        if (pieceType == PieceType.KING) {
+            return kingMoves(board, myPosition);
+        }
+        if (pieceType ==PieceType.QUEEN) {
+            return queenMoves(board, myPosition);
+        }
+        if (pieceType == PieceType.BISHOP) {
+            return bishopMoves(board, myPosition);
+        }
+        if (pieceType == PieceType.KNIGHT) {
+            return knightMoves(board, myPosition);
+        }
+        if (pieceType == PieceType.ROOK) {
+            return rookMoves(board, myPosition);
+        }
+        if (pieceType == PieceType.PAWN) {
+            return pawnMoves(board, myPosition);
+        }
+        return null;
+    }
+
+    public Collection<ChessMove> kingMoves(ChessBoard board, ChessPosition myPosition) {
         Collection<ChessMove> moves = new ArrayList<>();
         int currentRow = myPosition.getRow();
         int currentCol = myPosition.getColumn();
-        PieceType pieceType = getPieceType();
 
-        if(pieceType == PieceType.KING) {
-            moves.add(new ChessMove(myPosition, new ChessPosition()))
-        }
+
+
+        return moves;
+    }
+
+    public Collection<ChessMove> queenMoves(ChessBoard board, ChessPosition myPosition) {
+        Collection<ChessMove> moves = new ArrayList<>();
+        int currentRow = myPosition.getRow();
+        int currentCol = myPosition.getColumn();
+
+        return moves;
+    }
+
+    public Collection<ChessMove> bishopMoves(ChessBoard board, ChessPosition myPosition) {
+        Collection<ChessMove> moves = new ArrayList<>();
+        int currentRow = myPosition.getRow();
+        int currentCol = myPosition.getColumn();
+
+        return moves;
+    }
+
+    public Collection<ChessMove> knightMoves(ChessBoard board, ChessPosition myPosition) {
+        Collection<ChessMove> moves = new ArrayList<>();
+        int currentRow = myPosition.getRow();
+        int currentCol = myPosition.getColumn();
+
+        return moves;
+    }
+
+    public Collection<ChessMove> rookMoves(ChessBoard board, ChessPosition myPosition) {
+        Collection<ChessMove> moves = new ArrayList<>();
+        int currentRow = myPosition.getRow();
+        int currentCol = myPosition.getColumn();
+
+        return moves;
+    }
+
+    public Collection<ChessMove> pawnMoves(ChessBoard board, ChessPosition myPosition) {
+        Collection<ChessMove> moves = new ArrayList<>();
+        int currentRow = myPosition.getRow();
+        int currentCol = myPosition.getColumn();
+
+        return moves;
     }
 
     @Override
@@ -85,6 +149,6 @@ public class ChessPiece {
 
     @Override
     public String toString() {
-        return "Piece{" + "Color = " + pieceColor + "Type = " + type + "}";
+        return "Piece{" + "Color = " + pieceColor + " Type = " + type + "}";
     }
 }

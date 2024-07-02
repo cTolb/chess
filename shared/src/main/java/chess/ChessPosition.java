@@ -56,6 +56,6 @@ public class ChessPosition {
 
     @Override
     public String toString() {
-        return "Board Position{" + "row = " + row + "col = " + col + "}";
+        return "Board Position{" + "row = " + row + " col = " + col + "}";
     }
 }
