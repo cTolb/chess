@@ -77,7 +77,20 @@ public class ChessPiece {
         return null;
     }
 
+    public boolean validMove (ChessPosition myPosition, ChessBoard board) {
+        int row = myPosition.getRow();
+        int col = myPosition.getColumn();
+
+        if (row >= 1 && col >= 1 && row <= 8 && col <= 8) {
+            if (board.getPiece(myPosition).getTeamColor() != pieceColor || board.getPiece(myPosition) == null) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public Collection<ChessMove> kingMoves(ChessBoard board, ChessPosition myPosition) {
+        //Create empty collection to store moves
         Collection<ChessMove> moves = new ArrayList<>();
         int currentRow = myPosition.getRow();
         int currentCol = myPosition.getColumn();
