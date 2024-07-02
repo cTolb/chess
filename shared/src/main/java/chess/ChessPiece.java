@@ -82,11 +82,15 @@ public class ChessPiece {
         int col = myPosition.getColumn();
 
         if (row >= 1 && col >= 1 && row <= 8 && col <= 8) {
-            if (board.getPiece(myPosition).getTeamColor() != pieceColor || board.getPiece(myPosition) == null) {
+            if (board.getPiece(myPosition) == null || board.getPiece(myPosition).getTeamColor() != pieceColor) {
                 return true;
             }
         }
         return false;
+    }
+
+    public ChessMove addMove (ChessPosition currentPosition, ChessPosition endPosition, ChessPiece.PieceType promotionPiece) {
+        return new ChessMove(currentPosition, endPosition, promotionPiece);
     }
 
     public Collection<ChessMove> kingMoves(ChessBoard board, ChessPosition myPosition) {
@@ -95,8 +99,53 @@ public class ChessPiece {
         int currentRow = myPosition.getRow();
         int currentCol = myPosition.getColumn();
 
+        //Move Up
+        if (currentRow != 1) {
+            //Forward left
+            ChessPosition newPosition = new ChessPosition(currentRow - 1, currentCol - 1);
+            if (currentCol != 1 && validMove(newPosition, board)) {
+                moves.add(addMove(myPosition, newPosition, null));
+            }
+            //Forward
+            newPosition = new ChessPosition(currentRow - 1, currentCol);
+            if (validMove(newPosition, board)) {
+                moves.add(addMove(myPosition, newPosition, null));
+            }
+            //Forward Right
+            newPosition = new ChessPosition(currentRow - 1, currentCol + 1);
+            if (currentCol != 8 && validMove(newPosition, board)) {
+                moves.add(addMove(myPosition, newPosition, null));
+            }
+        }
 
+        //Move Down
+        if (currentRow != 8) {
+            //Back left
+            ChessPosition newPosition = new ChessPosition(currentRow + 1, currentCol - 1);
+            if (currentCol != 1 && validMove(newPosition, board)) {
+                moves.add(addMove(myPosition, newPosition, null));
+            }
+            //Back
+            newPosition = new ChessPosition(currentRow + 1, currentCol);
+            if (validMove(newPosition, board)) {
+                moves.add(addMove(myPosition, newPosition, null));
+            }
+            //Back Right
+            newPosition = new ChessPosition(currentRow + 1, currentCol + 1);
+            if (currentCol != 8 && validMove(newPosition, board)) {
+                moves.add(addMove(myPosition, newPosition, null));
+            }
+        }
 
+        //Left and Right
+        ChessPosition newPosition = new ChessPosition(currentRow, currentCol + 1);
+        if (currentCol != 8 && validMove(newPosition, board)) {
+            moves.add(addMove(myPosition, newPosition, null));
+        }
+        newPosition = new ChessPosition(currentRow, currentCol - 1);
+        if (currentCol != 1 && validMove(newPosition, board)) {
+            moves.add(addMove(myPosition, newPosition, null));
+        }
         return moves;
     }
 
