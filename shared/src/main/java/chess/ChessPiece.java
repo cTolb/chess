@@ -76,6 +76,6 @@ public class ChessPiece {
 
     @Override
     public String toString() {
-        return "Board Position{" + "Color = " + pieceColor + "Type = " + type + "}";
+        return "Piece{" + "Color = " + pieceColor + "Type = " + type + "}";
     }
 }
