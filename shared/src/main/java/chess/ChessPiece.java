@@ -151,15 +151,94 @@ public class ChessPiece {
 
     public Collection<ChessMove> queenMoves(ChessBoard board, ChessPosition myPosition) {
         Collection<ChessMove> moves = new ArrayList<>();
+
         moves.addAll(rookMoves(board, myPosition));
+        moves.addAll(bishopMoves(board, myPosition));
 
         return moves;
     }
 
     public Collection<ChessMove> bishopMoves(ChessBoard board, ChessPosition myPosition) {
         Collection<ChessMove> moves = new ArrayList<>();
-        int currentRow = myPosition.getRow();
-        int currentCol = myPosition.getColumn();
+        int beginRow = myPosition.getRow();
+        int beginCol = myPosition.getColumn();
+
+        int startRow = beginRow;
+        int startCol = beginCol;
+
+        //Move forward and left
+        while(startRow > 1 && startCol > 1) {
+            ChessPosition newPosition = new ChessPosition(startRow - 1, startCol - 1);
+            if (validMove(newPosition, board)) {
+                moves.add(addMove(myPosition, newPosition, null));
+
+                if (board.getPiece(newPosition) != null && board.getPiece(newPosition).getTeamColor() != pieceColor) {
+                    break;
+                }
+            }
+            else {
+                break;
+            }
+            startRow--;
+            startCol--;
+        }
+
+        //Move forward and right
+        startRow = beginRow;
+        startCol = beginCol;
+        while(startRow > 1 && startCol < 8) {
+            ChessPosition newPosition = new ChessPosition(startRow - 1, startCol + 1);
+            if (validMove(newPosition, board)) {
+                moves.add(addMove(myPosition, newPosition, null));
+
+                if (board.getPiece(newPosition) != null && board.getPiece(newPosition).getTeamColor() != pieceColor) {
+                    break;
+                }
+            }
+            else {
+                break;
+            }
+            startRow--;
+            startCol++;
+        }
+
+        //Move back and left
+        startRow = beginRow;
+        startCol = beginCol;
+        while(startRow < 8 && startCol > 1) {
+            ChessPosition newPosition = new ChessPosition(startRow + 1, startCol - 1);
+            if (validMove(newPosition, board)) {
+                moves.add(addMove(myPosition, newPosition, null));
+
+                if (board.getPiece(newPosition) != null && board.getPiece(newPosition).getTeamColor() != pieceColor) {
+                    break;
+                }
+            }
+            else {
+                break;
+            }
+            startRow++;
+            startCol--;
+        }
+
+        //Move back and right
+        startRow = beginRow;
+        startCol = beginCol;
+        while(startRow < 8 && startCol < 8) {
+            ChessPosition newPosition = new ChessPosition(startRow + 1, startCol + 1);
+            if (validMove(newPosition, board)) {
+                moves.add(addMove(myPosition, newPosition, null));
+
+                if (board.getPiece(newPosition) != null && board.getPiece(newPosition).getTeamColor() != pieceColor) {
+                    break;
+                }
+            }
+            else {
+                break;
+            }
+            startRow++;
+            startCol++;
+        }
 
         return moves;
     }
