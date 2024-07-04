@@ -255,6 +255,82 @@ public class ChessPiece {
         int currentRow = myPosition.getRow();
         int currentCol = myPosition.getColumn();
 
+        //Down
+        if (currentRow >= 1 && currentRow <= 6) {
+            //Down and left
+            if(currentCol >= 2) {
+                ChessPosition newPosition = new ChessPosition(currentRow + 2, currentCol - 1);
+                if (validMove(newPosition, board)) {
+                    moves.add(addMove(myPosition, newPosition, null));
+                }
+            }
+
+            //Down and right
+            if (currentCol <= 7) {
+                ChessPosition newPosition = new ChessPosition(currentRow + 2, currentCol + 1);
+                if (validMove(newPosition, board)) {
+                    moves.add(addMove(myPosition, newPosition, null));
+                }
+            }
+        }
+
+        //Up
+        if(currentRow <= 8 && currentRow >= 3) {
+            //Up and left
+            if (currentCol >= 2) {
+                ChessPosition newPosition = new ChessPosition(currentRow - 2, currentCol - 1);
+                if (validMove(newPosition, board)) {
+                    moves.add(addMove(myPosition, newPosition, null));
+                }
+            }
+
+            //Up and right
+            if (currentCol <= 7) {
+                ChessPosition newPosition = new ChessPosition(currentRow - 2, currentCol + 1);
+                if (validMove(newPosition, board)) {
+                    moves.add(addMove(myPosition, newPosition, null));
+                }
+            }
+        }
+
+        //Right
+        if (currentCol <= 6 && currentCol >= 1) {
+            //Right and up
+            if (currentRow >= 2) {
+                ChessPosition newPosition = new ChessPosition(currentRow - 1, currentCol + 2);
+                if (validMove(newPosition, board)) {
+                    moves.add(addMove(myPosition, newPosition, null));
+                }
+            }
+
+            //Right and Down
+            if (currentRow <= 7) {
+                ChessPosition newPosition = new ChessPosition(currentRow + 1, currentCol + 2);
+                if (validMove(newPosition, board)) {
+                    moves.add(addMove(myPosition, newPosition, null));
+                }
+            }
+        }
+
+        //Left
+        if (currentCol <= 8 && currentCol >= 3) {
+            //Left and up
+            if (currentRow >= 2) {
+                ChessPosition newPosition = new ChessPosition(currentRow - 1, currentCol - 2);
+                if(validMove(newPosition, board)) {
+                    moves.add(addMove(myPosition, newPosition, null));
+                }
+            }
+
+            //Left and down
+            if (currentRow <= 7) {
+                ChessPosition newPosition = new ChessPosition(currentRow + 1, currentCol - 2);
+                if (validMove(newPosition, board)) {
+                    moves.add(addMove(myPosition, newPosition, null));
+                }
+            }
+        }
+
         return moves;
     }
 
