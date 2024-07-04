@@ -163,6 +163,7 @@ public class ChessPiece {
         int beginRow = myPosition.getRow();
         int beginCol = myPosition.getColumn();
 
+        //Set temp variables
         int firstRow = beginRow;
         int firstCol = beginCol;
 
@@ -183,8 +184,10 @@ public class ChessPiece {
             firstCol++;
         }
 
+        //Reset Variables
         firstRow = beginRow;
         firstCol = beginCol;
+
         //Up and Left
         while (firstRow <= 8 && firstCol >= 1) {
             ChessPosition newPosition = new ChessPosition(firstRow + 1, firstCol - 1);
@@ -202,8 +205,10 @@ public class ChessPiece {
             firstCol--;
         }
 
+        //Reset Variables
         firstRow = beginRow;
         firstCol = beginCol;
+
         //Back and Right
         while (firstRow >= 1 && firstCol <=8) {
             ChessPosition newPosition = new ChessPosition(firstRow - 1, firstCol + 1);
@@ -221,8 +226,10 @@ public class ChessPiece {
             firstCol++;
         }
 
+        //Reset Variables
         firstRow = beginRow;
         firstCol = beginCol;
+
         //Back and Left
         while (firstRow >= 1 && firstCol >= 1) {
             ChessPosition newPosition = new ChessPosition(firstRow - 1, firstCol - 1);
