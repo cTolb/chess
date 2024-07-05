@@ -109,7 +109,7 @@ public class ChessBoard {
     public String toString() {
         StringBuilder output = new StringBuilder();
 
-        for (int y = 7; y >= 0; y--){
+        for (int y = 8; y >= 1; y--){
             output.append("|");
             for (int x = 0; x < 8; x++) {
                 output.append(layout[x][y] != null ? layout[x][y].toString() : " ");
