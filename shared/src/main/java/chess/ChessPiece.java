@@ -82,6 +82,7 @@ public class ChessPiece {
         int col = myPosition.getColumn();
 
         if (row >= 1 && col >= 1 && row <= 8 && col <= 8) {
+            //noinspection RedundantIfStatement
             if (board.getPiece(myPosition) == null || board.getPiece(myPosition).getTeamColor() != pieceColor) {
                 return true;
             }
@@ -526,6 +527,7 @@ public class ChessPiece {
         int col = myPosition.getColumn();
 
         if (row >= 1 && col >= 1 && row <= 8 && col <= 8) {
+            //noinspection RedundantIfStatement
             if (board.getPiece(myPosition) == null) {
                 return true;
             }
@@ -538,6 +540,7 @@ public class ChessPiece {
         int col = myPosition.getColumn();
 
         if (row >= 1 && col >= 1 && row <= 8 && col <= 8) {
+            //noinspection RedundantIfStatement
             if (board.getPiece(myPosition) != null && board.getPiece(myPosition).getTeamColor() != pieceColor) {
                 return true;
             }
@@ -567,6 +570,7 @@ public class ChessPiece {
 
     @Override
     public String toString() {
+        //noinspection StringTemplateMigration
         return "Piece{" + "Color = " + pieceColor + " Type = " + type + "}";
     }
 }
