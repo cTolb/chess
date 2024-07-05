@@ -229,7 +229,7 @@ public class ChessPiece {
         newCol = beginCol;
 
         //Down and Left
-        while (newRow >= 1 && newCol >= 1) {
+        /*while (newRow >= 1 && newCol >= 1) {
             ChessPosition newPosition = new ChessPosition(newRow - 1, newCol - 1);
             if (validMove(newPosition, board)) {
                 moves.add(addMove(myPosition, newPosition, null));
@@ -242,7 +242,7 @@ public class ChessPiece {
             }
             newRow--;
             newCol--;
-        }
+        }*/
 
         return moves;
     }
