@@ -164,88 +164,84 @@ public class ChessPiece {
         int beginRow = myPosition.getRow();
         int beginCol = myPosition.getColumn();
 
-        //Set temp variables
-        int firstRow = beginRow;
-        int firstCol = beginCol;
+        //Set Temp
+        int newRow = beginRow;
+        int newCol = beginCol;
 
         //Up and Right
-        while (firstRow <= 8 && firstCol <= 8) {
-            ChessPosition newPosition = new ChessPosition(firstRow + 1, firstCol + 1);
+        while (newRow <= 8 && newCol <= 8) {
+            ChessPosition newPosition = new ChessPosition(newRow + 1, newCol + 1);
             if (validMove(newPosition, board)) {
                 moves.add(addMove(myPosition, newPosition, null));
-                if(board.getPiece(newPosition) != null && board.getPiece(newPosition).getTeamColor() != pieceColor) {
+                if (board.getPiece(newPosition) != null && board.getPiece(newPosition).getTeamColor() != pieceColor) {
                     break;
                 }
             }
-            else{
+            else {
                 break;
             }
-
-            firstRow++;
-            firstCol++;
+            newRow++;
+            newCol++;
         }
 
-        //Reset Variables
-        firstRow = beginRow;
-        firstCol = beginCol;
+        //Reset temp
+        newRow = beginRow;
+        newCol = beginCol;
+
+        //Down and Right
+        while (newRow >= 1 && newCol <= 8) {
+            ChessPosition newPosition = new ChessPosition(newRow - 1, newCol + 1);
+            if (validMove(newPosition, board)) {
+                moves.add(addMove(myPosition, newPosition, null));
+                if (board.getPiece(newPosition) != null && board.getPiece(newPosition).getTeamColor() != pieceColor) {
+                    break;
+                }
+            }
+            else {
+                break;
+            }
+            newRow--;
+            newCol++;
+        }
+
+        //Reset temp
+        newRow = beginRow;
+        newCol = beginCol;
 
         //Up and Left
-        while (firstRow <= 8 && firstCol >= 1) {
-            ChessPosition newPosition = new ChessPosition(firstRow + 1, firstCol - 1);
+        while (newRow <= 8 && newCol >= 1) {
+            ChessPosition newPosition = new ChessPosition(newRow + 1, newCol - 1);
             if (validMove(newPosition, board)) {
                 moves.add(addMove(myPosition, newPosition, null));
-                if(board.getPiece(newPosition) != null && board.getPiece(newPosition).getTeamColor() != pieceColor) {
+                if (board.getPiece(newPosition) != null && board.getPiece(newPosition).getTeamColor() != pieceColor) {
                     break;
                 }
             }
-            else{
+            else {
                 break;
             }
-
-            firstRow++;
-            firstCol--;
+            newRow++;
+            newCol--;
         }
 
-        //Reset Variables
-        firstRow = beginRow;
-        firstCol = beginCol;
+        //Reset temp
+        newRow = beginRow;
+        newCol = beginCol;
 
-        //Back and Right
-        while (firstRow >= 1 && firstCol <=8) {
-            ChessPosition newPosition = new ChessPosition(firstRow - 1, firstCol + 1);
+        //Down and Left
+        while (newRow >= 1 && newCol >= 1) {
+            ChessPosition newPosition = new ChessPosition(newRow - 1, newCol - 1);
             if (validMove(newPosition, board)) {
                 moves.add(addMove(myPosition, newPosition, null));
-                if(board.getPiece(newPosition) != null && board.getPiece(newPosition).getTeamColor() != pieceColor) {
+                if (board.getPiece(newPosition) != null && board.getPiece(newPosition).getTeamColor() != pieceColor) {
                     break;
                 }
             }
-            else{
+            else {
                 break;
             }
-
-            firstRow--;
-            firstCol++;
-        }
-
-        //Reset Variables
-        firstRow = beginRow;
-        firstCol = beginCol;
-
-        //Back and Left
-        while (firstRow >= 1 && firstCol >= 1) {
-            ChessPosition newPosition = new ChessPosition(firstRow - 1, firstCol - 1);
-            if (validMove(newPosition, board)) {
-                moves.add(addMove(myPosition, newPosition, null));
-                if(board.getPiece(newPosition) != null && board.getPiece(newPosition).getTeamColor() != pieceColor) {
-                    break;
-                }
-            }
-            else{
-                break;
-            }
-
-            firstRow--;
-            firstCol--;
+            newRow--;
+            newCol--;
         }
 
         return moves;
@@ -340,12 +336,12 @@ public class ChessPiece {
         int currentRow = myPosition.getRow();
         int currentCol = myPosition.getColumn();
 
-        //Move right
+        //Right
         for (int i = currentCol; i <= 8; i++) {
             ChessPosition newPosition = new ChessPosition(currentRow, i + 1);
             if (validMove(newPosition, board)) {
                 moves.add(addMove(myPosition, newPosition, null));
-                if (board.getPiece(newPosition) != null && board.getPiece(newPosition).getTeamColor() != pieceColor){
+                if (board.getPiece(newPosition) != null && board.getPiece(newPosition).getTeamColor() != pieceColor) {
                     break;
                 }
             }
@@ -354,7 +350,7 @@ public class ChessPiece {
             }
         }
 
-        //Move Left
+        //Left
         for (int i = currentCol; i >= 1; i--) {
             ChessPosition newPosition = new ChessPosition(currentRow, i - 1);
             if (validMove(newPosition, board)) {
@@ -368,7 +364,7 @@ public class ChessPiece {
             }
         }
 
-        //Move up
+        //Up
         for (int i = currentRow; i <= 8; i++) {
             ChessPosition newPosition = new ChessPosition(i + 1, currentCol);
             if (validMove(newPosition, board)) {
@@ -382,7 +378,7 @@ public class ChessPiece {
             }
         }
 
-        //Move down
+        //Down
         for (int i = currentRow; i >= 1; i--) {
             ChessPosition newPosition = new ChessPosition(i - 1, currentCol);
             if (validMove(newPosition, board)) {
