@@ -92,13 +92,7 @@ public class ChessBoard {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (obj == this) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
+        if (obj == null || obj == this || getClass() != obj.getClass()) {
             return false;
         }
         ChessBoard other = (ChessBoard) obj;
