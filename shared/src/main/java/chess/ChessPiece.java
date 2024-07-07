@@ -482,7 +482,11 @@ public class ChessPiece {
         int col = myPosition.getColumn();
 
         if (row >= 1 && row <= 8 && col >= 1 && col <= 8) {
-            return board.getPiece(myPosition) != null && board.getPiece(myPosition).getTeamColor() != pieceColor;
+            if(board.getPiece(myPosition) != null){
+                if (board.getPiece(myPosition).getTeamColor() != pieceColor) {
+                    return true;
+                }
+            }
         }
         return false;
     }
