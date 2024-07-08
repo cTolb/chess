@@ -18,27 +18,39 @@ public class KnightMoves {
         this.position = position;
     }
 
+    public ChessGame.TeamColor getPieceColor() {
+        return pieceColor;
+    }
+
+    public ChessBoard getBoard() {
+        return board;
+    }
+
+    public ChessPosition getPosition() {
+        return position;
+    }
+
     /**
      * This function will return possible moves for a knight at a given position on the board.
      * @return ArrayList of possible moves
      */
     public Collection<ChessMove> knightMoves() {
         Collection<ChessMove> moves = new ArrayList<>();
-        int currentRow = position.getRow();
-        int currentCol = position.getColumn();
+        int currentRow = getPosition().getRow();
+        int currentCol = getPosition().getColumn();
 
         if (currentRow >= 1 && currentRow <= 6) {
             if(currentCol >= 2) {
                 ChessPosition newPosition = new ChessPosition(currentRow + 2, currentCol - 1);
-                if (validMove(newPosition, board)) {
-                    moves.add(new ChessMove(position, newPosition, null));
+                if (validMove(newPosition)) {
+                    moves.add(new ChessMove(getPosition(), newPosition, null));
                 }
             }
 
             if (currentCol <= 7) {
                 ChessPosition newPosition = new ChessPosition(currentRow + 2, currentCol + 1);
-                if (validMove(newPosition, board)) {
-                    moves.add(new ChessMove(position, newPosition, null));
+                if (validMove(newPosition)) {
+                    moves.add(new ChessMove(getPosition(), newPosition, null));
                 }
             }
         }
@@ -46,15 +58,15 @@ public class KnightMoves {
         if(currentRow <= 8 && currentRow >= 3) {
             if (currentCol >= 2) {
                 ChessPosition newPosition = new ChessPosition(currentRow - 2, currentCol - 1);
-                if (validMove(newPosition, board)) {
-                    moves.add(new ChessMove(position, newPosition, null));
+                if (validMove(newPosition)) {
+                    moves.add(new ChessMove(getPosition(), newPosition, null));
                 }
             }
 
             if (currentCol <= 7) {
                 ChessPosition newPosition = new ChessPosition(currentRow - 2, currentCol + 1);
-                if (validMove(newPosition, board)) {
-                    moves.add(new ChessMove(position, newPosition, null));
+                if (validMove(newPosition)) {
+                    moves.add(new ChessMove(getPosition(), newPosition, null));
                 }
             }
         }
@@ -62,15 +74,15 @@ public class KnightMoves {
         if (currentCol <= 6 && currentCol >= 1) {
             if (currentRow >= 2) {
                 ChessPosition newPosition = new ChessPosition(currentRow - 1, currentCol + 2);
-                if (validMove(newPosition, board)) {
-                    moves.add(new ChessMove(position, newPosition, null));
+                if (validMove(newPosition)) {
+                    moves.add(new ChessMove(getPosition(), newPosition, null));
                 }
             }
 
             if (currentRow <= 7) {
                 ChessPosition newPosition = new ChessPosition(currentRow + 1, currentCol + 2);
-                if (validMove(newPosition, board)) {
-                    moves.add(new ChessMove(position, newPosition, null));
+                if (validMove(newPosition)) {
+                    moves.add(new ChessMove(getPosition(), newPosition, null));
                 }
             }
         }
@@ -78,15 +90,15 @@ public class KnightMoves {
         if (currentCol <= 8 && currentCol >= 3) {
             if (currentRow >= 2) {
                 ChessPosition newPosition = new ChessPosition(currentRow - 1, currentCol - 2);
-                if(validMove(newPosition, board)) {
-                    moves.add(new ChessMove(position, newPosition, null));
+                if(validMove(newPosition)) {
+                    moves.add(new ChessMove(getPosition(), newPosition, null));
                 }
             }
 
             if (currentRow <= 7) {
                 ChessPosition newPosition = new ChessPosition(currentRow + 1, currentCol - 2);
-                if (validMove(newPosition, board)) {
-                    moves.add(new ChessMove(position, newPosition, null));
+                if (validMove(newPosition)) {
+                    moves.add(new ChessMove(getPosition(), newPosition, null));
                 }
             }
         }
@@ -94,12 +106,12 @@ public class KnightMoves {
         return moves;
     }
 
-    private boolean validMove (ChessPosition newPosition, ChessBoard board) {
+    private boolean validMove (ChessPosition newPosition) {
         if (isInBounds(newPosition)) {
-            if (board.getPiece(newPosition) == null) {
+            if (getBoard().getPiece(newPosition) == null) {
                 return true;
             }
-            return board.getPiece(newPosition).getTeamColor() != pieceColor;
+            return getBoard().getPiece(newPosition).getTeamColor() != getPieceColor();
         }
         return false;
     }
