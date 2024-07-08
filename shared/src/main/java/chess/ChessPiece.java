@@ -348,9 +348,9 @@ public class ChessPiece {
         if (board.getPiece(myPosition).getTeamColor() == ChessGame.TeamColor.WHITE && currentRow == 2) {
             ChessPosition newPosition1 = new ChessPosition(currentRow + 1, currentCol);
             ChessPosition newPosition2 = new ChessPosition(currentRow + 2, currentCol);
-            if (validPawnMove(newPosition1, board)) {
+            if (validMove(newPosition1, board)) {
                 moves.add(new ChessMove(myPosition, newPosition1, null));
-                if (validPawnMove(newPosition2, board)) {
+                if (validMove(newPosition2, board)) {
                     moves.add(new ChessMove(myPosition, newPosition2, null));
                 }
             }
@@ -359,9 +359,9 @@ public class ChessPiece {
         if (board.getPiece(myPosition).getTeamColor() == ChessGame.TeamColor.BLACK && currentRow == 7) {
             ChessPosition newPosition1 = new ChessPosition(currentRow - 1, currentCol);
             ChessPosition newPosition2 = new ChessPosition(currentRow - 2, currentCol);
-            if (validPawnMove(newPosition1, board)) {
+            if (validMove(newPosition1, board)) {
                 moves.add(new ChessMove(myPosition, newPosition1, null));
-                if (validPawnMove(newPosition2, board)) {
+                if (validMove(newPosition2, board)) {
                     moves.add(new ChessMove(myPosition, newPosition2, null));
                 }
             }
@@ -370,14 +370,14 @@ public class ChessPiece {
         //Reg and promotion
         if (board.getPiece(myPosition).getTeamColor() == ChessGame.TeamColor.WHITE) {
             ChessPosition newPosition = new ChessPosition(currentRow + 1, currentCol);
-            if (validPawnMove(newPosition, board) && newPosition.getRow() == 8){
+            if (validMove(newPosition, board) && newPosition.getRow() == 8){
                 moves.add(new ChessMove(myPosition, newPosition, PieceType.ROOK));
                 moves.add(new ChessMove(myPosition, newPosition, PieceType.BISHOP));
                 moves.add(new ChessMove(myPosition, newPosition, PieceType.KNIGHT));
                 moves.add(new ChessMove(myPosition, newPosition, PieceType.QUEEN));
             }
             else {
-                if (validPawnMove(newPosition, board)) {
+                if (validMove(newPosition, board)) {
                     moves.add(new ChessMove(myPosition, newPosition, null));
                 }
             }
@@ -385,14 +385,14 @@ public class ChessPiece {
 
         if (board.getPiece(myPosition).getTeamColor() == ChessGame.TeamColor.BLACK) {
             ChessPosition newPosition = new ChessPosition(currentRow - 1, currentCol);
-            if (validPawnMove(newPosition, board) && newPosition.getRow() == 1) {
+            if (validMove(newPosition, board) && newPosition.getRow() == 1) {
                 moves.add(new ChessMove(myPosition, newPosition, PieceType.ROOK));
                 moves.add(new ChessMove(myPosition, newPosition, PieceType.BISHOP));
                 moves.add(new ChessMove(myPosition, newPosition, PieceType.KNIGHT));
                 moves.add(new ChessMove(myPosition, newPosition, PieceType.QUEEN));
             }
             else {
-                if (validPawnMove(newPosition, board)) {
+                if (validMove(newPosition, board)) {
                     moves.add(new ChessMove(myPosition, newPosition, null));
                 }
             }
@@ -459,24 +459,23 @@ public class ChessPiece {
         int row = myPosition.getRow();
         int col = myPosition.getColumn();
 
-        if (row >= 1 && col >= 1 && row <= 8 && col <= 8) {
-            if (board.getPiece(myPosition) == null) {
-                return true;
+        if (type == PieceType.PAWN) {
+            if (row >= 1 && row <= 8 && col >= 1 && col <= 8) {
+                return board.getPiece(myPosition) == null;
             }
-            return board.getPiece(myPosition).getTeamColor() != pieceColor;
+            return false;
         }
-        return false;
+        else {
+            if (row >= 1 && col >= 1 && row <= 8 && col <= 8) {
+                if (board.getPiece(myPosition) == null) {
+                    return true;
+                }
+                return board.getPiece(myPosition).getTeamColor() != pieceColor;
+            }
+            return false;
+        }
     }
 
-    public boolean validPawnMove(ChessPosition myPosition, ChessBoard board) {
-        int row = myPosition.getRow();
-        int col = myPosition.getColumn();
-
-        if (row >= 1 && row <= 8 && col >= 1 && col <= 8) {
-            return board.getPiece(myPosition) == null;
-        }
-        return false;
-    }
     public boolean validPawnCap(ChessPosition myPosition, ChessBoard board) {
         int row = myPosition.getRow();
         int col = myPosition.getColumn();
