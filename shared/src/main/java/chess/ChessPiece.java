@@ -57,7 +57,8 @@ public class ChessPiece {
 
         //call move function depending on piece type, else return null
         if (pieceType == PieceType.KING) {
-            return kingMoves(board, myPosition);
+            KingMoves moves = new KingMoves(board, myPosition, pieceColor);
+            return moves.calcMoves();
         }
         if (pieceType ==PieceType.QUEEN) {
             return queenMoves(board, myPosition);
