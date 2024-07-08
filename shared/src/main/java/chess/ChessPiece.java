@@ -56,32 +56,26 @@ public class ChessPiece {
         //get piece type
         PieceType pieceType = getPieceType();
 
-        //call move function depending on piece type, else return null
-        if (pieceType == PieceType.KING) {
-            KingMoves moves = new KingMoves(board, myPosition, getTeamColor());
-            return moves.kingMoves();
-        }
-        if (pieceType ==PieceType.QUEEN) {
-            QueenMoves moves = new QueenMoves(board, myPosition, getTeamColor());
-            return moves.queenMoves();
-        }
-        if (pieceType == PieceType.BISHOP) {
-            BishopMoves moves = new BishopMoves(board, myPosition, getTeamColor());
-            return moves.bishopMoves();
-        }
-        if (pieceType == PieceType.KNIGHT) {
-            KnightMoves moves = new KnightMoves(board, myPosition, getTeamColor());
-            return moves.knightMoves();
-        }
-        if (pieceType == PieceType.ROOK) {
-            RookMoves moves = new RookMoves(board, myPosition, getTeamColor());
-            return moves.rookMoves();
-        }
-        if (pieceType == PieceType.PAWN) {
-            PawnMoves moves = new PawnMoves(board, myPosition, getTeamColor());
-            return moves.pawnMoves();
-        }
-        return null;
+        return switch (pieceType) {
+            case KING:
+                KingMoves kingMoves = new KingMoves(board, myPosition, getTeamColor());
+                yield kingMoves.kingMoves();
+            case QUEEN:
+                QueenMoves queenMoves = new QueenMoves(board, myPosition, getTeamColor());
+                yield queenMoves.queenMoves();
+            case BISHOP:
+                BishopMoves bishopMoves = new BishopMoves(board, myPosition, getTeamColor());
+                yield bishopMoves.bishopMoves();
+            case KNIGHT:
+                KnightMoves knightMoves = new KnightMoves(board, myPosition, getTeamColor());
+                yield knightMoves.knightMoves();
+            case ROOK:
+                RookMoves rookMoves = new RookMoves(board, myPosition, getTeamColor());
+                yield rookMoves.rookMoves();
+            case PAWN:
+                PawnMoves pawnMoves = new PawnMoves(board, myPosition, getTeamColor());
+                yield pawnMoves.pawnMoves();
+        };
     }
 
     @Override
