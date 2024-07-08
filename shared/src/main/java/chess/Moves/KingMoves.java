@@ -1,4 +1,9 @@
-package chess;
+package chess.Moves;
+
+import chess.ChessBoard;
+import chess.ChessGame;
+import chess.ChessMove;
+import chess.ChessPosition;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -18,7 +23,7 @@ public class KingMoves {
      * position on the board
      * @return ArrayList of possible moves
      */
-    public Collection<ChessMove> calcMoves() {
+    public Collection<ChessMove> kingMoves() {
         Collection<ChessMove> moves = new ArrayList<>();
         int currentRow = position.getRow();
         int currentCol = position.getColumn();
