@@ -84,7 +84,7 @@ public class ChessPiece {
      * @param myPosition current piece position
      * @return ArrayList of possible moves
      */
-    public Collection<ChessMove> kingMoves(ChessBoard board, ChessPosition myPosition) {
+    private Collection<ChessMove> kingMoves(ChessBoard board, ChessPosition myPosition) {
         Collection<ChessMove> moves = new ArrayList<>();
         int currentRow = myPosition.getRow();
         int currentCol = myPosition.getColumn();
@@ -141,7 +141,7 @@ public class ChessPiece {
      * @param myPosition current piece position
      * @return ArrayList of possible moves
      */
-    public Collection<ChessMove> queenMoves(ChessBoard board, ChessPosition myPosition) {
+    private Collection<ChessMove> queenMoves(ChessBoard board, ChessPosition myPosition) {
         Collection<ChessMove> moves = new ArrayList<>();
 
         moves.addAll(rookMoves(board, myPosition));
@@ -157,7 +157,7 @@ public class ChessPiece {
      * @param myPosition current piece position
      * @return ArrayList of possible moves
      */
-    public Collection<ChessMove> bishopMoves(ChessBoard board, ChessPosition myPosition) {
+    private Collection<ChessMove> bishopMoves(ChessBoard board, ChessPosition myPosition) {
         Collection<ChessMove> moves = new ArrayList<>();
         int beginRow = myPosition.getRow();
         int beginCol = myPosition.getColumn();
@@ -222,7 +222,7 @@ public class ChessPiece {
      * @param myPosition current piece position
      * @return ArrayList of possible moves
      */
-    public Collection<ChessMove> knightMoves(ChessBoard board, ChessPosition myPosition) {
+    private Collection<ChessMove> knightMoves(ChessBoard board, ChessPosition myPosition) {
         Collection<ChessMove> moves = new ArrayList<>();
         int currentRow = myPosition.getRow();
         int currentCol = myPosition.getColumn();
@@ -300,7 +300,7 @@ public class ChessPiece {
      * @param myPosition current piece position
      * @return ArrayList of possible moves
      */
-    public Collection<ChessMove> rookMoves(ChessBoard board, ChessPosition myPosition) {
+    private Collection<ChessMove> rookMoves(ChessBoard board, ChessPosition myPosition) {
         Collection<ChessMove> moves = new ArrayList<>();
         int currentRow = myPosition.getRow();
         int currentCol = myPosition.getColumn();
@@ -373,7 +373,7 @@ public class ChessPiece {
      * @param myPosition current piece position
      * @return ArrayList of possible moves
      */
-    public Collection<ChessMove> pawnMoves(ChessBoard board, ChessPosition myPosition) {
+    private Collection<ChessMove> pawnMoves(ChessBoard board, ChessPosition myPosition) {
         Collection<ChessMove> moves = new ArrayList<>();
         int currentRow = myPosition.getRow();
         int currentCol = myPosition.getColumn();
@@ -489,25 +489,22 @@ public class ChessPiece {
 
     /**
      * This function determines if a given move is valid.
-     * @param myPosition Proposed new position
+     * @param newPosition Proposed new position
      * @param board current game board
      * @return boolean if the move is valid
      */
-    public boolean validMove (ChessPosition myPosition, ChessBoard board) {
-        int row = myPosition.getRow();
-        int col = myPosition.getColumn();
-
+    private boolean validMove (ChessPosition newPosition, ChessBoard board) {
         if (type == PieceType.PAWN) {
-            if (row >= 1 && row <= 8 && col >= 1 && col <= 8) {
-                return board.getPiece(myPosition) == null;
+            if (isInBounds(newPosition)) {
+                return board.getPiece(newPosition) == null;
             }
         }
         else {
-            if (row >= 1 && col >= 1 && row <= 8 && col <= 8) {
-                if (board.getPiece(myPosition) == null) {
+            if (isInBounds(newPosition)) {
+                if (board.getPiece(newPosition) == null) {
                     return true;
                 }
-                return board.getPiece(myPosition).getTeamColor() != pieceColor;
+                return board.getPiece(newPosition).getTeamColor() != pieceColor;
             }
         }
         return false;
@@ -515,22 +512,31 @@ public class ChessPiece {
 
     /**
      * This function determines if the given move of a pawn is a valid capture move.
-     * @param myPosition proposed new position
+     * @param newPosition proposed new position
      * @param board current game board
      * @return boolean if the move is valid capture
      */
-    public boolean validCap(ChessPosition myPosition, ChessBoard board) {
-        int row = myPosition.getRow();
-        int col = myPosition.getColumn();
-
-        if (row >= 1 && row <= 8 && col >= 1 && col <= 8) {
-            if(board.getPiece(myPosition) != null){
-                if (board.getPiece(myPosition).getTeamColor() != pieceColor) {
+    private boolean validCap(ChessPosition newPosition, ChessBoard board) {
+        if (isInBounds(newPosition)) {
+            if(board.getPiece(newPosition) != null){
+                if (board.getPiece(newPosition).getTeamColor() != pieceColor) {
                     return true;
                 }
             }
         }
         return false;
+    }
+
+    /**
+     * Returns if a position is in bounds.
+     * @param myPosition current position on board
+     * @return boolean if position is in bounds
+     */
+    private boolean isInBounds (ChessPosition myPosition) {
+        int row = myPosition.getRow();
+        int col = myPosition.getColumn();
+
+        return row <= 8 && col <= 8 && row >= 1 && col >= 1;
     }
 
     @Override
