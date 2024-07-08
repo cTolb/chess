@@ -463,7 +463,6 @@ public class ChessPiece {
             if (row >= 1 && row <= 8 && col >= 1 && col <= 8) {
                 return board.getPiece(myPosition) == null;
             }
-            return false;
         }
         else {
             if (row >= 1 && col >= 1 && row <= 8 && col <= 8) {
@@ -472,8 +471,8 @@ public class ChessPiece {
                 }
                 return board.getPiece(myPosition).getTeamColor() != pieceColor;
             }
-            return false;
         }
+        return false;
     }
 
     public boolean validPawnCap(ChessPosition myPosition, ChessBoard board) {
