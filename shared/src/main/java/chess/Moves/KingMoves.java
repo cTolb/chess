@@ -40,7 +40,8 @@ public class KingMoves {
         int currentRow = getPosition().getRow();
         int currentCol = getPosition().getColumn();
 
-        ChessPosition newPosition = new ChessPosition(currentRow + 1, currentCol - 1);
+        ChessPosition newPosition;
+        newPosition = new ChessPosition(currentRow + 1, currentCol - 1);
         if (validMove(newPosition)) {
             moves.add(new ChessMove(getPosition(), newPosition, null));
         }
