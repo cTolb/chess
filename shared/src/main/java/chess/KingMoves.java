@@ -12,6 +12,12 @@ public class KingMoves {
         this.board = board;
         this.position = position;
     }
+
+    /**
+     * This function will return an ArrayList of possible moves a king can make at a given
+     * position on the board
+     * @return ArrayList of possible moves
+     */
     public Collection<ChessMove> calcMoves() {
         Collection<ChessMove> moves = new ArrayList<>();
         int currentRow = position.getRow();

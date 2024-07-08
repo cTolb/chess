@@ -78,62 +78,6 @@ public class ChessPiece {
         return null;
     }
 
-    /**
-     * This function will return an ArrayList of possible moves a king can make at a given
-     * position on the board
-     * @param board current game board
-     * @param myPosition current piece position
-     * @return ArrayList of possible moves
-     */
-    private Collection<ChessMove> kingMoves(ChessBoard board, ChessPosition myPosition) {
-        Collection<ChessMove> moves = new ArrayList<>();
-        int currentRow = myPosition.getRow();
-        int currentCol = myPosition.getColumn();
-
-        if (currentRow <= 7) {
-            ChessPosition newPosition = new ChessPosition(currentRow + 1, currentCol - 1);
-            if (validMove(newPosition, board)) {
-                moves.add(new ChessMove(myPosition, newPosition, null));
-            }
-            newPosition = new ChessPosition(currentRow + 1, currentCol);
-            if (validMove(newPosition, board)) {
-                moves.add(new ChessMove(myPosition, newPosition, null));
-            }
-            newPosition = new ChessPosition(currentRow + 1, currentCol + 1);
-            if (validMove(newPosition, board)) {
-                moves.add(new ChessMove(myPosition, newPosition, null));
-            }
-        }
-
-        if (currentRow >= 2) {
-            ChessPosition newPosition = new ChessPosition(currentRow - 1, currentCol - 1);
-            if (validMove(newPosition, board)) {
-                moves.add(new ChessMove(myPosition, newPosition, null));
-            }
-            newPosition = new ChessPosition(currentRow - 1, currentCol);
-            if (validMove(newPosition, board)) {
-                moves.add(new ChessMove(myPosition, newPosition, null));
-            }
-            newPosition = new ChessPosition(currentRow - 1, currentCol + 1);
-            if (validMove(newPosition, board)) {
-                moves.add(new ChessMove(myPosition, newPosition, null));
-            }
-        }
-
-        if (currentCol <= 7) {
-            ChessPosition newPosition = new ChessPosition(currentRow, currentCol + 1);
-            if (validMove(newPosition, board)) {
-                moves.add(new ChessMove(myPosition, newPosition, null));
-            }
-        }
-        if (currentCol >= 1) {
-            ChessPosition newPosition = new ChessPosition(currentRow, currentCol - 1);
-            if (validMove(newPosition, board)) {
-                moves.add(new ChessMove(myPosition, newPosition, null));
-            }
-        }
-        return moves;
-    }
 
     /**
      * This function will return possible moves for a queen at a given position on the board. It
