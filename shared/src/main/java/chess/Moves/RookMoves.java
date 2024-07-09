@@ -41,7 +41,7 @@ public class RookMoves {
 
         for (int i = currentCol; i <= 8; i++) {
             ChessPosition newPosition = new ChessPosition(currentRow, i + 1);
-            if (validMove(newPosition)) {
+            if (Moves.validMove(newPosition, board, pieceColor)) {
                 moves.add(new ChessMove(getPosition(), newPosition, null));
                 if (getBoard().getPiece(newPosition) != null) {
                     if(getBoard().getPiece(newPosition).getTeamColor() != getPieceColor()) {
@@ -56,7 +56,7 @@ public class RookMoves {
 
         for (int i = currentCol; i >= 1; i--) {
             ChessPosition newPosition = new ChessPosition(currentRow, i - 1);
-            if (validMove(newPosition)) {
+            if (Moves.validMove(newPosition, board, pieceColor)) {
                 moves.add(new ChessMove(getPosition(), newPosition, null));
                 if (getBoard().getPiece(newPosition) != null) {
                     if(getBoard().getPiece(newPosition).getTeamColor() != getPieceColor()) {
@@ -71,7 +71,7 @@ public class RookMoves {
 
         for (int i = currentRow; i <= 8; i++) {
             ChessPosition newPosition = new ChessPosition(i + 1, currentCol);
-            if (validMove(newPosition)) {
+            if (Moves.validMove(newPosition, board, pieceColor)) {
                 moves.add(new ChessMove(getPosition(), newPosition, null));
                 if (getBoard().getPiece(newPosition) != null) {
                     if(getBoard().getPiece(newPosition).getTeamColor() != getPieceColor()) {
@@ -86,7 +86,7 @@ public class RookMoves {
 
         for (int i = currentRow; i >= 1; i--) {
             ChessPosition newPosition = new ChessPosition(i - 1, currentCol);
-            if (validMove(newPosition)) {
+            if (Moves.validMove(newPosition, board, pieceColor)) {
                 moves.add(new ChessMove(getPosition(), newPosition, null));
                 if (getBoard().getPiece(newPosition) != null) {
                     if(getBoard().getPiece(newPosition).getTeamColor() != getPieceColor()) {
@@ -99,21 +99,5 @@ public class RookMoves {
             }
         }
         return moves;
-    }
-
-    private boolean validMove (ChessPosition newPosition) {
-        if (isInBounds(newPosition)) {
-            if (getBoard().getPiece(newPosition) == null) {
-                return true;
-            }
-            return getBoard().getPiece(newPosition).getTeamColor() != getPieceColor();
-        }
-        return false;
-    }
-    private boolean isInBounds (ChessPosition position) {
-        int row = position.getRow();
-        int col = position.getColumn();
-
-        return row <= 8 && col <= 8 && row >= 1 && col >= 1;
     }
 }

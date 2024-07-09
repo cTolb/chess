@@ -33,7 +33,7 @@ public class BishopMoves {
     /**
      * This function returns an ArrayList of possibles moves for a bishop piece at a given location
      * on the board.
-     * @return ArrayList of possible moves
+     * @return Collection of possible moves
      */
     public Collection<ChessMove> bishopMoves() {
         Collection<ChessMove> moves = new ArrayList<>();
@@ -42,7 +42,7 @@ public class BishopMoves {
 
         for (int startRow = beginRow, startCol = beginCol; startRow <= 8 && startCol <= 8; startRow++, startCol++) {
             ChessPosition newPosition = new ChessPosition(startRow + 1, startCol + 1);
-            if (validMove(newPosition)) {
+            if (Moves.validMove(newPosition, board, pieceColor)) {
                 moves.add(new ChessMove(getPosition(), newPosition, null));
                 if (getBoard().getPiece(newPosition) != null && getBoard().getPiece(newPosition).getTeamColor() != getPieceColor()) {
                     break;
@@ -55,7 +55,7 @@ public class BishopMoves {
 
         for (int startRow = beginRow, startCol = beginCol;startRow <= 8 && startCol >= 1; startRow++, startCol--) {
             ChessPosition newPosition = new ChessPosition(startRow + 1, startCol - 1);
-            if (validMove(newPosition)) {
+            if (Moves.validMove(newPosition, board, pieceColor)) {
                 moves.add(new ChessMove(getPosition(), newPosition, null));
                 if (getBoard().getPiece(newPosition) != null && getBoard().getPiece(newPosition).getTeamColor() != getPieceColor()) {
                     break;
@@ -68,7 +68,7 @@ public class BishopMoves {
 
         for (int startRow = beginRow, startCol = beginCol ;startRow >= 1 && startCol <= 8; startRow--, startCol++) {
             ChessPosition newPosition = new ChessPosition(startRow - 1, startCol + 1);
-            if (validMove(newPosition)) {
+            if (Moves.validMove(newPosition, board, pieceColor)) {
                 moves.add(new ChessMove(getPosition(), newPosition, null));
                 if (getBoard().getPiece(newPosition) != null && getBoard().getPiece(newPosition).getTeamColor() != getPieceColor()) {
                     break;
@@ -81,7 +81,7 @@ public class BishopMoves {
 
         for (int startRow = beginRow, startCol = beginCol;startRow >= 1 && startCol >= 1; startRow--, startCol--) {
             ChessPosition newPosition = new ChessPosition(startRow - 1, startCol - 1);
-            if (validMove(newPosition)) {
+            if (Moves.validMove(newPosition, board, pieceColor)) {
                 moves.add(new ChessMove(getPosition(), newPosition, null));
                 if (getBoard().getPiece(newPosition) != null && getBoard().getPiece(newPosition).getTeamColor() != getPieceColor()) {
                     break;
@@ -92,21 +92,5 @@ public class BishopMoves {
             }
         }
         return moves;
-    }
-
-    private boolean validMove (ChessPosition newPosition) {
-        if (isInBounds(newPosition)) {
-            if (getBoard().getPiece(newPosition) == null) {
-                return true;
-            }
-            return getBoard().getPiece(newPosition).getTeamColor() != getPieceColor();
-        }
-        return false;
-    }
-    private boolean isInBounds (ChessPosition position) {
-        int row = position.getRow();
-        int col = position.getColumn();
-
-        return row <= 8 && col <= 8 && row >= 1 && col >= 1;
     }
 }

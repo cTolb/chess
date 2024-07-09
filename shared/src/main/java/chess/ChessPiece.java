@@ -53,7 +53,6 @@ public class ChessPiece {
      * @return Collection of valid moves
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
-        //get piece type
         PieceType pieceType = getPieceType();
 
         return switch (pieceType) {
