@@ -36,70 +36,21 @@ public class KnightMoves {
      */
     public Collection<ChessMove> knightMoves() {
         Collection<ChessMove> moves = new ArrayList<>();
-        int currentRow = getPosition().getRow();
-        int currentCol = getPosition().getColumn();
+        int currentRow = position.getRow();
+        int currentCol = position.getColumn();
 
-        if (currentRow >= 1 && currentRow <= 6) {
-            if(currentCol >= 2) {
-                ChessPosition newPosition = new ChessPosition(currentRow + 2, currentCol - 1);
-                if (Moves.validMove(newPosition, board, pieceColor)) {
-                    moves.add(new ChessMove(getPosition(), newPosition, null));
-                }
-            }
+        ChessPosition[] possibleMoves = {new ChessPosition(currentRow + 2, currentCol - 1),
+                new ChessPosition(currentRow + 2, currentCol + 1),
+                new ChessPosition(currentRow - 2, currentCol - 1),
+                new ChessPosition(currentRow - 2, currentCol + 1),
+                new ChessPosition(currentRow - 1, currentCol + 2),
+                new ChessPosition(currentRow + 1, currentCol + 2),
+                new ChessPosition(currentRow - 1, currentCol - 2),
+                new ChessPosition(currentRow + 1, currentCol - 2)};
 
-            if (currentCol <= 7) {
-                ChessPosition newPosition = new ChessPosition(currentRow + 2, currentCol + 1);
-                if (Moves.validMove(newPosition, board, pieceColor)) {
-                    moves.add(new ChessMove(getPosition(), newPosition, null));
-                }
-            }
-        }
-
-        if(currentRow <= 8 && currentRow >= 3) {
-            if (currentCol >= 2) {
-                ChessPosition newPosition = new ChessPosition(currentRow - 2, currentCol - 1);
-                if (Moves.validMove(newPosition, board, pieceColor)) {
-                    moves.add(new ChessMove(getPosition(), newPosition, null));
-                }
-            }
-
-            if (currentCol <= 7) {
-                ChessPosition newPosition = new ChessPosition(currentRow - 2, currentCol + 1);
-                if (Moves.validMove(newPosition, board, pieceColor)) {
-                    moves.add(new ChessMove(getPosition(), newPosition, null));
-                }
-            }
-        }
-
-        if (currentCol <= 6 && currentCol >= 1) {
-            if (currentRow >= 2) {
-                ChessPosition newPosition = new ChessPosition(currentRow - 1, currentCol + 2);
-                if (Moves.validMove(newPosition, board, pieceColor)) {
-                    moves.add(new ChessMove(getPosition(), newPosition, null));
-                }
-            }
-
-            if (currentRow <= 7) {
-                ChessPosition newPosition = new ChessPosition(currentRow + 1, currentCol + 2);
-                if (Moves.validMove(newPosition, board, pieceColor)) {
-                    moves.add(new ChessMove(getPosition(), newPosition, null));
-                }
-            }
-        }
-
-        if (currentCol <= 8 && currentCol >= 3) {
-            if (currentRow >= 2) {
-                ChessPosition newPosition = new ChessPosition(currentRow - 1, currentCol - 2);
-                if(Moves.validMove(newPosition, board, pieceColor)) {
-                    moves.add(new ChessMove(getPosition(), newPosition, null));
-                }
-            }
-
-            if (currentRow <= 7) {
-                ChessPosition newPosition = new ChessPosition(currentRow + 1, currentCol - 2);
-                if (Moves.validMove(newPosition, board, pieceColor)) {
-                    moves.add(new ChessMove(getPosition(), newPosition, null));
-                }
+        for (ChessPosition move : possibleMoves) {
+            if (Moves.validMove(move, board, pieceColor)) {
+                moves.add(new ChessMove(position, move, null));
             }
         }
 
