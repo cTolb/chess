@@ -39,40 +39,21 @@ public class KingMoves {
         Collection<ChessMove> moves = new ArrayList<>();
         int currentRow = getPosition().getRow();
         int currentCol = getPosition().getColumn();
+        ChessPosition[] possibleMoves = {new ChessPosition(currentRow + 1, currentCol - 1),
+                new ChessPosition(currentRow + 1, currentCol),
+                new ChessPosition(currentRow + 1, currentCol + 1),
+                new ChessPosition(currentRow - 1, currentCol - 1),
+                new ChessPosition(currentRow - 1, currentCol),
+                new ChessPosition(currentRow - 1, currentCol + 1),
+                new ChessPosition(currentRow, currentCol + 1),
+                new ChessPosition(currentRow, currentCol - 1)};
 
-        ChessPosition newPosition;
-        newPosition = new ChessPosition(currentRow + 1, currentCol - 1);
-        if (Moves.validMove(newPosition, board, pieceColor)) {
-            moves.add(new ChessMove(getPosition(), newPosition, null));
+        for (ChessPosition move : possibleMoves) {
+            if (Moves.validMove(move, board, pieceColor)) {
+                moves.add(new ChessMove(position, move, null));
+            }
         }
-        newPosition = new ChessPosition(currentRow + 1, currentCol);
-        if (Moves.validMove(newPosition, board, pieceColor)) {
-            moves.add(new ChessMove(getPosition(), newPosition, null));
-        }
-        newPosition = new ChessPosition(currentRow + 1, currentCol + 1);
-        if (Moves.validMove(newPosition, board, pieceColor)) {
-            moves.add(new ChessMove(getPosition(), newPosition, null));
-        }
-        newPosition = new ChessPosition(currentRow - 1, currentCol - 1);
-        if (Moves.validMove(newPosition, board, pieceColor)) {
-            moves.add(new ChessMove(getPosition(), newPosition, null));
-        }
-        newPosition = new ChessPosition(currentRow - 1, currentCol);
-        if (Moves.validMove(newPosition, board, pieceColor)) {
-            moves.add(new ChessMove(getPosition(), newPosition, null));
-        }
-        newPosition = new ChessPosition(currentRow - 1, currentCol + 1);
-        if (Moves.validMove(newPosition, board, pieceColor)) {
-            moves.add(new ChessMove(getPosition(), newPosition, null));
-        }
-        newPosition = new ChessPosition(currentRow, currentCol + 1);
-        if (Moves.validMove(newPosition, board, pieceColor)) {
-            moves.add(new ChessMove(getPosition(), newPosition, null));
-        }
-        newPosition = new ChessPosition(currentRow, currentCol - 1);
-        if (Moves.validMove(newPosition, board, pieceColor)) {
-            moves.add(new ChessMove(getPosition(), newPosition, null));
-        }
+
         return moves;
     }
 
