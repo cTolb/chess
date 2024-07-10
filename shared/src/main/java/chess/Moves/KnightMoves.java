@@ -18,15 +18,15 @@ public class KnightMoves {
         this.position = position;
     }
 
-    public ChessGame.TeamColor getPieceColor() {
+    private ChessGame.TeamColor getPieceColor() {
         return pieceColor;
     }
 
-    public ChessBoard getBoard() {
+    private ChessBoard getBoard() {
         return board;
     }
 
-    public ChessPosition getPosition() {
+    private ChessPosition getPosition() {
         return position;
     }
 
