@@ -40,118 +40,116 @@ public class PawnMoves {
                 ChessPiece.PieceType.KNIGHT,
                 ChessPiece.PieceType.QUEEN};
 
+        //White Moves
+        ChessPosition whiteRegularMove = new ChessPosition(currentRow + 1, currentCol);
+        ChessPosition whiteCaptureRight = new ChessPosition(currentRow + 1, currentCol + 1);
+        ChessPosition whiteCaptureLeft = new ChessPosition(currentRow + 1, currentCol - 1);
 
+        //BlackMoves
+        ChessPosition blackRegularMove = new ChessPosition(currentRow - 1, currentCol);
+        ChessPosition blackCaptureRight = new ChessPosition(currentRow - 1, currentCol + 1);
+        ChessPosition blackCaptureLeft = new ChessPosition(currentRow - 1, currentCol - 1);
 
         //White initial moves
         if (getPieceColor() == ChessGame.TeamColor.WHITE && currentRow == 2) {
-            ChessPosition newPosition1 = new ChessPosition(currentRow + 1, currentCol);
-            ChessPosition newPosition2 = new ChessPosition(currentRow + 2, currentCol);
-            if (Moves.validPawnMove(newPosition1, getBoard())) {
-                moves.add(new ChessMove(getPosition(), newPosition1, null));
-                if (Moves.validPawnMove(newPosition2, getBoard())) {
-                    moves.add(new ChessMove(getPosition(), newPosition2, null));
+            ChessPosition newPosition = new ChessPosition(currentRow + 2, currentCol);
+            if (Moves.validPawnMove(whiteRegularMove, getBoard())) {
+                moves.add(new ChessMove(getPosition(), whiteRegularMove, null));
+                if (Moves.validPawnMove(newPosition, getBoard())) {
+                    moves.add(new ChessMove(getPosition(), newPosition, null));
                 }
             }
         }
 
         //Black initial moves
         if (getPieceColor() == ChessGame.TeamColor.BLACK && currentRow == 7) {
-            ChessPosition newPosition1 = new ChessPosition(currentRow - 1, currentCol);
-            ChessPosition newPosition2 = new ChessPosition(currentRow - 2, currentCol);
-            if (Moves.validPawnMove(newPosition1, getBoard())) {
-                moves.add(new ChessMove(getPosition(), newPosition1, null));
-                if (Moves.validPawnMove(newPosition2, getBoard())) {
-                    moves.add(new ChessMove(getPosition(), newPosition2, null));
+            ChessPosition newPosition = new ChessPosition(currentRow - 2, currentCol);
+            if (Moves.validPawnMove(blackRegularMove, getBoard())) {
+                moves.add(new ChessMove(getPosition(), blackRegularMove, null));
+                if (Moves.validPawnMove(newPosition, getBoard())) {
+                    moves.add(new ChessMove(getPosition(), newPosition, null));
                 }
             }
         }
 
         //All other white moves
         if (getPieceColor() == ChessGame.TeamColor.WHITE) {
-            ChessPosition newPosition = new ChessPosition(currentRow + 1, currentCol);
             //Promo
-            if (Moves.validPawnMove(newPosition, getBoard()) && newPosition.getRow() == 8){
+            if (Moves.validPawnMove(whiteRegularMove, getBoard()) && whiteRegularMove.getRow() == 8){
                 for (ChessPiece.PieceType promo : promos) {
-                    moves.add(new ChessMove(getPosition(), newPosition, promo));
+                    moves.add(new ChessMove(getPosition(), whiteRegularMove, promo));
                 }
             }
-            //Regular Move
-            else {
-                if (Moves.validPawnMove(newPosition, getBoard())) {
-                    moves.add(new ChessMove(getPosition(), newPosition, null));
+            else { //Regular Move
+                if (Moves.validPawnMove(whiteRegularMove, getBoard())) {
+                    moves.add(new ChessMove(getPosition(), whiteRegularMove, null));
                 }
             }
+
             //Capture right
-            newPosition = new ChessPosition(currentRow + 1, currentCol + 1);
             //Promo
-            if (Moves.validPawnCap(newPosition, getBoard(), getPieceColor()) && newPosition.getRow() == 8) {
+            if (Moves.validPawnCap(whiteCaptureRight, getBoard(), getPieceColor()) && whiteCaptureRight.getRow() == 8) {
                 for (ChessPiece.PieceType promo : promos) {
-                    moves.add(new ChessMove(getPosition(), newPosition, promo));
+                    moves.add(new ChessMove(getPosition(), whiteCaptureRight, promo));
                 }
             }
-            //Regular capture
-            else {
-                if (Moves.validPawnCap(newPosition, getBoard(), getPieceColor())) {
-                    moves.add(new ChessMove(getPosition(), newPosition, null));
+            else { //Regular capture
+                if (Moves.validPawnCap(whiteCaptureRight, getBoard(), getPieceColor())) {
+                    moves.add(new ChessMove(getPosition(), whiteCaptureRight, null));
                 }
             }
+
             //Capture left
-            newPosition = new ChessPosition(currentRow + 1, currentCol - 1);
             //Promo
-            if (Moves.validPawnCap(newPosition, getBoard(), getPieceColor()) && newPosition.getRow() == 8) {
+            if (Moves.validPawnCap(whiteCaptureLeft, getBoard(), getPieceColor()) && whiteCaptureLeft.getRow() == 8) {
                 for (ChessPiece.PieceType promo : promos) {
-                    moves.add(new ChessMove(getPosition(), newPosition, promo));
+                    moves.add(new ChessMove(getPosition(), whiteCaptureLeft, promo));
                 }
             }
-            //Regular capture
-            else {
-                if (Moves.validPawnCap(newPosition, getBoard(), getPieceColor())) {
-                    moves.add(new ChessMove(getPosition(), newPosition, null));
+            else { //Regular capture
+                if (Moves.validPawnCap(whiteCaptureLeft, getBoard(), getPieceColor())) {
+                    moves.add(new ChessMove(getPosition(), whiteCaptureLeft, null));
                 }
             }
         }
 
         //Black moves
         if (getPieceColor() == ChessGame.TeamColor.BLACK) {
-            ChessPosition newPosition = new ChessPosition(currentRow - 1, currentCol);
             //Promo
-            if (Moves.validPawnMove(newPosition, getBoard()) && newPosition.getRow() == 1) {
+            if (Moves.validPawnMove(blackRegularMove, getBoard()) && blackRegularMove.getRow() == 1) {
                 for (ChessPiece.PieceType promo : promos) {
-                    moves.add(new ChessMove(getPosition(), newPosition, promo));
+                    moves.add(new ChessMove(getPosition(), blackRegularMove, promo));
                 }
             }
-            //Regular move
-            else {
-                if (Moves.validPawnMove(newPosition, getBoard())) {
-                    moves.add(new ChessMove(getPosition(), newPosition, null));
+            else { //Regular move
+                if (Moves.validPawnMove(blackRegularMove, getBoard())) {
+                    moves.add(new ChessMove(getPosition(), blackRegularMove, null));
                 }
             }
+
             //Capture right
-            newPosition = new ChessPosition(currentRow - 1, currentCol + 1);
             //Promo
-            if (Moves.validPawnCap(newPosition, getBoard(), getPieceColor()) && newPosition.getRow() == 1) {
+            if (Moves.validPawnCap(blackCaptureRight, getBoard(), getPieceColor()) && blackCaptureRight.getRow() == 1) {
                 for (ChessPiece.PieceType promo : promos) {
-                    moves.add(new ChessMove(getPosition(), newPosition, promo));
+                    moves.add(new ChessMove(getPosition(), blackCaptureRight, promo));
                 }
             }
-            //Regular capture
-            else {
-                if (Moves.validPawnCap(newPosition, getBoard(), getPieceColor())) {
-                    moves.add(new ChessMove(getPosition(), newPosition, null));
+            else { //Regular capture
+                if (Moves.validPawnCap(blackCaptureRight, getBoard(), getPieceColor())) {
+                    moves.add(new ChessMove(getPosition(), blackCaptureRight, null));
                 }
             }
+
             //Capture left
-            newPosition = new ChessPosition(currentRow - 1, currentCol - 1);
             //Promo
-            if (Moves.validPawnCap(newPosition, getBoard(), getPieceColor()) && newPosition.getRow() == 1) {
+            if (Moves.validPawnCap(blackCaptureLeft, getBoard(), getPieceColor()) && blackCaptureLeft.getRow() == 1) {
                 for (ChessPiece.PieceType promo : promos) {
-                    moves.add(new ChessMove(getPosition(), newPosition, promo));
+                    moves.add(new ChessMove(getPosition(), blackCaptureLeft, promo));
                 }
             }
-            //Regular capture
-            else {
-                if (Moves.validPawnCap(newPosition, getBoard(), getPieceColor())) {
-                    moves.add(new ChessMove(getPosition(), newPosition, null));
+            else { //Regular capture
+                if (Moves.validPawnCap(blackCaptureLeft, getBoard(), getPieceColor())) {
+                    moves.add(new ChessMove(getPosition(), blackRegularMove, null));
                 }
             }
         }
