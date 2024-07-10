@@ -37,6 +37,7 @@ public class PawnMoves {
         int currentCol = getPosition().getColumn();
         ChessPiece.PieceType [] promos = {ChessPiece.PieceType.ROOK, ChessPiece.PieceType.BISHOP, ChessPiece.PieceType.KNIGHT, ChessPiece.PieceType.QUEEN};
 
+        //White initial moves
         if (getPieceColor() == ChessGame.TeamColor.WHITE && currentRow == 2) {
             ChessPosition newPosition1 = new ChessPosition(currentRow + 1, currentCol);
             ChessPosition newPosition2 = new ChessPosition(currentRow + 2, currentCol);
@@ -48,6 +49,7 @@ public class PawnMoves {
             }
         }
 
+        //Black initial moves
         if (getPieceColor() == ChessGame.TeamColor.BLACK && currentRow == 7) {
             ChessPosition newPosition1 = new ChessPosition(currentRow - 1, currentCol);
             ChessPosition newPosition2 = new ChessPosition(currentRow - 2, currentCol);
@@ -59,84 +61,95 @@ public class PawnMoves {
             }
         }
 
+        //All other white moves
         if (getPieceColor() == ChessGame.TeamColor.WHITE) {
             ChessPosition newPosition = new ChessPosition(currentRow + 1, currentCol);
+            //Promo
             if (Moves.validPawnMove(newPosition, board) && newPosition.getRow() == 8){
                 for (ChessPiece.PieceType promo : promos) {
                     moves.add(new ChessMove(getPosition(), newPosition, promo));
                 }
             }
+            //Regular Move
             else {
                 if (Moves.validPawnMove(newPosition, board)) {
                     moves.add(new ChessMove(getPosition(), newPosition, null));
                 }
             }
+            //Capture right
+            newPosition = new ChessPosition(currentRow + 1, currentCol + 1);
+            //Promo
+            if (Moves.validPawnCap(newPosition, board, pieceColor) && newPosition.getRow() == 8) {
+                for (ChessPiece.PieceType promo : promos) {
+                    moves.add(new ChessMove(getPosition(), newPosition, promo));
+                }
+            }
+            //Regular capture
+            else {
+                if (Moves.validPawnCap(newPosition, board, pieceColor)) {
+                    moves.add(new ChessMove(getPosition(), newPosition, null));
+                }
+            }
+            //Capture left
+            newPosition = new ChessPosition(currentRow + 1, currentCol - 1);
+            //Promo
+            if (Moves.validPawnCap(newPosition, board, pieceColor) && newPosition.getRow() == 8) {
+                for (ChessPiece.PieceType promo : promos) {
+                    moves.add(new ChessMove(getPosition(), newPosition, promo));
+                }
+            }
+            //Regular capture
+            else {
+                if (Moves.validPawnCap(newPosition, board, pieceColor)) {
+                    moves.add(new ChessMove(getPosition(), newPosition, null));
+                }
+            }
         }
 
+        //Black moves
         if (getPieceColor() == ChessGame.TeamColor.BLACK) {
             ChessPosition newPosition = new ChessPosition(currentRow - 1, currentCol);
+            //Promo
             if (Moves.validPawnMove(newPosition, board) && newPosition.getRow() == 1) {
                 for (ChessPiece.PieceType promo : promos) {
                     moves.add(new ChessMove(getPosition(), newPosition, promo));
                 }
             }
+            //Regular move
             else {
                 if (Moves.validPawnMove(newPosition, board)) {
                     moves.add(new ChessMove(getPosition(), newPosition, null));
                 }
             }
-        }
-
-        if (getPieceColor() == ChessGame.TeamColor.WHITE) {
-            ChessPosition newPosition = new ChessPosition(currentRow + 1, currentCol + 1);
-            if (Moves.validPawnCap(newPosition, board, pieceColor) && newPosition.getRow() == 8) {
-                for (ChessPiece.PieceType promo : promos) {
-                    moves.add(new ChessMove(getPosition(), newPosition, promo));
-                }
-            }
-            else {
-                if (Moves.validPawnCap(newPosition, board, pieceColor)) {
-                    moves.add(new ChessMove(getPosition(), newPosition, null));
-                }
-            }
-            newPosition = new ChessPosition(currentRow + 1, currentCol - 1);
-            if (Moves.validPawnCap(newPosition, board, pieceColor) && newPosition.getRow() == 8) {
-                for (ChessPiece.PieceType promo : promos) {
-                    moves.add(new ChessMove(getPosition(), newPosition, promo));
-                }
-            }
-            else {
-                if (Moves.validPawnCap(newPosition, board, pieceColor)) {
-                    moves.add(new ChessMove(getPosition(), newPosition, null));
-                }
-            }
-        }
-
-        if (getPieceColor() == ChessGame.TeamColor.BLACK) {
-            ChessPosition newPosition = new ChessPosition(currentRow - 1, currentCol + 1);
+            //Capture right
+            newPosition = new ChessPosition(currentRow - 1, currentCol + 1);
+            //Promo
             if (Moves.validPawnCap(newPosition, board, pieceColor) && newPosition.getRow() == 1) {
                 for (ChessPiece.PieceType promo : promos) {
                     moves.add(new ChessMove(getPosition(), newPosition, promo));
                 }
             }
+            //Regular capture
             else {
                 if (Moves.validPawnCap(newPosition, board, pieceColor)) {
                     moves.add(new ChessMove(getPosition(), newPosition, null));
                 }
             }
+            //Capture left
             newPosition = new ChessPosition(currentRow - 1, currentCol - 1);
+            //Promo
             if (Moves.validPawnCap(newPosition, board, pieceColor) && newPosition.getRow() == 1) {
                 for (ChessPiece.PieceType promo : promos) {
                     moves.add(new ChessMove(getPosition(), newPosition, promo));
                 }
             }
+            //Regular capture
             else {
                 if (Moves.validPawnCap(newPosition, board, pieceColor)) {
                     moves.add(new ChessMove(getPosition(), newPosition, null));
                 }
             }
         }
-
         return moves;
     }
 }
