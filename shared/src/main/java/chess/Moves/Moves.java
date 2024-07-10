@@ -2,7 +2,6 @@ package chess.Moves;
 
 import chess.ChessBoard;
 import chess.ChessGame;
-import chess.ChessPiece;
 import chess.ChessPosition;
 
 public class Moves {
@@ -11,7 +10,9 @@ public class Moves {
             if (board.getPiece(newPosition) == null) {
                 return true;
             }
-            return board.getPiece(newPosition).getTeamColor() != pieceColor;
+            if (board.getPiece(newPosition).getTeamColor() != pieceColor){
+                return true;
+            }
         }
         return false;
     }

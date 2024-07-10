@@ -35,6 +35,7 @@ public class PawnMoves {
         Collection<ChessMove> moves = new ArrayList<>();
         int currentRow = getPosition().getRow();
         int currentCol = getPosition().getColumn();
+        ChessPiece.PieceType [] promos = {ChessPiece.PieceType.ROOK, ChessPiece.PieceType.BISHOP, ChessPiece.PieceType.KNIGHT, ChessPiece.PieceType.QUEEN};
 
         if (getPieceColor() == ChessGame.TeamColor.WHITE && currentRow == 2) {
             ChessPosition newPosition1 = new ChessPosition(currentRow + 1, currentCol);
@@ -61,10 +62,9 @@ public class PawnMoves {
         if (getPieceColor() == ChessGame.TeamColor.WHITE) {
             ChessPosition newPosition = new ChessPosition(currentRow + 1, currentCol);
             if (Moves.validPawnMove(newPosition, board) && newPosition.getRow() == 8){
-                moves.add(new ChessMove(getPosition(), newPosition, ChessPiece.PieceType.ROOK));
-                moves.add(new ChessMove(getPosition(), newPosition, ChessPiece.PieceType.BISHOP));
-                moves.add(new ChessMove(getPosition(), newPosition, ChessPiece.PieceType.KNIGHT));
-                moves.add(new ChessMove(getPosition(), newPosition, ChessPiece.PieceType.QUEEN));
+                for (ChessPiece.PieceType promo : promos) {
+                    moves.add(new ChessMove(getPosition(), newPosition, promo));
+                }
             }
             else {
                 if (Moves.validPawnMove(newPosition, board)) {
@@ -76,10 +76,9 @@ public class PawnMoves {
         if (getPieceColor() == ChessGame.TeamColor.BLACK) {
             ChessPosition newPosition = new ChessPosition(currentRow - 1, currentCol);
             if (Moves.validPawnMove(newPosition, board) && newPosition.getRow() == 1) {
-                moves.add(new ChessMove(getPosition(), newPosition, ChessPiece.PieceType.ROOK));
-                moves.add(new ChessMove(getPosition(), newPosition, ChessPiece.PieceType.BISHOP));
-                moves.add(new ChessMove(getPosition(), newPosition, ChessPiece.PieceType.KNIGHT));
-                moves.add(new ChessMove(getPosition(), newPosition, ChessPiece.PieceType.QUEEN));
+                for (ChessPiece.PieceType promo : promos) {
+                    moves.add(new ChessMove(getPosition(), newPosition, promo));
+                }
             }
             else {
                 if (Moves.validPawnMove(newPosition, board)) {
@@ -91,10 +90,9 @@ public class PawnMoves {
         if (getPieceColor() == ChessGame.TeamColor.WHITE) {
             ChessPosition newPosition = new ChessPosition(currentRow + 1, currentCol + 1);
             if (Moves.validPawnCap(newPosition, board, pieceColor) && newPosition.getRow() == 8) {
-                moves.add(new ChessMove(getPosition(), newPosition, ChessPiece.PieceType.ROOK));
-                moves.add(new ChessMove(getPosition(), newPosition, ChessPiece.PieceType.BISHOP));
-                moves.add(new ChessMove(getPosition(), newPosition, ChessPiece.PieceType.KNIGHT));
-                moves.add(new ChessMove(getPosition(), newPosition, ChessPiece.PieceType.QUEEN));
+                for (ChessPiece.PieceType promo : promos) {
+                    moves.add(new ChessMove(getPosition(), newPosition, promo));
+                }
             }
             else {
                 if (Moves.validPawnCap(newPosition, board, pieceColor)) {
@@ -103,10 +101,9 @@ public class PawnMoves {
             }
             newPosition = new ChessPosition(currentRow + 1, currentCol - 1);
             if (Moves.validPawnCap(newPosition, board, pieceColor) && newPosition.getRow() == 8) {
-                moves.add(new ChessMove(getPosition(), newPosition, ChessPiece.PieceType.ROOK));
-                moves.add(new ChessMove(getPosition(), newPosition, ChessPiece.PieceType.BISHOP));
-                moves.add(new ChessMove(getPosition(), newPosition, ChessPiece.PieceType.KNIGHT));
-                moves.add(new ChessMove(getPosition(), newPosition, ChessPiece.PieceType.QUEEN));
+                for (ChessPiece.PieceType promo : promos) {
+                    moves.add(new ChessMove(getPosition(), newPosition, promo));
+                }
             }
             else {
                 if (Moves.validPawnCap(newPosition, board, pieceColor)) {
@@ -118,10 +115,9 @@ public class PawnMoves {
         if (getPieceColor() == ChessGame.TeamColor.BLACK) {
             ChessPosition newPosition = new ChessPosition(currentRow - 1, currentCol + 1);
             if (Moves.validPawnCap(newPosition, board, pieceColor) && newPosition.getRow() == 1) {
-                moves.add(new ChessMove(getPosition(), newPosition, ChessPiece.PieceType.ROOK));
-                moves.add(new ChessMove(getPosition(), newPosition, ChessPiece.PieceType.BISHOP));
-                moves.add(new ChessMove(getPosition(), newPosition, ChessPiece.PieceType.KNIGHT));
-                moves.add(new ChessMove(getPosition(), newPosition, ChessPiece.PieceType.QUEEN));
+                for (ChessPiece.PieceType promo : promos) {
+                    moves.add(new ChessMove(getPosition(), newPosition, promo));
+                }
             }
             else {
                 if (Moves.validPawnCap(newPosition, board, pieceColor)) {
@@ -130,10 +126,9 @@ public class PawnMoves {
             }
             newPosition = new ChessPosition(currentRow - 1, currentCol - 1);
             if (Moves.validPawnCap(newPosition, board, pieceColor) && newPosition.getRow() == 1) {
-                moves.add(new ChessMove(getPosition(), newPosition, ChessPiece.PieceType.ROOK));
-                moves.add(new ChessMove(getPosition(), newPosition, ChessPiece.PieceType.BISHOP));
-                moves.add(new ChessMove(getPosition(), newPosition, ChessPiece.PieceType.KNIGHT));
-                moves.add(new ChessMove(getPosition(), newPosition, ChessPiece.PieceType.QUEEN));
+                for (ChessPiece.PieceType promo : promos) {
+                    moves.add(new ChessMove(getPosition(), newPosition, promo));
+                }
             }
             else {
                 if (Moves.validPawnCap(newPosition, board, pieceColor)) {
