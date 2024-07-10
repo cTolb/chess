@@ -41,7 +41,7 @@ public class RookMoves {
 
         for (int i = currentCol; i <= 8; i++) {
             ChessPosition newPosition = new ChessPosition(currentRow, i + 1);
-            if (Moves.validMove(newPosition, board, pieceColor)) {
+            if (Moves.validMove(newPosition, getBoard(), getPieceColor())) {
                 moves.add(new ChessMove(getPosition(), newPosition, null));
                 if (getBoard().getPiece(newPosition) != null) {
                     if(getBoard().getPiece(newPosition).getTeamColor() != getPieceColor()) {
@@ -56,7 +56,7 @@ public class RookMoves {
 
         for (int i = currentCol; i >= 1; i--) {
             ChessPosition newPosition = new ChessPosition(currentRow, i - 1);
-            if (Moves.validMove(newPosition, board, pieceColor)) {
+            if (Moves.validMove(newPosition, getBoard(), getPieceColor())) {
                 moves.add(new ChessMove(getPosition(), newPosition, null));
                 if (getBoard().getPiece(newPosition) != null) {
                     if(getBoard().getPiece(newPosition).getTeamColor() != getPieceColor()) {
@@ -71,7 +71,7 @@ public class RookMoves {
 
         for (int i = currentRow; i <= 8; i++) {
             ChessPosition newPosition = new ChessPosition(i + 1, currentCol);
-            if (Moves.validMove(newPosition, board, pieceColor)) {
+            if (Moves.validMove(newPosition, getBoard(), getPieceColor())) {
                 moves.add(new ChessMove(getPosition(), newPosition, null));
                 if (getBoard().getPiece(newPosition) != null) {
                     if(getBoard().getPiece(newPosition).getTeamColor() != getPieceColor()) {
@@ -86,7 +86,7 @@ public class RookMoves {
 
         for (int i = currentRow; i >= 1; i--) {
             ChessPosition newPosition = new ChessPosition(i - 1, currentCol);
-            if (Moves.validMove(newPosition, board, pieceColor)) {
+            if (Moves.validMove(newPosition, getBoard(), getPieceColor())) {
                 moves.add(new ChessMove(getPosition(), newPosition, null));
                 if (getBoard().getPiece(newPosition) != null) {
                     if(getBoard().getPiece(newPosition).getTeamColor() != getPieceColor()) {

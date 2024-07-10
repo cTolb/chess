@@ -49,8 +49,8 @@ public class KingMoves {
                 new ChessPosition(currentRow, currentCol - 1)};
 
         for (ChessPosition move : possibleMoves) {
-            if (Moves.validMove(move, board, pieceColor)) {
-                moves.add(new ChessMove(position, move, null));
+            if (Moves.validMove(move, getBoard(), getPieceColor())) {
+                moves.add(new ChessMove(getPosition(), move, null));
             }
         }
 
