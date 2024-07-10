@@ -39,6 +39,7 @@ public class RookMoves {
         int currentRow = getPosition().getRow();
         int currentCol = getPosition().getColumn();
 
+        //Check right
         for (int i = currentCol; i <= 8; i++) {
             ChessPosition newPosition = new ChessPosition(currentRow, i + 1);
             if (Moves.validMove(newPosition, getBoard(), getPieceColor())) {
@@ -54,6 +55,7 @@ public class RookMoves {
             }
         }
 
+        //Check left
         for (int i = currentCol; i >= 1; i--) {
             ChessPosition newPosition = new ChessPosition(currentRow, i - 1);
             if (Moves.validMove(newPosition, getBoard(), getPieceColor())) {
@@ -69,6 +71,7 @@ public class RookMoves {
             }
         }
 
+        //Check up
         for (int i = currentRow; i <= 8; i++) {
             ChessPosition newPosition = new ChessPosition(i + 1, currentCol);
             if (Moves.validMove(newPosition, getBoard(), getPieceColor())) {
@@ -84,6 +87,7 @@ public class RookMoves {
             }
         }
 
+        //Check down
         for (int i = currentRow; i >= 1; i--) {
             ChessPosition newPosition = new ChessPosition(i - 1, currentCol);
             if (Moves.validMove(newPosition, getBoard(), getPieceColor())) {
