@@ -58,22 +58,22 @@ public class ChessPiece {
         return switch (pieceType) {
             case KING:
                 KingMoves kingMoves = new KingMoves(board, myPosition, getTeamColor());
-                yield kingMoves.kingMoves();
+                yield kingMoves.calcKingMoves();
             case QUEEN:
                 QueenMoves queenMoves = new QueenMoves(board, myPosition, getTeamColor());
-                yield queenMoves.queenMoves();
+                yield queenMoves.calcQueenMoves();
             case BISHOP:
                 BishopMoves bishopMoves = new BishopMoves(board, myPosition, getTeamColor());
-                yield bishopMoves.bishopMoves();
+                yield bishopMoves.calcBishopMoves();
             case KNIGHT:
                 KnightMoves knightMoves = new KnightMoves(board, myPosition, getTeamColor());
-                yield knightMoves.knightMoves();
+                yield knightMoves.calcKnightMoves();
             case ROOK:
                 RookMoves rookMoves = new RookMoves(board, myPosition, getTeamColor());
-                yield rookMoves.rookMoves();
+                yield rookMoves.calcRookMoves();
             case PAWN:
                 PawnMoves pawnMoves = new PawnMoves(board, myPosition, getTeamColor());
-                yield pawnMoves.pawnMoves();
+                yield pawnMoves.calcPawnMoves();
         };
     }
 

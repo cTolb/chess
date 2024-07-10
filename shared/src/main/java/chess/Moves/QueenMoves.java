@@ -30,13 +30,13 @@ public class QueenMoves {
         return position;
     }
 
-    public Collection<ChessMove> queenMoves() {
+    public Collection<ChessMove> calcQueenMoves() {
         Collection<ChessMove> moves = new ArrayList<>();
         RookMoves rookMoves = new RookMoves(getBoard(), getPosition(), getPieceColor());
         BishopMoves bishopMoves = new BishopMoves(getBoard(), getPosition(), getPieceColor());
 
-        moves.addAll(rookMoves.rookMoves());
-        moves.addAll(bishopMoves.bishopMoves());
+        moves.addAll(rookMoves.calcRookMoves());
+        moves.addAll(bishopMoves.calcBishopMoves());
 
         return moves;
     }

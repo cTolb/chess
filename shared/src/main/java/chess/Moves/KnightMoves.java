@@ -34,7 +34,7 @@ public class KnightMoves {
      * This function will return possible moves for a knight at a given position on the board.
      * @return ArrayList of possible moves
      */
-    public Collection<ChessMove> knightMoves() {
+    public Collection<ChessMove> calcKnightMoves() {
         Collection<ChessMove> moves = new ArrayList<>();
         int currentRow = position.getRow();
         int currentCol = position.getColumn();

@@ -35,7 +35,7 @@ public class KingMoves {
      * position on the board
      * @return ArrayList of possible moves
      */
-    public Collection<ChessMove> kingMoves() {
+    public Collection<ChessMove> calcKingMoves() {
         Collection<ChessMove> moves = new ArrayList<>();
         int currentRow = getPosition().getRow();
         int currentCol = getPosition().getColumn();

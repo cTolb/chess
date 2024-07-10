@@ -31,7 +31,7 @@ public class PawnMoves {
      * This function will return possible moves for a pawn at a given position on the board.
      * @return ArrayList of possible moves
      */
-    public Collection<ChessMove> pawnMoves() {
+    public Collection<ChessMove> calcPawnMoves() {
         Collection<ChessMove> moves = new ArrayList<>();
         int currentRow = getPosition().getRow();
         int currentCol = getPosition().getColumn();

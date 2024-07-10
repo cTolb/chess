@@ -35,7 +35,7 @@ public class BishopMoves {
      * on the board.
      * @return Collection of possible moves
      */
-    public Collection<ChessMove> bishopMoves() {
+    public Collection<ChessMove> calcBishopMoves() {
         Collection<ChessMove> moves = new ArrayList<>();
         int beginRow = getPosition().getRow();
         int beginCol = getPosition().getColumn();
