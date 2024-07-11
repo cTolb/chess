@@ -9,6 +9,11 @@ public class PawnMoves {
     private final ChessGame.TeamColor pieceColor;
     private final ChessBoard board;
     private final ChessPosition position;
+    private final ChessPiece.PieceType [] promos = {ChessPiece.PieceType.ROOK,
+            ChessPiece.PieceType.BISHOP,
+            ChessPiece.PieceType.KNIGHT,
+            ChessPiece.PieceType.QUEEN};
+
     public  PawnMoves (ChessBoard board, ChessPosition position, ChessGame.TeamColor pieceColor) {
         this.pieceColor = pieceColor;
         this.board = board;
@@ -35,10 +40,6 @@ public class PawnMoves {
         Collection<ChessMove> moves = new ArrayList<>();
         int currentRow = getPosition().getRow();
         int currentCol = getPosition().getColumn();
-        ChessPiece.PieceType [] promos = {ChessPiece.PieceType.ROOK,
-                ChessPiece.PieceType.BISHOP,
-                ChessPiece.PieceType.KNIGHT,
-                ChessPiece.PieceType.QUEEN};
 
         //White Moves
         ChessPosition whiteRegularMove = new ChessPosition(currentRow + 1, currentCol);

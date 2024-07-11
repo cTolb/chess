@@ -1,8 +1,6 @@
 package chess.Moves;
 
-import chess.ChessBoard;
-import chess.ChessGame;
-import chess.ChessPosition;
+import chess.*;
 
 public class Moves {
     public static boolean validMove(ChessPosition newPosition, ChessBoard board, ChessGame.TeamColor pieceColor) {
