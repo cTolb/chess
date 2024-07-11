@@ -37,10 +37,10 @@ public class BishopMoves {
      */
     public Collection<ChessMove> calcBishopMoves() {
         Collection<ChessMove> moves = new ArrayList<>();
-        int beginRow = getPosition().getRow();
-        int beginCol = getPosition().getColumn();
+        int currentRow = getPosition().getRow();
+        int currentCol = getPosition().getColumn();
 
-        for (int startRow = beginRow, startCol = beginCol; startRow <= 8 && startCol <= 8; startRow++, startCol++) {
+        for (int startRow = currentRow, startCol = currentCol; startRow <= 8 && startCol <= 8; startRow++, startCol++) {
             ChessPosition newPosition = new ChessPosition(startRow + 1, startCol + 1);
             if (Moves.validMove(newPosition, getBoard(), getPieceColor())) {
                 moves.add(new ChessMove(getPosition(), newPosition, null));
@@ -53,7 +53,7 @@ public class BishopMoves {
             }
         }
 
-        for (int startRow = beginRow, startCol = beginCol;startRow <= 8 && startCol >= 1; startRow++, startCol--) {
+        for (int startRow = currentRow, startCol = currentCol; startRow <= 8 && startCol >= 1; startRow++, startCol--) {
             ChessPosition newPosition = new ChessPosition(startRow + 1, startCol - 1);
             if (Moves.validMove(newPosition, getBoard(), getPieceColor())) {
                 moves.add(new ChessMove(getPosition(), newPosition, null));
@@ -66,7 +66,7 @@ public class BishopMoves {
             }
         }
 
-        for (int startRow = beginRow, startCol = beginCol ;startRow >= 1 && startCol <= 8; startRow--, startCol++) {
+        for (int startRow = currentRow, startCol = currentCol; startRow >= 1 && startCol <= 8; startRow--, startCol++) {
             ChessPosition newPosition = new ChessPosition(startRow - 1, startCol + 1);
             if (Moves.validMove(newPosition, getBoard(), getPieceColor())) {
                 moves.add(new ChessMove(getPosition(), newPosition, null));
@@ -79,7 +79,7 @@ public class BishopMoves {
             }
         }
 
-        for (int startRow = beginRow, startCol = beginCol;startRow >= 1 && startCol >= 1; startRow--, startCol--) {
+        for (int startRow = currentRow, startCol = currentCol; startRow >= 1 && startCol >= 1; startRow--, startCol--) {
             ChessPosition newPosition = new ChessPosition(startRow - 1, startCol - 1);
             if (Moves.validMove(newPosition, getBoard(), getPieceColor())) {
                 moves.add(new ChessMove(getPosition(), newPosition, null));
