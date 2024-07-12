@@ -32,11 +32,18 @@ public class QueenMoves {
 
     public Collection<ChessMove> calcQueenMoves() {
         Collection<ChessMove> moves = new ArrayList<>();
-        RookMoves rookMoves = new RookMoves(getBoard(), getPosition(), getPieceColor());
-        BishopMoves bishopMoves = new BishopMoves(getBoard(), getPosition(), getPieceColor());
 
-        moves.addAll(rookMoves.calcRookMoves());
-        moves.addAll(bishopMoves.calcBishopMoves());
+        //Diagonal
+        Moves.calculateContinuousMove(moves, 1, 1, getPosition(), getBoard(), getPieceColor());
+        Moves.calculateContinuousMove(moves, 1, -1, getPosition(), getBoard(), getPieceColor());
+        Moves.calculateContinuousMove(moves, -1, 1, getPosition(), getBoard(), getPieceColor());
+        Moves.calculateContinuousMove(moves, -1, -1, getPosition(), getBoard(), getPieceColor());
+
+        //Straight line
+        Moves.calculateContinuousMove(moves, 1, 0, getPosition(), getBoard(), getPieceColor());
+        Moves.calculateContinuousMove(moves, -1, 0, getPosition(), getBoard(), getPieceColor());
+        Moves.calculateContinuousMove(moves, 0, 1, getPosition(), getBoard(), getPieceColor());
+        Moves.calculateContinuousMove(moves, 0, -1, getPosition(), getBoard(), getPieceColor());
 
         return moves;
     }

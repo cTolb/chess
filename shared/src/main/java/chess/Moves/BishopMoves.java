@@ -37,60 +37,14 @@ public class BishopMoves {
      */
     public Collection<ChessMove> calcBishopMoves() {
         Collection<ChessMove> moves = new ArrayList<>();
-        int currentRow = getPosition().getRow();
-        int currentCol = getPosition().getColumn();
 
-        for (int startRow = currentRow, startCol = currentCol; startRow <= 8 && startCol <= 8; startRow++, startCol++) {
-            ChessPosition newPosition = new ChessPosition(startRow + 1, startCol + 1);
-            if (Moves.validMove(newPosition, getBoard(), getPieceColor())) {
-                moves.add(new ChessMove(getPosition(), newPosition, null));
-                if (getBoard().getPiece(newPosition) != null && getBoard().getPiece(newPosition).getTeamColor() != getPieceColor()) {
-                    break;
-                }
-            }
-            else {
-                break;
-            }
-        }
+        Moves.calculateContinuousMove(moves, 1, 1, getPosition(), getBoard(), getPieceColor());
+        Moves.calculateContinuousMove(moves, 1, -1, getPosition(), getBoard(), getPieceColor());
+        Moves.calculateContinuousMove(moves, -1, 1, getPosition(), getBoard(), getPieceColor());
+        Moves.calculateContinuousMove(moves, -1, -1, getPosition(), getBoard(), getPieceColor());
 
-        for (int startRow = currentRow, startCol = currentCol; startRow <= 8 && startCol >= 1; startRow++, startCol--) {
-            ChessPosition newPosition = new ChessPosition(startRow + 1, startCol - 1);
-            if (Moves.validMove(newPosition, getBoard(), getPieceColor())) {
-                moves.add(new ChessMove(getPosition(), newPosition, null));
-                if (getBoard().getPiece(newPosition) != null && getBoard().getPiece(newPosition).getTeamColor() != getPieceColor()) {
-                    break;
-                }
-            }
-            else {
-                break;
-            }
-        }
-
-        for (int startRow = currentRow, startCol = currentCol; startRow >= 1 && startCol <= 8; startRow--, startCol++) {
-            ChessPosition newPosition = new ChessPosition(startRow - 1, startCol + 1);
-            if (Moves.validMove(newPosition, getBoard(), getPieceColor())) {
-                moves.add(new ChessMove(getPosition(), newPosition, null));
-                if (getBoard().getPiece(newPosition) != null && getBoard().getPiece(newPosition).getTeamColor() != getPieceColor()) {
-                    break;
-                }
-            }
-            else {
-                break;
-            }
-        }
-
-        for (int startRow = currentRow, startCol = currentCol; startRow >= 1 && startCol >= 1; startRow--, startCol--) {
-            ChessPosition newPosition = new ChessPosition(startRow - 1, startCol - 1);
-            if (Moves.validMove(newPosition, getBoard(), getPieceColor())) {
-                moves.add(new ChessMove(getPosition(), newPosition, null));
-                if (getBoard().getPiece(newPosition) != null && getBoard().getPiece(newPosition).getTeamColor() != getPieceColor()) {
-                    break;
-                }
-            }
-            else {
-                break;
-            }
-        }
         return moves;
     }
+
+
 }

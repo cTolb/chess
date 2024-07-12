@@ -2,7 +2,28 @@ package chess.Moves;
 
 import chess.*;
 
+import java.util.Collection;
+
 public class Moves {
+
+    public static void calculateContinuousMove(Collection<ChessMove> moves, int rowInc, int colInc, ChessPosition position, ChessBoard board, ChessGame.TeamColor pieceColor) {
+        int currentRow = position.getRow();
+        int currentCol = position.getColumn();
+
+        for (int beginRow = currentRow + rowInc, beginCol = currentCol + colInc; ;beginRow += rowInc, beginCol += colInc) {
+            ChessPosition newPosition = new ChessPosition(beginRow, beginCol);
+            if (Moves.validMove(newPosition, board, pieceColor)) {
+                moves.add(new ChessMove(position, newPosition, null));
+                if (board.getPiece(newPosition) != null && board.getPiece(newPosition).getTeamColor() != pieceColor) {
+                    break;
+                }
+            }
+            else {
+                break;
+            }
+        }
+
+    }
     public static boolean validMove(ChessPosition newPosition, ChessBoard board, ChessGame.TeamColor pieceColor) {
         if (isInBounds(newPosition)) {
             if (board.getPiece(newPosition) == null) {

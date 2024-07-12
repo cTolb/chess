@@ -36,72 +36,12 @@ public class RookMoves {
      */
     public Collection<ChessMove> calcRookMoves() {
         Collection<ChessMove> moves = new ArrayList<>();
-        int currentRow = getPosition().getRow();
-        int currentCol = getPosition().getColumn();
 
-        //Check right
-        for (int i = currentCol; i <= 8; i++) {
-            ChessPosition newPosition = new ChessPosition(currentRow, i + 1);
-            if (Moves.validMove(newPosition, getBoard(), getPieceColor())) {
-                moves.add(new ChessMove(getPosition(), newPosition, null));
-                if (getBoard().getPiece(newPosition) != null) {
-                    if(getBoard().getPiece(newPosition).getTeamColor() != getPieceColor()) {
-                        break;
-                    }
-                }
-            }
-            else {
-                break;
-            }
-        }
+        Moves.calculateContinuousMove(moves, 1, 0, getPosition(), getBoard(), getPieceColor());
+        Moves.calculateContinuousMove(moves, -1, 0, getPosition(), getBoard(), getPieceColor());
+        Moves.calculateContinuousMove(moves, 0, 1, getPosition(), getBoard(), getPieceColor());
+        Moves.calculateContinuousMove(moves, 0, -1, getPosition(), getBoard(), getPieceColor());
 
-        //Check left
-        for (int i = currentCol; i >= 1; i--) {
-            ChessPosition newPosition = new ChessPosition(currentRow, i - 1);
-            if (Moves.validMove(newPosition, getBoard(), getPieceColor())) {
-                moves.add(new ChessMove(getPosition(), newPosition, null));
-                if (getBoard().getPiece(newPosition) != null) {
-                    if(getBoard().getPiece(newPosition).getTeamColor() != getPieceColor()) {
-                        break;
-                    }
-                }
-            }
-            else {
-                break;
-            }
-        }
-
-        //Check up
-        for (int i = currentRow; i <= 8; i++) {
-            ChessPosition newPosition = new ChessPosition(i + 1, currentCol);
-            if (Moves.validMove(newPosition, getBoard(), getPieceColor())) {
-                moves.add(new ChessMove(getPosition(), newPosition, null));
-                if (getBoard().getPiece(newPosition) != null) {
-                    if(getBoard().getPiece(newPosition).getTeamColor() != getPieceColor()) {
-                        break;
-                    }
-                }
-            }
-            else {
-                break;
-            }
-        }
-
-        //Check down
-        for (int i = currentRow; i >= 1; i--) {
-            ChessPosition newPosition = new ChessPosition(i - 1, currentCol);
-            if (Moves.validMove(newPosition, getBoard(), getPieceColor())) {
-                moves.add(new ChessMove(getPosition(), newPosition, null));
-                if (getBoard().getPiece(newPosition) != null) {
-                    if(getBoard().getPiece(newPosition).getTeamColor() != getPieceColor()) {
-                        break;
-                    }
-                }
-            }
-            else {
-                break;
-            }
-        }
         return moves;
     }
 }
