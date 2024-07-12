@@ -38,113 +38,110 @@ public class PawnMoves {
      */
     public Collection<ChessMove> calcPawnMoves() {
         Collection<ChessMove> moves = new ArrayList<>();
+
+        if (getPieceColor() == ChessGame.TeamColor.WHITE) {
+            whiteMoves(moves);
+        }
+        if (getPieceColor() == ChessGame.TeamColor.BLACK) {
+            blackMoves(moves);
+        }
+
+        return moves;
+    }
+
+    private void whiteMoves(Collection<ChessMove> moves) {
         int currentRow = getPosition().getRow();
         int currentCol = getPosition().getColumn();
 
-        //White Moves
         ChessPosition whiteRegularMove = new ChessPosition(currentRow + 1, currentCol);
         ChessPosition whiteCaptureRight = new ChessPosition(currentRow + 1, currentCol + 1);
         ChessPosition whiteCaptureLeft = new ChessPosition(currentRow + 1, currentCol - 1);
 
-        //BlackMoves
+        //White initial moves
+        if (currentRow == 2) {
+            ChessPosition whiteMoveTwo = new ChessPosition(currentRow + 2, currentCol);
+            initialMove(moves, whiteRegularMove, whiteMoveTwo);
+        }
+
+        //All other white moves
+        if (Moves.validPawnMove(whiteRegularMove, getBoard()) && whiteRegularMove.getRow() == 8) {
+            moves.addAll(makePromotion(promos, getPosition(), whiteRegularMove, moves));
+        } else { //Regular Move
+            if (Moves.validPawnMove(whiteRegularMove, getBoard())) {
+                moves.add(new ChessMove(getPosition(), whiteRegularMove, null));
+            }
+        }
+        //Capture right
+        //Promo
+        if (Moves.validPawnCap(whiteCaptureRight, getBoard(), getPieceColor()) && whiteCaptureRight.getRow() == 8) {
+            moves.addAll(makePromotion(promos, getPosition(), whiteCaptureRight, moves));
+        } else { //Regular capture
+            if (Moves.validPawnCap(whiteCaptureRight, getBoard(), getPieceColor())) {
+                moves.add(new ChessMove(getPosition(), whiteCaptureRight, null));
+            }
+        }
+        //Capture left
+        //Promo
+        if (Moves.validPawnCap(whiteCaptureLeft, getBoard(), getPieceColor()) && whiteCaptureLeft.getRow() == 8) {
+            moves.addAll(makePromotion(promos, getPosition(), whiteCaptureLeft, moves));
+        } else { //Regular capture
+            if (Moves.validPawnCap(whiteCaptureLeft, getBoard(), getPieceColor())) {
+                moves.add(new ChessMove(getPosition(), whiteCaptureLeft, null));
+            }
+        }
+    }
+
+    private void blackMoves(Collection<ChessMove> moves) {
+        int currentRow = getPosition().getRow();
+        int currentCol = getPosition().getColumn();
+
         ChessPosition blackRegularMove = new ChessPosition(currentRow - 1, currentCol);
         ChessPosition blackCaptureRight = new ChessPosition(currentRow - 1, currentCol + 1);
         ChessPosition blackCaptureLeft = new ChessPosition(currentRow - 1, currentCol - 1);
 
-        //White initial moves
-        if (getPieceColor() == ChessGame.TeamColor.WHITE && currentRow == 2) {
-            ChessPosition whiteMoveTwo = new ChessPosition(currentRow + 2, currentCol);
-            if (Moves.validPawnMove(whiteRegularMove, getBoard())) {
-                moves.add(new ChessMove(getPosition(), whiteRegularMove, null));
-                if (Moves.validPawnMove(whiteMoveTwo, getBoard())) {
-                    moves.add(new ChessMove(getPosition(), whiteMoveTwo, null));
-                }
-            }
-        }
-
         //Black initial moves
-        if (getPieceColor() == ChessGame.TeamColor.BLACK && currentRow == 7) {
+        if (currentRow == 7) {
             ChessPosition blackMoveTwo = new ChessPosition(currentRow - 2, currentCol);
-            if (Moves.validPawnMove(blackRegularMove, getBoard())) {
-                moves.add(new ChessMove(getPosition(), blackRegularMove, null));
-                if (Moves.validPawnMove(blackMoveTwo, getBoard())) {
-                    moves.add(new ChessMove(getPosition(), blackMoveTwo, null));
-                }
-            }
-        }
-
-        //All other white moves
-        if (getPieceColor() == ChessGame.TeamColor.WHITE) {
-            //Promo
-            if (Moves.validPawnMove(whiteRegularMove, getBoard()) && whiteRegularMove.getRow() == 8){
-                moves.addAll(makePromotion(promos, getPosition(), whiteRegularMove, moves));
-            }
-            else { //Regular Move
-                if (Moves.validPawnMove(whiteRegularMove, getBoard())) {
-                    moves.add(new ChessMove(getPosition(), whiteRegularMove, null));
-                }
-            }
-
-            //Capture right
-            //Promo
-            if (Moves.validPawnCap(whiteCaptureRight, getBoard(), getPieceColor()) && whiteCaptureRight.getRow() == 8) {
-                moves.addAll(makePromotion(promos, getPosition(), whiteCaptureRight, moves));
-            }
-            else { //Regular capture
-                if (Moves.validPawnCap(whiteCaptureRight, getBoard(), getPieceColor())) {
-                    moves.add(new ChessMove(getPosition(), whiteCaptureRight, null));
-                }
-            }
-
-            //Capture left
-            //Promo
-            if (Moves.validPawnCap(whiteCaptureLeft, getBoard(), getPieceColor()) && whiteCaptureLeft.getRow() == 8) {
-                moves.addAll(makePromotion(promos, getPosition(), whiteCaptureLeft, moves));
-            }
-            else { //Regular capture
-                if (Moves.validPawnCap(whiteCaptureLeft, getBoard(), getPieceColor())) {
-                    moves.add(new ChessMove(getPosition(), whiteCaptureLeft, null));
-                }
-            }
+            initialMove(moves, blackRegularMove, blackMoveTwo);
         }
 
         //Black moves
-        if (getPieceColor() == ChessGame.TeamColor.BLACK) {
-            //Promo
-            if (Moves.validPawnMove(blackRegularMove, getBoard()) && blackRegularMove.getRow() == 1) {
-                moves.addAll(makePromotion(promos, getPosition(), blackRegularMove, moves));
-            }
-            else { //Regular move
-                if (Moves.validPawnMove(blackRegularMove, getBoard())) {
-                    moves.add(new ChessMove(getPosition(), blackRegularMove, null));
-                }
-            }
-
-            //Capture right
-            //Promo
-            if (Moves.validPawnCap(blackCaptureRight, getBoard(), getPieceColor()) && blackCaptureRight.getRow() == 1) {
-                moves.addAll(makePromotion(promos, getPosition(), blackCaptureRight, moves));
-            }
-            else { //Regular capture
-                if (Moves.validPawnCap(blackCaptureRight, getBoard(), getPieceColor())) {
-                    moves.add(new ChessMove(getPosition(), blackCaptureRight, null));
-                }
-            }
-
-            //Capture left
-            //Promo
-            if (Moves.validPawnCap(blackCaptureLeft, getBoard(), getPieceColor()) && blackCaptureLeft.getRow() == 1) {
-                moves.addAll(makePromotion(promos, getPosition(), blackCaptureLeft, moves));
-            }
-            else { //Regular capture
-                if (Moves.validPawnCap(blackCaptureLeft, getBoard(), getPieceColor())) {
-                    moves.add(new ChessMove(getPosition(), blackRegularMove, null));
-                }
+        //Promo
+        if (Moves.validPawnMove(blackRegularMove, getBoard()) && blackRegularMove.getRow() == 1) {
+            moves.addAll(makePromotion(promos, getPosition(), blackRegularMove, moves));
+        } else { //Regular move
+            if (Moves.validPawnMove(blackRegularMove, getBoard())) {
+                moves.add(new ChessMove(getPosition(), blackRegularMove, null));
             }
         }
-        return moves;
+        //Capture right
+        //Promo
+        if (Moves.validPawnCap(blackCaptureRight, getBoard(), getPieceColor()) && blackCaptureRight.getRow() == 1) {
+            moves.addAll(makePromotion(promos, getPosition(), blackCaptureRight, moves));
+        } else { //Regular capture
+            if (Moves.validPawnCap(blackCaptureRight, getBoard(), getPieceColor())) {
+                moves.add(new ChessMove(getPosition(), blackCaptureRight, null));
+            }
+        }
+        //Capture left
+        //Promo
+        if (Moves.validPawnCap(blackCaptureLeft, getBoard(), getPieceColor()) && blackCaptureLeft.getRow() == 1) {
+            moves.addAll(makePromotion(promos, getPosition(), blackCaptureLeft, moves));
+        } else { //Regular capture
+            if (Moves.validPawnCap(blackCaptureLeft, getBoard(), getPieceColor())) {
+                moves.add(new ChessMove(getPosition(), blackRegularMove, null));
+            }
+        }
     }
 
+    private void initialMove(Collection<ChessMove> moves, ChessPosition firstMove, ChessPosition secondMove){
+        if (Moves.validPawnMove(firstMove, getBoard())) {
+            moves.add(new ChessMove(getPosition(), firstMove, null));
+            if (Moves.validPawnMove(secondMove, getBoard())) {
+                moves.add(new ChessMove(getPosition(), secondMove, null));
+            }
+        }
+    }
     private Collection<ChessMove> makePromotion (ChessPiece.PieceType[] promos, ChessPosition oldPosition,
                                                  ChessPosition newPosition, Collection<ChessMove> moves) {
         for (ChessPiece.PieceType promo : promos) {
