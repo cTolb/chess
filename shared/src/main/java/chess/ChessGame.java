@@ -58,19 +58,15 @@ public class ChessGame {
         if (piece == null) {
             return null;
         }
-        if (getTeamTurn() != piece.getTeamColor()) {
-            return null;
-        }
 
         for (ChessMove move : potentialMoves) {
-            ChessBoard tempBoard = board;
-            board.addPiece(move.getEndPosition(), board.getPiece(move.getStartPosition()));
-            board.addPiece(move.getStartPosition(), null);
-            if (!isInCheck(getTeamTurn())) {
+            //Move piece to board to check if is in check
+            movePiece(move);
+            if (!isInCheck(piece.getTeamColor())) {
                 moves.add(move);
             }
-            board.addPiece(move.getStartPosition(), board.getPiece(move.getEndPosition()));
-            board.addPiece(move.getEndPosition(), null);
+            //Set board back to actual board
+            resetBoard(move);
         }
         return moves;
 
@@ -112,6 +108,16 @@ public class ChessGame {
         }
 
         return false;
+    }
+
+    private void movePiece(ChessMove move) {
+        board.addPiece(move.getEndPosition(), board.getPiece(move.getStartPosition()));
+        board.addPiece(move.getStartPosition(), null);
+    }
+
+    private void resetBoard(ChessMove move) {
+        board.addPiece(move.getStartPosition(), board.getPiece(move.getEndPosition()));
+        board.addPiece(move.getEndPosition(), null);
     }
 
     public ChessPosition findPiecePosition(TeamColor teamColor, ChessBoard board, ChessPiece.PieceType typeToFind) {
