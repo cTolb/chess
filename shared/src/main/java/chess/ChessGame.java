@@ -118,18 +118,8 @@ public class ChessGame {
      */
     public boolean isInCheck(TeamColor teamColor) {
         ChessPosition king = findPiecePosition(teamColor, getBoard(), ChessPiece.PieceType.KING);
-        Collection<ChessPosition> otherTeam = new ArrayList<>();
+        Collection<ChessPosition> otherTeam = findTeam(opponentColor(teamColor), new ArrayList<>());
 
-        for (int i = 1; i <= 8; i++) {
-            for (int j = 1; j <= 8; j++) {
-                ChessPiece piece = board.getPiece(new ChessPosition(i ,j));
-                if (piece != null) {
-                    if (piece.getTeamColor() == opponentColor(teamColor)) {
-                        otherTeam.add(new ChessPosition(i, j));
-                    }
-                }
-            }
-        }
 
         for (ChessPosition loc : otherTeam) {
             ChessPiece checkPiece = board.getPiece(loc);
@@ -155,9 +145,10 @@ public class ChessGame {
         boolean isInCheckmate = false;
         ChessPosition kingPosition = findPiecePosition(teamColor, board, ChessPiece.PieceType.KING);
         Collection<ChessMove> moves = validMoves(kingPosition);
-        if (moves.isEmpty()){
+        if (moves.isEmpty()) {
             isInCheckmate = true;
         }
+
 
         return isInCheckmate;
     }
@@ -198,6 +189,19 @@ public class ChessGame {
         return board;
     }
 
+    private Collection<ChessPosition> findTeam(TeamColor color, Collection<ChessPosition> team) {
+        for (int i = 1; i <= 8; i++) {
+            for (int j = 1; j <= 8; j++) {
+                ChessPiece piece = board.getPiece(new ChessPosition(i ,j));
+                if (piece != null) {
+                    if (piece.getTeamColor() == color) {
+                        team.add(new ChessPosition(i, j));
+                    }
+                }
+            }
+        }
+        return team;
+    }
     private void movePiece(ChessMove move) {
         if (move.getPromotionPiece() != null) {
             board.addPiece(move.getEndPosition(), new ChessPiece(board.getPiece(move.getStartPosition()).getTeamColor(), move.getPromotionPiece()));
