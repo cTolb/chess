@@ -94,7 +94,20 @@ public class ChessGame {
         if (workingPiece == null) {
             throw new InvalidMoveException();
         }
+        if(!validMoves(move.getStartPosition()).contains(move)){
+            throw new InvalidMoveException();
+        }
+        if (workingPiece.getTeamColor() != getTeamTurn()) {
+            throw new InvalidMoveException();
+        }
+        movePiece(move);
 
+        if (workingPiece.getTeamColor() == TeamColor.WHITE) {
+            setTeamTurn(TeamColor.BLACK);
+        }
+        if (workingPiece.getTeamColor() == TeamColor.BLACK) {
+            setTeamTurn(TeamColor.WHITE);
+        }
 
     }
 
