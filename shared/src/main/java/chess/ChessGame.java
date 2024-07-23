@@ -43,6 +43,16 @@ public class ChessGame {
         BLACK
     }
 
+    /*private ChessBoard copyBoard() {
+        ChessBoard newBoard = new ChessBoard();
+        for (int i = 1; i <= 8; i++) {
+            for (int j = 1; j <= 8; j++) {
+                newBoard.addPiece();
+            }
+        }
+        return newBoard;
+    }*/
+
     /**
      * Gets a valid moves for a piece at the given location
      *
@@ -50,10 +60,11 @@ public class ChessGame {
      * @return Set of valid moves for requested piece, or null if no piece at
      * startPosition
      */
-    public Collection<ChessMove> validMoves(ChessPosition startPosition) {
+    public Collection<ChessMove> validMoves(ChessPosition startPosition){
         ChessPiece piece = board.getPiece(startPosition);
         Collection<ChessMove> potentialMoves = piece.pieceMoves(board, startPosition);
         Collection<ChessMove> moves = new ArrayList<>();
+        ChessBoard workingBoard = board.copyBoard();
 
         if (piece == null) {
             return null;
@@ -66,7 +77,7 @@ public class ChessGame {
                 moves.add(move);
             }
             //Set board back to actual board
-            resetBoard(move);
+            resetBoard(workingBoard);
         }
         return moves;
 
@@ -90,34 +101,45 @@ public class ChessGame {
      */
     public boolean isInCheck(TeamColor teamColor) {
         ChessPosition king = findPiecePosition(teamColor, getBoard(), ChessPiece.PieceType.KING);
+        Collection<ChessPosition> otherTeam = new ArrayList<>();
 
-        for (int row = 1; row <= 8; row++) {
-            for (int col = 1; col <= 8; col++) {
-                ChessPosition checkPosition = new ChessPosition(row, col);
-                ChessPiece checkPiece = board.getPiece(checkPosition);
-
-                if (checkPiece != null && checkPiece.getTeamColor() == opponentColor(teamColor)) {
-                    Collection<ChessMove> moves = checkPiece.pieceMoves(board, checkPosition);
-                    for (ChessMove move : moves) {
-                        if (move.getEndPosition().getRow() == king.getRow() && move.getEndPosition().getColumn() == king.getColumn()) {
-                            return true;
-                        }
+        for (int i = 1; i <= 8; i++) {
+            for (int j = 1; j <= 8; j++) {
+                ChessPiece piece = board.getPiece(new ChessPosition(i ,j));
+                if (piece != null) {
+                    if (piece.getTeamColor() == opponentColor(teamColor)) {
+                        otherTeam.add(new ChessPosition(i, j));
                     }
                 }
             }
         }
 
+        for (ChessPosition loc : otherTeam) {
+            ChessPiece checkPiece = board.getPiece(loc);
+            if (checkPiece != null && checkPiece.getTeamColor() == opponentColor(teamColor)) {
+                Collection<ChessMove> moves = checkPiece.pieceMoves(board, loc);
+                for (ChessMove move : moves) {
+                    if (move.getEndPosition().equals(king)) {
+                        return true;
+                    }
+                }
+            }
+        }
         return false;
     }
 
     private void movePiece(ChessMove move) {
-        board.addPiece(move.getEndPosition(), board.getPiece(move.getStartPosition()));
+        if (move.getPromotionPiece() != null) {
+            board.addPiece(move.getEndPosition(), new ChessPiece(board.getPiece(move.getStartPosition()).getTeamColor(), move.getPromotionPiece()));
+        }
+        else {
+            board.addPiece(move.getEndPosition(), board.getPiece(move.getStartPosition()));
+        }
         board.addPiece(move.getStartPosition(), null);
     }
 
-    private void resetBoard(ChessMove move) {
-        board.addPiece(move.getStartPosition(), board.getPiece(move.getEndPosition()));
-        board.addPiece(move.getEndPosition(), null);
+    private void resetBoard(ChessBoard workingBoard) {
+        board = workingBoard.copyBoard();
     }
 
     public ChessPosition findPiecePosition(TeamColor teamColor, ChessBoard board, ChessPiece.PieceType typeToFind) {

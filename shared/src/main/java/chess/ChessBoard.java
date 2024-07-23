@@ -73,6 +73,21 @@ public class ChessBoard {
         }
     }
 
+    public ChessBoard copyBoard() {
+        ChessBoard newBoard = new ChessBoard();
+
+        for (int i = 1; i <= 8; i++) {
+            for (int j = 1; j <= 8; j++) {
+                ChessPiece piece = this.getPiece(new ChessPosition(i, j));
+                if (piece != null) {
+                    ChessPiece newPiece = new ChessPiece(piece.getTeamColor(), piece.getPieceType());
+                    newBoard.addPiece(new ChessPosition(i, j), newPiece);
+                }
+            }
+        }
+        return newBoard;
+    }
+
     @Override
     public int hashCode() {
         return Arrays.deepHashCode(board);
