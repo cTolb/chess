@@ -145,6 +145,59 @@ public class ChessGame {
         return false;
     }
 
+    /**
+     * Determines if the given team is in checkmate
+     *
+     * @param teamColor which team to check for checkmate
+     * @return True if the specified team is in checkmate
+     */
+    public boolean isInCheckmate(TeamColor teamColor) {
+        boolean isInCheckmate = false;
+        ChessPosition kingPosition = findPiecePosition(teamColor, board, ChessPiece.PieceType.KING);
+        Collection<ChessMove> moves = validMoves(kingPosition);
+        if (moves.isEmpty()){
+            isInCheckmate = true;
+        }
+
+        return isInCheckmate;
+    }
+
+    /**
+     * Determines if the given team is in stalemate, which here is defined as having
+     * no valid moves
+     *
+     * @param teamColor which team to check for stalemate
+     * @return True if the specified team is in stalemate, otherwise false
+     */
+    public boolean isInStalemate(TeamColor teamColor) {
+        boolean isInStalemate = false;
+        ChessPosition kingPosition = findPiecePosition(teamColor, board, ChessPiece.PieceType.KING);
+        Collection<ChessMove> moves = validMoves(kingPosition);
+        if (moves.isEmpty()){
+            isInStalemate = true;
+        }
+
+        return isInStalemate;
+    }
+
+    /**
+     * Sets this game's chessboard with a given board
+     *
+     * @param board the new board to use
+     */
+    public void setBoard(ChessBoard board) {
+        this.board = board;
+    }
+
+    /**
+     * Gets the current chessboard
+     *
+     * @return the chessboard
+     */
+    public ChessBoard getBoard() {
+        return board;
+    }
+
     private void movePiece(ChessMove move) {
         if (move.getPromotionPiece() != null) {
             board.addPiece(move.getEndPosition(), new ChessPiece(board.getPiece(move.getStartPosition()).getTeamColor(), move.getPromotionPiece()));
@@ -177,45 +230,6 @@ public class ChessGame {
             case WHITE -> TeamColor.BLACK;
             case BLACK -> TeamColor.WHITE;
         };
-    }
-
-    /**
-     * Determines if the given team is in checkmate
-     *
-     * @param teamColor which team to check for checkmate
-     * @return True if the specified team is in checkmate
-     */
-    public boolean isInCheckmate(TeamColor teamColor) {
-        throw new RuntimeException("Not implemented");
-    }
-
-    /**
-     * Determines if the given team is in stalemate, which here is defined as having
-     * no valid moves
-     *
-     * @param teamColor which team to check for stalemate
-     * @return True if the specified team is in stalemate, otherwise false
-     */
-    public boolean isInStalemate(TeamColor teamColor) {
-        throw new RuntimeException("Not implemented");
-    }
-
-    /**
-     * Sets this game's chessboard with a given board
-     *
-     * @param board the new board to use
-     */
-    public void setBoard(ChessBoard board) {
-        this.board = board;
-    }
-
-    /**
-     * Gets the current chessboard
-     *
-     * @return the chessboard
-     */
-    public ChessBoard getBoard() {
-        return board;
     }
 
     @Override
