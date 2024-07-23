@@ -80,7 +80,6 @@ public class ChessGame {
             resetBoard(workingBoard);
         }
         return moves;
-
     }
 
     /**
@@ -100,6 +99,7 @@ public class ChessGame {
         if (workingPiece.getTeamColor() != getTeamTurn()) {
             throw new InvalidMoveException();
         }
+
         movePiece(move);
 
         if (workingPiece.getTeamColor() == TeamColor.WHITE) {
@@ -108,7 +108,6 @@ public class ChessGame {
         if (workingPiece.getTeamColor() == TeamColor.BLACK) {
             setTeamTurn(TeamColor.WHITE);
         }
-
     }
 
     /**
