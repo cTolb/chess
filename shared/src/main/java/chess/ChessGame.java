@@ -43,16 +43,6 @@ public class ChessGame {
         BLACK
     }
 
-    /*private ChessBoard copyBoard() {
-        ChessBoard newBoard = new ChessBoard();
-        for (int i = 1; i <= 8; i++) {
-            for (int j = 1; j <= 8; j++) {
-                newBoard.addPiece();
-            }
-        }
-        return newBoard;
-    }*/
-
     /**
      * Gets a valid moves for a piece at the given location
      *
@@ -66,7 +56,8 @@ public class ChessGame {
         Collection<ChessMove> moves = new ArrayList<>();
         ChessBoard workingBoard = board.copyBoard();
 
-        if (piece == null) {
+        //If piece at startPosition is null return null
+        if (piece.equals(null)) {
             return null;
         }
 
@@ -90,24 +81,20 @@ public class ChessGame {
      */
     public void makeMove(ChessMove move) throws InvalidMoveException {
         ChessPiece workingPiece = board.getPiece(move.getStartPosition());
-        if (workingPiece == null) {
-            throw new InvalidMoveException();
-        }
-        if(!validMoves(move.getStartPosition()).contains(move)){
-            throw new InvalidMoveException();
-        }
-        if (workingPiece.getTeamColor() != getTeamTurn()) {
-            throw new InvalidMoveException();
-        }
 
+        //Is there a piece at the starting point?
+        if ((workingPiece == null) || (workingPiece.getTeamColor() != getTeamTurn())) {
+            throw new InvalidMoveException();
+        }
+        //Is the move included in the possible moves?
+        Collection<ChessMove> possibleMoves = validMoves(move.getStartPosition());
+        if(!possibleMoves.contains(move)){
+            throw new InvalidMoveException();
+        }
+        //Make Move on Board
         movePiece(move);
-
-        if (workingPiece.getTeamColor() == TeamColor.WHITE) {
-            setTeamTurn(TeamColor.BLACK);
-        }
-        if (workingPiece.getTeamColor() == TeamColor.BLACK) {
-            setTeamTurn(TeamColor.WHITE);
-        }
+        //Change the Team color after turn
+        changeTeamTurn(workingPiece.getTeamColor());
     }
 
     /**
@@ -142,15 +129,11 @@ public class ChessGame {
      * @return True if the specified team is in checkmate
      */
     public boolean isInCheckmate(TeamColor teamColor) {
-        boolean isInCheckmate = false;
-        ChessPosition kingPosition = findPiecePosition(teamColor, board, ChessPiece.PieceType.KING);
-        Collection<ChessMove> moves = validMoves(kingPosition);
-        if (moves.isEmpty()) {
-            isInCheckmate = true;
+        if (!isInCheck(teamColor)) {
+            return false;
         }
 
-
-        return isInCheckmate;
+        return isMovePossible(teamColor);
     }
 
     /**
@@ -161,14 +144,31 @@ public class ChessGame {
      * @return True if the specified team is in stalemate, otherwise false
      */
     public boolean isInStalemate(TeamColor teamColor) {
-        boolean isInStalemate = false;
-        ChessPosition kingPosition = findPiecePosition(teamColor, board, ChessPiece.PieceType.KING);
-        Collection<ChessMove> moves = validMoves(kingPosition);
-        if (moves.isEmpty()){
-            isInStalemate = true;
+        if (isInCheckmate(teamColor)) {
+            return false;
         }
 
-        return isInStalemate;
+        return isMovePossible(teamColor);
+    }
+
+    private void changeTeamTurn(TeamColor color) {
+        if (color == TeamColor.WHITE) {
+            setTeamTurn(TeamColor.BLACK);
+        }
+        if (color == TeamColor.BLACK) {
+            setTeamTurn(TeamColor.WHITE);
+        }
+    }
+
+    private boolean isMovePossible(TeamColor teamColor) {
+        Collection<ChessPosition> currentTeamPositions = findTeam(teamColor, new ArrayList<>());
+        for (ChessPosition pos : currentTeamPositions) {
+            Collection<ChessMove> possibleMoves = validMoves(pos);
+            if (!possibleMoves.isEmpty()) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
