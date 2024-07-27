@@ -1,4 +1,4 @@
-package chess.Moves;
+package chess.moves;
 
 import chess.ChessBoard;
 import chess.ChessGame;
@@ -8,11 +8,11 @@ import chess.ChessPosition;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class QueenMoves {
+public class RookMoves {
     private final ChessGame.TeamColor pieceColor;
     private final ChessBoard board;
     private final ChessPosition position;
-    public  QueenMoves (ChessBoard board, ChessPosition position, ChessGame.TeamColor pieceColor) {
+    public  RookMoves (ChessBoard board, ChessPosition position, ChessGame.TeamColor pieceColor) {
         this.pieceColor = pieceColor;
         this.board = board;
         this.position = position;
@@ -30,16 +30,13 @@ public class QueenMoves {
         return position;
     }
 
-    public Collection<ChessMove> calcQueenMoves() {
+    /**
+     * This function will return possible moves for a rook at a given position on the board.
+     * @return ArrayList of possible moves
+     */
+    public Collection<ChessMove> calcRookMoves() {
         Collection<ChessMove> moves = new ArrayList<>();
 
-        //Diagonal
-        Moves.calculateContinuousMove(moves, 1, 1, getPosition(), getBoard(), getPieceColor());
-        Moves.calculateContinuousMove(moves, 1, -1, getPosition(), getBoard(), getPieceColor());
-        Moves.calculateContinuousMove(moves, -1, 1, getPosition(), getBoard(), getPieceColor());
-        Moves.calculateContinuousMove(moves, -1, -1, getPosition(), getBoard(), getPieceColor());
-
-        //Straight line
         Moves.calculateContinuousMove(moves, 1, 0, getPosition(), getBoard(), getPieceColor());
         Moves.calculateContinuousMove(moves, -1, 0, getPosition(), getBoard(), getPieceColor());
         Moves.calculateContinuousMove(moves, 0, 1, getPosition(), getBoard(), getPieceColor());
