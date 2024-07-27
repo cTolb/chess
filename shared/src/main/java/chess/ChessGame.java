@@ -52,7 +52,7 @@ public class ChessGame {
         }
     }
 
-    private TeamColor opponentColor (TeamColor teamColor) {
+    private TeamColor getOpponentColor (TeamColor teamColor) {
         return switch (teamColor) {
             case WHITE -> TeamColor.BLACK;
             case BLACK -> TeamColor.WHITE;
@@ -176,7 +176,7 @@ public class ChessGame {
      */
     public boolean isInCheck(TeamColor teamColor) {
         ChessPosition king = findPiecePosition(teamColor, getBoard(), ChessPiece.PieceType.KING);
-        TeamColor opponentTeamColor = opponentColor(teamColor);
+        TeamColor opponentTeamColor = getOpponentColor(teamColor);
         Collection<ChessPosition> otherTeam = findTeamPositions(opponentTeamColor, new ArrayList<>());
 
 
