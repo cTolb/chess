@@ -1,7 +1,5 @@
 package chess;
 
-import chess.Moves.RookMoves;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
@@ -77,15 +75,16 @@ public class ChessGame {
         ChessBoard currentBoard = board.copyBoard();
 
         //If piece at startPosition is null return null
-        if (piece.equals(null)) {
+        if (piece == null) {
             return null;
         }
 
-        for (ChessMove move : potentialMoves) {
+        for (int i = 0; i < potentialMoves.size(); i++) {
             //Move piece to board to check if is in check
-            movePiece(move);
+            ChessMove possibleMove = (ChessMove) potentialMoves.toArray()[i];
+            movePiece(possibleMove);
             if (!isInCheck(piece.getTeamColor())) {
-                validMoves.add(move);
+                validMoves.add(possibleMove);
             }
             //Set board back to actual board
             resetBoard(currentBoard);
@@ -170,12 +169,14 @@ public class ChessGame {
         Collection<ChessPosition> otherTeam = findTeamPositions(opponentTeamColor, new ArrayList<>());
 
 
-        for (ChessPosition location : otherTeam) {
-            ChessPiece checkPiece = board.getPiece(location);
-            if (checkPiece != null && checkPiece.getTeamColor() == opponentTeamColor) {
-                Collection<ChessMove> moves = checkPiece.pieceMoves(board, location);
-                for (ChessMove move : moves) {
-                    if (move.getEndPosition().equals(king)) {
+        for (int i = 0; i < otherTeam.size(); i++) {
+            ChessPosition checkPosition = (ChessPosition) otherTeam.toArray()[i];
+            ChessPiece checkPiece = getBoard().getPiece(checkPosition);
+            if (checkPiece != null) {
+                Collection<ChessMove> moves = checkPiece.pieceMoves(getBoard(), checkPosition);
+                for (int j = 0; j < moves.size(); j++) {
+                    ChessMove checkMove = (ChessMove) moves.toArray()[j];
+                    if (checkMove.getEndPosition().equals(king)) {
                         return true;
                     }
                 }
@@ -218,7 +219,7 @@ public class ChessGame {
         Collection<ChessPosition> currentTeamPositions = findTeamPositions(teamColor, new ArrayList<>());
         for (ChessPosition position : currentTeamPositions) {
             Collection<ChessMove> possibleMoves = validMoves(position);
-            if (!possibleMoves.isEmpty()) {
+            if (possibleMoves.size() > 0) {
                 return false;
             }
         }
