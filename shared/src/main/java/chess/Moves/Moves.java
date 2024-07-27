@@ -6,7 +6,12 @@ import java.util.Collection;
 
 public class Moves {
 
-    public static void calculateContinuousMove(Collection<ChessMove> moves, int rowInc, int colInc, ChessPosition position, ChessBoard board, ChessGame.TeamColor pieceColor) {
+    public static void calculateContinuousMove(Collection<ChessMove> moves,
+                                               int rowInc,
+                                               int colInc,
+                                               ChessPosition position,
+                                               ChessBoard board,
+                                               ChessGame.TeamColor pieceColor) {
         int currentRow = position.getRow();
         int currentCol = position.getColumn();
 
