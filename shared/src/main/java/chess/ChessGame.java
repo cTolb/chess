@@ -43,6 +43,22 @@ public class ChessGame {
         BLACK
     }
 
+    private void changeTeamTurn(TeamColor color) {
+        if (color == TeamColor.WHITE) {
+            setTeamTurn(TeamColor.BLACK);
+        }
+        if (color == TeamColor.BLACK) {
+            setTeamTurn(TeamColor.WHITE);
+        }
+    }
+
+    private TeamColor opponentColor (TeamColor teamColor) {
+        return switch (teamColor) {
+            case WHITE -> TeamColor.BLACK;
+            case BLACK -> TeamColor.WHITE;
+        };
+    }
+
     /**
      * Sets this game's chessboard with a given board
      *
@@ -59,6 +75,10 @@ public class ChessGame {
      */
     public ChessBoard getBoard() {
         return board;
+    }
+
+    private void resetBoard(ChessBoard resetBoard) {
+        board = resetBoard.copyBoard();
     }
 
     /**
@@ -148,15 +168,6 @@ public class ChessGame {
         board.addPiece(move.getStartPosition(), null);
     }
 
-    private void changeTeamTurn(TeamColor color) {
-        if (color == TeamColor.WHITE) {
-            setTeamTurn(TeamColor.BLACK);
-        }
-        if (color == TeamColor.BLACK) {
-            setTeamTurn(TeamColor.WHITE);
-        }
-    }
-
     /**
      * Determines if the given team is in check
      *
@@ -217,8 +228,9 @@ public class ChessGame {
 
     private boolean isMovePossible(TeamColor teamColor) {
         Collection<ChessPosition> currentTeamPositions = findTeamPositions(teamColor, new ArrayList<>());
-        for (ChessPosition position : currentTeamPositions) {
-            Collection<ChessMove> possibleMoves = validMoves(position);
+        for (int i = 0; i < currentTeamPositions.size(); i++) {
+            ChessPosition checkPosition = (ChessPosition) currentTeamPositions.toArray()[i];
+            Collection<ChessMove> possibleMoves = validMoves(checkPosition);
             if (possibleMoves.size() > 0) {
                 return false;
             }
@@ -238,10 +250,6 @@ public class ChessGame {
         return team;
     }
 
-    private void resetBoard(ChessBoard resetBoard) {
-        board = resetBoard.copyBoard();
-    }
-
     public ChessPosition findPiecePosition(TeamColor teamColor, ChessBoard board, ChessPiece.PieceType typeToFind) {
         for (int i = 1; i <= 8; i++) {
             for (int j = 1; j <= 8; j++) {
@@ -253,13 +261,6 @@ public class ChessGame {
             }
         }
         return null;
-    }
-
-    private TeamColor opponentColor (TeamColor teamColor) {
-        return switch (teamColor) {
-            case WHITE -> TeamColor.BLACK;
-            case BLACK -> TeamColor.WHITE;
-        };
     }
 
     @Override
