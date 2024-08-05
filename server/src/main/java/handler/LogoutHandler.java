@@ -2,6 +2,8 @@ package handler;
 
 import dataaccess.DataAccess;
 import model.UserData;
+import service.ServerException;
+import service.UserService;
 
 public class LogoutHandler extends RequestHandler<Void>{
     public LogoutHandler(DataAccess dataAccess) {
@@ -10,8 +12,9 @@ public class LogoutHandler extends RequestHandler<Void>{
 
     @Override
     //finish
-    protected Object getResult(DataAccess dataAccess, Void request, String authToken) {
-        return null;
+    protected Object getResult(DataAccess dataAccess, Void request, String authToken) throws ServerException {
+        new UserService(dataAccess).logout(authToken);
+        return "";
     }
 
     @Override

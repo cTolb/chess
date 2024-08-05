@@ -15,6 +15,6 @@ public class CreateGameHandler extends RequestHandler<GameData>{
 
     @Override
     protected Class<GameData> getRequestClass() {
-        return null;
+        return GameData.class;
     }
 }

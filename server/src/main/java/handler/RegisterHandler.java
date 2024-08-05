@@ -1,11 +1,9 @@
 package handler;
 
 import dataaccess.DataAccess;
-import dataaccess.DataAccessException;
 import model.UserData;
+import service.ServerException;
 import service.UserService;
-
-import java.rmi.ServerException;
 
 public class RegisterHandler extends RequestHandler<UserData>{
 
@@ -14,7 +12,7 @@ public class RegisterHandler extends RequestHandler<UserData>{
     }
 
     @Override
-    protected Object getResult(DataAccess dataAccess, UserData request, String authToken) {
+    protected Object getResult(DataAccess dataAccess, UserData request, String authToken) throws ServerException {
         return new UserService(dataAccess).registerUser(request);
     }
 

@@ -3,8 +3,8 @@ package handler;
 import dataaccess.DataAccess;
 import model.GameData;
 
-public class AddGameHandler extends RequestHandler<GameData>{
-    public AddGameHandler(DataAccess dataAccess) {
+public class JoinGameHandler extends RequestHandler<GameData>{
+    public JoinGameHandler(DataAccess dataAccess) {
         super(dataAccess);
     }
 
@@ -15,6 +15,6 @@ public class AddGameHandler extends RequestHandler<GameData>{
 
     @Override
     protected Class<GameData> getRequestClass() {
-        return null;
+        return GameData.class;
     }
 }

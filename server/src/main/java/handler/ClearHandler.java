@@ -1,6 +1,8 @@
 package handler;
 
 import dataaccess.DataAccess;
+import service.ClearService;
+import service.ServerException;
 
 public class ClearHandler extends RequestHandler<Void>{
     public ClearHandler(DataAccess dataAccess) {
@@ -8,7 +10,8 @@ public class ClearHandler extends RequestHandler<Void>{
     }
 
     @Override
-    protected Object getResult(DataAccess dataAccess, Void request, String authToken) {
+    protected Object getResult(DataAccess dataAccess, Void request, String authToken) throws ServerException {
+        new ClearService(dataAccess).clear();
         return null;
     }
 

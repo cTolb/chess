@@ -2,12 +2,12 @@ package handler;
 
 import com.google.gson.Gson;
 import dataaccess.DataAccess;
+import service.ServerException;
 import spark.Request;
 import spark.Response;
 import spark.Route;
 
 import java.net.HttpURLConnection;
-import java.rmi.ServerException;
 
 public abstract class RequestHandler<T> implements Route {
     private final DataAccess dataAccess;
@@ -33,7 +33,7 @@ public abstract class RequestHandler<T> implements Route {
         return serializer.toJson(result);
     }
 
-    protected abstract Object getResult(DataAccess dataAccess, T request, String authToken);
+    protected abstract Object getResult(DataAccess dataAccess, T request, String authToken) throws ServerException;
 
     protected abstract Class<T> getRequestClass();
 }
