@@ -1,13 +1,15 @@
 package handler;
 
 import dataaccess.DataAccess;
+import dataaccess.DataAccessException;
 import model.UserData;
-import org.eclipse.jetty.server.Authentication;
 import service.UserService;
 
-public class Register extends RequestHandler<UserData>{
+import java.rmi.ServerException;
 
-    public Register(DataAccess dataAccess) {
+public class RegisterHandler extends RequestHandler<UserData>{
+
+    public RegisterHandler(DataAccess dataAccess) {
         super(dataAccess);
     }
 
