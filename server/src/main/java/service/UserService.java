@@ -24,6 +24,10 @@ public class UserService {
         return authorizationData;
     }
 
+    public AuthData loginUser(UserData user) {
+        return null;
+    }
+
     public String createAuthToken() {
         return UUID.randomUUID().toString();
     }

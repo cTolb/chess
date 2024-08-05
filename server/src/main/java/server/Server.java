@@ -2,8 +2,7 @@ package server;
 
 import dataaccess.DataAccess;
 import dataaccess.memory.MemDataAccess;
-import handler.RegisterHandler;
-import passoff.exception.ResponseParseException;
+import handler.*;
 import spark.*;
 
 public class Server {
@@ -17,12 +16,12 @@ public class Server {
 
         // Register your endpoints and handle exceptions here.
         Spark.post("/user", new RegisterHandler(data));
-        /*Spark.post("/session", logInUser);
-        Spark.delete("/session", this::logOutUser);
-        Spark.get("/game", this::listGames);
-        Spark.post("/game", this::createGame);
-        Spark.put("/game", this::addGame);
-        Spark.delete("db", this::clearAll);*/
+        Spark.post("/session", new LoginHandler(data));
+        Spark.delete("/session", new LogoutHandler(data));
+        Spark.get("/game", new ListGamesHandler(data));
+        Spark.post("/game", new CreateGameHandler(data));
+        Spark.put("/game", new AddGameHandler(data));
+        Spark.delete("db", new ClearHandler(data));
 
         //This line initializes the server and can be removed once you have a functioning endpoint 
         Spark.init();
