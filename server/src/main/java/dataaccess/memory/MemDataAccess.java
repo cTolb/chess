@@ -4,29 +4,32 @@ import dataaccess.AuthDao;
 import dataaccess.DataAccess;
 import dataaccess.GameDao;
 import dataaccess.UserDao;
+import model.AuthData;
 
 public class MemDataAccess implements DataAccess {
-    private final AuthDao authDao;
-    private final GameDao gameDao;
-    private final UserDao userDao;
+
+    private final MemAuthDao authDao;
+    private final MemUserDao userDao;
+    private final MemGameDao gameDao;
 
     public MemDataAccess() {
         authDao = new MemAuthDao();
-        gameDao = new MemGameDao();
         userDao = new MemUserDao();
+        gameDao = new MemGameDao();
     }
+
     @Override
     public AuthDao getAuthDao() {
         return authDao;
     }
 
     @Override
-    public GameDao getGameDao() {
-        return gameDao;
+    public UserDao getUserDao() {
+        return userDao;
     }
 
     @Override
-    public UserDao getUserDao() {
-        return userDao;
+    public GameDao getGameDao() {
+        return gameDao;
     }
 }
