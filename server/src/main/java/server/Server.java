@@ -1,27 +1,27 @@
 package server;
 
-import dataaccess.DataAccess;
-import dataaccess.memory.MemDataAccess;
-import handler.*;
+import server.handlers.ClearHandler;
+import server.handlers.RegisterHandler;
 import spark.*;
 
 public class Server {
 
     public int run(int desiredPort) {
-        DataAccess data = new MemDataAccess();
-
         Spark.port(desiredPort);
 
         Spark.staticFiles.location("web");
 
-        // Register your endpoints and handle exceptions here.
-        Spark.post("/user", new RegisterHandler(data));
-        Spark.post("/session", new LoginHandler(data));
+        //DataAccess data = new MemDataAccess();
+
+        //Register your endpoints and handle exceptions here.
+        Spark.delete("db", new ClearHandler());
+        Spark.post("/user", new RegisterHandler());
+        /*Spark.post("/session", new LoginHandler(data));
         Spark.delete("/session", new LogoutHandler(data));
         Spark.get("/game", new ListGamesHandler(data));
         Spark.post("/game", new CreateGameHandler(data));
-        Spark.put("/game", new JoinGameHandler(data));
-        Spark.delete("db", new ClearHandler(data));
+        Spark.put("/game", new JoinGameHandler(data));*/
+
 
         //This line initializes the server and can be removed once you have a functioning endpoint 
         Spark.init();
