@@ -1,5 +1,7 @@
 package server;
 
+import dataaccess.DataAccess;
+import dataaccess.memory.MemDataAccess;
 import server.handlers.ClearHandler;
 import server.handlers.RegisterHandler;
 import spark.*;
@@ -11,11 +13,11 @@ public class Server {
 
         Spark.staticFiles.location("web");
 
-        //DataAccess data = new MemDataAccess();
+        DataAccess data = new MemDataAccess();
 
         //Register your endpoints and handle exceptions here.
-        Spark.delete("/db", new ClearHandler());
-        Spark.post("/user", new RegisterHandler());
+        Spark.delete("/db", new ClearHandler(data));
+        Spark.post("/user", new RegisterHandler(data));
         /*Spark.post("/session", new LoginHandler(data));
         Spark.delete("/session", new LogoutHandler(data));
         Spark.get("/game", new ListGamesHandler(data));
@@ -24,7 +26,7 @@ public class Server {
 
 
         //This line initializes the server and can be removed once you have a functioning endpoint 
-        Spark.init();
+        //Spark.init();
 
         Spark.awaitInitialization();
         return Spark.port();
