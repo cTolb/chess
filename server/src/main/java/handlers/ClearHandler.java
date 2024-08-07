@@ -1,8 +1,8 @@
-package server.handlers;
+package handlers;
 
 import dataaccess.DataAccess;
 import dataaccess.DataAccessException;
-import server.service.ClearService;
+import service.ClearService;
 
 
 public class ClearHandler extends Handler<Void> {

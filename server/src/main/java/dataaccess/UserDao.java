@@ -1,11 +1,33 @@
 package dataaccess;
 
+import model.LoginRequest;
 import model.UserData;
 
-public interface UserDao {
-    void clear() throws DataAccessException;
+import java.util.HashMap;
 
-    void addUser(UserData user) throws DataAccessException;
+public class UserDao {
+    private final HashMap<String, UserData> users = new HashMap<>();
+    public void clear() throws DataAccessException {
+        users.clear();
+    }
 
-    UserData getUser(String username) throws DataAccessException;
+    public void addUser(UserData user) throws DataAccessException {
+        if (userExists(user.username())) {
+            throw new DataAccessException("User is already registered");
+        }
+        users.put(user.username(), user);
+    }
+
+    public UserData getUser(String username) throws DataAccessException {
+        return users.get(username);
+    }
+
+    public boolean valid(LoginRequest request) throws DataAccessException {
+        UserData user = users.get(request.username());
+        return user != null && user.password().equals(request.password());
+    }
+
+    public boolean userExists(String username) throws DataAccessException {
+        return users.containsKey(username);
+    }
 }
