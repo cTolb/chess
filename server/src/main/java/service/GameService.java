@@ -1,22 +1,12 @@
 package service;
 
 import chess.ChessGame;
-import dataaccess.AuthDao;
 import dataaccess.DataAccess;
 import dataaccess.DataAccessException;
 import model.AuthData;
 import model.GameData;
 import model.JoinGameRequest;
 import model.ListGameResponse;
-import server.Server;
-import service.exceptions.RequestException;
-import service.exceptions.ServerException;
-import service.exceptions.TakenException;
-import service.exceptions.UnauthorizedException;
-
-import javax.xml.crypto.Data;
-import java.lang.foreign.PaddingLayout;
-import java.util.Collection;
 
 public class GameService {
     private final DataAccess dataAccess;
@@ -46,23 +36,19 @@ public class GameService {
             if (request.playerColor() == null) {
                 throw new RequestException("Error: player color can not be null");
             }
+
             GameData gameData = dataAccess.getGameDao().getGame(request.gameID());
             if (gameData == null) {
                 throw new RequestException("Error: bad request");
             }
 
             AuthData authData = checkAuth(authToken);
-
             ChessGame.TeamColor requestTeamColor = request.playerColor();
 
             if (isColorAvailable(requestTeamColor, gameData, authData)) {
                 throw new TakenException("Error: color already taken");
             }
 
-            /*if (request.playerColor() == ChessGame.TeamColor.WHITE && gameData.whiteUsername() != null && !gameData.whiteUsername().equals(authData.username())
-            || request.playerColor() == ChessGame.TeamColor.BLACK && gameData.blackUsername() != null && !gameData.blackUsername().equals(authData.username())) {
-                throw new TakenException("Error: color already taken");
-            }*/
             if (requestTeamColor == ChessGame.TeamColor.WHITE) {
                 gameData = new GameData(gameData.gameID(), authData.username(), gameData.blackUsername(), gameData.gameName(), gameData.game());
             }

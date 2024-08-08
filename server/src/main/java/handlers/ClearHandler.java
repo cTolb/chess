@@ -2,9 +2,8 @@ package handlers;
 
 import com.google.gson.Gson;
 import dataaccess.DataAccess;
-import server.Server;
 import service.ClearService;
-import service.exceptions.ServerException;
+import service.ServerException;
 import spark.Request;
 import spark.Response;
 import spark.Route;

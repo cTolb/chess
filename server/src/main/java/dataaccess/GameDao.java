@@ -7,6 +7,7 @@ import java.util.HashMap;
 
 public class GameDao {
     private final HashMap<Integer, GameData> games = new HashMap<>();
+    private int id = 1000;
     public void clear() throws DataAccessException {
         games.clear();
     }
@@ -16,14 +17,13 @@ public class GameDao {
     }
 
     public Collection<GameData> getAllGames() throws DataAccessException {
-        return Collections.unmodifiableCollection(games.values());
+        return games.values();
     }
 
     public GameData addGame(GameData game) throws DataAccessException {
         if (game.game() == null) {
             throw new DataAccessException("Game can not be null");
         }
-        int id = games.size() * 2;
         id++;
         GameData newGame = new GameData(id, game.whiteUsername(), game.blackUsername(), game.gameName(), game.game());
         games.put(id, newGame);

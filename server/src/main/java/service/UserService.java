@@ -5,10 +5,6 @@ import dataaccess.DataAccessException;
 import model.AuthData;
 import model.LoginRequest;
 import model.UserData;
-import service.exceptions.RequestException;
-import service.exceptions.ServerException;
-import service.exceptions.TakenException;
-import service.exceptions.UnauthorizedException;
 
 import java.util.UUID;
 
