@@ -1,13 +1,11 @@
 package handlers;
 
 import dataaccess.DataAccess;
-import service.ClearService;
+import service.GameService;
 import service.exceptions.ServerException;
 
-
-public class ClearHandler extends Handler<Void> {
-
-    public ClearHandler(DataAccess dataAccess) {
+public class ListGamesHandler extends Handler<Void>{
+    public ListGamesHandler(DataAccess dataAccess) {
         super(dataAccess);
     }
 
@@ -18,7 +16,6 @@ public class ClearHandler extends Handler<Void> {
 
     @Override
     protected Object getServiceResponse(DataAccess dataAccess, Void request, String token) throws ServerException {
-        new ClearService(dataAccess).clear();
-        return null;
+        return new GameService(dataAccess).listGames(token);
     }
 }

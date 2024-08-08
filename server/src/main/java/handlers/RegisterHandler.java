@@ -1,10 +1,9 @@
 package handlers;
 
 import dataaccess.DataAccess;
-import dataaccess.DataAccessException;
 import model.AuthData;
 import model.UserData;
-import service.ServerException;
+import service.exceptions.ServerException;
 import service.UserService;
 
 public class RegisterHandler extends Handler<UserData> {

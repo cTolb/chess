@@ -5,6 +5,10 @@ import dataaccess.DataAccessException;
 import model.AuthData;
 import model.LoginRequest;
 import model.UserData;
+import service.exceptions.RequestException;
+import service.exceptions.ServerException;
+import service.exceptions.TakenException;
+import service.exceptions.UnauthorizedException;
 
 import java.util.UUID;
 
@@ -15,7 +19,7 @@ public class UserService {
         this.dataAccess = dataAccess;
     }
 
-    public AuthData register(UserData userData) throws ServerException{
+    public AuthData register(UserData userData) throws ServerException {
         try {
             if (userData == null || userData.username() == null || userData.password() == null || userData.email() == null) {
                 throw new RequestException("Error: UserData can not be null");
@@ -52,8 +56,16 @@ public class UserService {
         }
     }
 
-    public void logoutUser(String authToken) throws DataAccessException {
-        dataAccess.getAuthDao().deleteAuth(authToken);
+    public void logoutUser(String authToken) throws ServerException {
+        try {
+            AuthData delete = dataAccess.getAuthDao().getAuthorization(authToken);
+            if (delete == null) {
+                throw new UnauthorizedException("Error: unauthorized");
+            }
+            dataAccess.getAuthDao().deleteAuth(authToken);
+        } catch (DataAccessException e) {
+            throw new ServerException(e);
+        }
     }
 
     private String createAuthToken() {

@@ -2,6 +2,7 @@ package service;
 
 import dataaccess.DataAccess;
 import dataaccess.DataAccessException;
+import service.exceptions.ServerException;
 
 public class ClearService {
     private final DataAccess dataAccess;
@@ -9,7 +10,7 @@ public class ClearService {
         this.dataAccess = dataAccess;
     }
 
-    public void clear() throws ServerException{
+    public void clear() throws ServerException {
         try {
             dataAccess.getAuthDao().clear();
             dataAccess.getUserDao().clear();

@@ -1,13 +1,11 @@
 package handlers;
 
 import dataaccess.DataAccess;
-import service.ClearService;
 import service.exceptions.ServerException;
+import service.UserService;
 
-
-public class ClearHandler extends Handler<Void> {
-
-    public ClearHandler(DataAccess dataAccess) {
+public class LogoutHandler extends Handler<Void>{
+    public LogoutHandler(DataAccess dataAccess) {
         super(dataAccess);
     }
 
@@ -18,7 +16,7 @@ public class ClearHandler extends Handler<Void> {
 
     @Override
     protected Object getServiceResponse(DataAccess dataAccess, Void request, String token) throws ServerException {
-        new ClearService(dataAccess).clear();
+        new UserService(dataAccess).logoutUser(token);
         return null;
     }
 }

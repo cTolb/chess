@@ -32,10 +32,10 @@ public class GameDao {
 
     public void updateGames(GameData game) throws DataAccessException {
         if (!games.containsKey(game.gameID())) {
-            throw new DataAccessException("Game not found");
+            throw new DataAccessException("Error: Game not found");
         }
         if (game.game() == null) {
-            throw new DataAccessException("Game can not be null");
+            throw new DataAccessException("Error: Game can not be null");
         }
         games.remove(game.gameID());
         games.put(game.gameID(), game);

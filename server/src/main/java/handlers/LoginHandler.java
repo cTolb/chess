@@ -2,7 +2,7 @@ package handlers;
 
 import dataaccess.DataAccess;
 import model.UserData;
-import service.ServerException;
+import service.exceptions.ServerException;
 import service.UserService;
 
 public class LoginHandler extends Handler<UserData>{

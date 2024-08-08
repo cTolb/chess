@@ -2,8 +2,10 @@ package server;
 
 import dataaccess.DataAccess;
 import handlers.*;
-import org.eclipse.jetty.util.log.Log;
-import service.*;
+import service.exceptions.RequestException;
+import service.exceptions.ServerException;
+import service.exceptions.TakenException;
+import service.exceptions.UnauthorizedException;
 import spark.*;
 
 import java.net.HttpURLConnection;
@@ -21,8 +23,10 @@ public class Server {
         Spark.post("/user", new RegisterHandler(data));
         Spark.delete("/db", new ClearHandler(data));
         Spark.post("/session", new LoginHandler(data));
-
-
+        Spark.delete("/session", new LogoutHandler(data));
+        Spark.post("/game", new CreateHandler(data));
+        Spark.put("/game", new JoinHandler(data));
+        Spark.get("/game", new ListGamesHandler(data));
 
         exceptions();
         //This line initializes the server and can be removed once you have a functioning endpoint 
