@@ -1,22 +1,30 @@
 package handlers;
 
+import com.google.gson.Gson;
 import dataaccess.DataAccess;
 import model.UserData;
 import service.exceptions.ServerException;
 import service.UserService;
+import spark.Request;
+import spark.Response;
+import spark.Route;
 
-public class LoginHandler extends Handler<UserData>{
+import java.net.HttpURLConnection;
+
+public class LoginHandler implements Route {
+    private final DataAccess dataAccess;
     public LoginHandler(DataAccess dataAccess) {
-        super(dataAccess);
+        this.dataAccess = dataAccess;
     }
-
     @Override
-    protected Class<UserData> getRequestClass() {
-        return UserData.class;
-    }
+    public Object handle(Request request, Response response) throws ServerException {
+        Gson gson = new Gson();
 
-    @Override
-    protected Object getServiceResponse(DataAccess dataAccess, UserData request, String token) throws ServerException {
-        return new UserService(dataAccess).loginUser(request);
+        UserData requestObject = gson.fromJson(request.body(), UserData.class);
+
+        Object resultObject = new UserService(dataAccess).loginUser(requestObject);
+        response.status(HttpURLConnection.HTTP_OK);
+
+        return gson.toJson(resultObject);
     }
 }

@@ -1,24 +1,31 @@
 package handlers;
 
+import com.google.gson.Gson;
 import dataaccess.DataAccess;
+import server.Server;
 import service.ClearService;
 import service.exceptions.ServerException;
+import spark.Request;
+import spark.Response;
+import spark.Route;
+
+import java.net.HttpURLConnection;
 
 
-public class ClearHandler extends Handler<Void> {
+public class ClearHandler implements Route {
+    private final DataAccess dataAccess;
 
     public ClearHandler(DataAccess dataAccess) {
-        super(dataAccess);
+        this.dataAccess = dataAccess;
     }
 
     @Override
-    protected Class<Void> getRequestClass() {
-        return null;
-    }
+    public Object handle(Request request, Response response) throws ServerException {
+        Gson gson = new Gson();
 
-    @Override
-    protected Object getServiceResponse(DataAccess dataAccess, Void request, String token) throws ServerException {
         new ClearService(dataAccess).clear();
-        return null;
+        response.status(HttpURLConnection.HTTP_OK);
+
+        return gson.toJson(null);
     }
 }
