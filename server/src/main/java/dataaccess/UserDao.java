@@ -18,7 +18,7 @@ public class UserDao {
         users.put(user.username(), user);
     }
 
-    public UserData getUser(String username) throws DataAccessException {
+    public UserData getUser(String username) {
         return users.get(username);
     }
 

@@ -15,33 +15,41 @@ public class UserService {
         this.dataAccess = dataAccess;
     }
 
-    public AuthData register(UserData userData) throws DataAccessException{
-        if (userData == null || userData.username() == null || userData.password() == null || userData.email() == null) {
-            throw new DataAccessException("Error: UserData can not be null");
+    public AuthData register(UserData userData) throws ServerException{
+        try {
+            if (userData == null || userData.username() == null || userData.password() == null || userData.email() == null) {
+                throw new RequestException("Error: UserData can not be null");
+            }
+            if (dataAccess.getUserDao().getUser(userData.username()) != null) {
+                throw new TakenException("Error: username is already taken");
+            }
+            dataAccess.getUserDao().addUser(userData);
+            String authToken = createAuthToken();
+            AuthData addAuth = new AuthData(authToken, userData.username());
+            dataAccess.getAuthDao().addAuth(addAuth);
+            return addAuth;
+        } catch (DataAccessException e) {
+            throw new ServerException(e);
         }
-        if (dataAccess.getUserDao().getUser(userData.username()) != null) {
-            throw new DataAccessException("Error: username is already taken");
-        }
-        dataAccess.getUserDao().addUser(userData);
-        String authToken = createAuthToken();
-        AuthData addAuth = new AuthData(authToken, userData.username());
-        dataAccess.getAuthDao().addAuth(addAuth);
-        return addAuth;
     }
 
-    public AuthData loginUser(UserData userData) throws DataAccessException {
-        if (!dataAccess.getUserDao().userExists(userData.username())){
-            throw new DataAccessException("Error: username is incorrect");
-        }
-        LoginRequest request = new LoginRequest(userData.username(), userData.password());
-        if (!dataAccess.getUserDao().valid(request)) {
-            throw new DataAccessException("WrongPassword");
-        }
+    public AuthData loginUser(UserData userData) throws ServerException {
+        try {
+            if (!dataAccess.getUserDao().userExists(userData.username())) {
+                throw new UnauthorizedException("Error: username is incorrect");
+            }
+            LoginRequest request = new LoginRequest(userData.username(), userData.password());
+            if (!dataAccess.getUserDao().valid(request)) {
+                throw new UnauthorizedException("Error: Wrong Password");
+            }
 
-        String authToken = createAuthToken();
-        AuthData addAuth = new AuthData(authToken, userData.username());
-        dataAccess.getAuthDao().addAuth(addAuth);
-        return addAuth;
+            String authToken = createAuthToken();
+            AuthData addAuth = new AuthData(authToken, userData.username());
+            dataAccess.getAuthDao().addAuth(addAuth);
+            return addAuth;
+        } catch (DataAccessException e) {
+            throw new ServerException(e);
+        }
     }
 
     public void logoutUser(String authToken) throws DataAccessException {

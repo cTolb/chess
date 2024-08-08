@@ -4,6 +4,7 @@ import dataaccess.DataAccess;
 import dataaccess.DataAccessException;
 import model.AuthData;
 import model.UserData;
+import service.ServerException;
 import service.UserService;
 
 public class RegisterHandler extends Handler<UserData> {
@@ -18,7 +19,7 @@ public class RegisterHandler extends Handler<UserData> {
     }
 
     @Override
-    protected AuthData getServiceResponse(DataAccess dataAccess, UserData request, String token) throws DataAccessException {
+    protected AuthData getServiceResponse(DataAccess dataAccess, UserData request, String token) throws ServerException {
         return new UserService(dataAccess).register(request);
     }
 
