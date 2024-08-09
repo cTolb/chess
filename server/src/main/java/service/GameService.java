@@ -7,6 +7,7 @@ import model.AuthData;
 import model.GameData;
 import requests.JoinGameRequest;
 import responses.CreateGameResponse;
+import responses.JoinGameResponse;
 import responses.ListGameResponse;
 
 public class GameService {
@@ -30,41 +31,40 @@ public class GameService {
             return new CreateGameResponse(addGame, null);
     }
 
-    public Object joinGame(JoinGameRequest request, String authToken) throws ServerException{
+    public JoinGameResponse joinGame(JoinGameRequest request, String authToken) throws ServerException{
         try {
             if (request.playerColor() == null) {
-                throw new ServerException("Error: player color can not be null");
+                return new JoinGameResponse("Error: bad request");
             }
 
             GameData gameData = dataAccess.getGameDao().getGame(request.gameID());
             if (gameData == null) {
-                throw new ServerException("Error: bad request");
+                return new JoinGameResponse("Error: bad request");
             }
 
-            if (isValidAuth(authToken)) {
-                AuthData authData = dataAccess.getAuthDao().getAuthorization(authToken);
-                ChessGame.TeamColor requestTeamColor = request.playerColor();
-
-                if (isColorAvailable(requestTeamColor, gameData, authData)) {
-                    throw new ServerException("Error: color already taken");
-                }
-
-                if (requestTeamColor == ChessGame.TeamColor.WHITE) {
-                    gameData = new GameData(gameData.gameID(), authData.username(), gameData.blackUsername(), gameData.gameName(), gameData.game());
-                }
-                if (requestTeamColor == ChessGame.TeamColor.BLACK) {
-                    gameData = new GameData(gameData.gameID(), gameData.whiteUsername(), authData.username(), gameData.gameName(), gameData.game());
-                }
-
-                dataAccess.getGameDao().updateGames(gameData);
+            if (!isValidAuth(authToken)) {
+                return new JoinGameResponse("Error: unauthorized");
             }
 
+            AuthData authData = dataAccess.getAuthDao().getAuthorization(authToken);
+            ChessGame.TeamColor requestTeamColor = request.playerColor();
+            if (isColorAvailable(requestTeamColor, gameData, authData)) {
+                return new JoinGameResponse("Error: color already taken");
+            }
+
+            if (requestTeamColor == ChessGame.TeamColor.WHITE) {
+                gameData = new GameData(gameData.gameID(), authData.username(), gameData.blackUsername(), gameData.gameName(), gameData.game());
+            }
+            if (requestTeamColor == ChessGame.TeamColor.BLACK) {
+                gameData = new GameData(gameData.gameID(), gameData.whiteUsername(), authData.username(), gameData.gameName(), gameData.game());
+            }
+
+            dataAccess.getGameDao().updateGames(gameData);
         } catch (DataAccessException e) {
             throw new ServerException(e);
         }
 
         return null;
-
     }
 
     public ListGameResponse listGames(String authToken) throws ServerException {
