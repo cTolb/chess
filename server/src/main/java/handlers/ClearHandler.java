@@ -2,6 +2,8 @@ package handlers;
 
 import com.google.gson.Gson;
 import dataaccess.DataAccess;
+import dataaccess.DataAccessException;
+import responses.ClearResponse;
 import responses.LogoutResponse;
 import service.ClearService;
 import service.ServerException;
@@ -21,12 +23,17 @@ public class ClearHandler implements Route {
     }
 
     @Override
-    public Object handle(Request request, Response response) throws ServerException {
+    public Object handle(Request request, Response response) throws DataAccessException {
         Gson gson = new Gson();
 
-        new ClearService(dataAccess).clear();
-        response.status(200);
+        ClearResponse responseObject = new ClearService(dataAccess).clear();
+        if (responseObject.message() == null) {
+            response.status(200);
+        }
+        else {
+            response.status(500);
+        }
 
-        return gson.toJson(null);
+        return gson.toJson(responseObject);
     }
 }

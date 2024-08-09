@@ -2,6 +2,7 @@ package handlers;
 
 import com.google.gson.Gson;
 import dataaccess.DataAccess;
+import responses.ListGameResponse;
 import service.GameService;
 import spark.Request;
 import spark.Response;
@@ -21,8 +22,17 @@ public class ListGamesHandler implements Route {
         Gson gson = new Gson();
         String authToken = request.headers("authorization");
 
-        Object resultObject = new GameService(dataAccess).listGames(authToken);
-        response.status(HttpURLConnection.HTTP_OK);
+        ListGameResponse resultObject = new GameService(dataAccess).listGames(authToken);
+
+        if (resultObject.message() == null) {
+            response.status(200);
+        }
+        else if (resultObject.message().equals("Error: unauthorized")){
+            response.status(401);
+        }
+        else {
+            response.status(500);
+        }
 
         return gson.toJson(resultObject);
     }

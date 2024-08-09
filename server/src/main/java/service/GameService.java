@@ -10,6 +10,8 @@ import responses.CreateGameResponse;
 import responses.JoinGameResponse;
 import responses.ListGameResponse;
 
+import java.util.List;
+
 public class GameService {
     private final DataAccess dataAccess;
 
@@ -69,15 +71,16 @@ public class GameService {
 
     public ListGameResponse listGames(String authToken) throws ServerException {
         try {
-            if (isValidAuth(authToken)) {
-
-                return new ListGameResponse(dataAccess.getGameDao().getAllGames());
+            if (!isValidAuth(authToken)) {
+                return new ListGameResponse(null, "Error: unauthorized");
             }
-
+            else {
+                return new ListGameResponse(dataAccess.getGameDao().getAllGames(), null);
+            }
         } catch (DataAccessException e) {
-            throw new ServerException(e);
+            return new ListGameResponse(null, e.getMessage());
         }
-        return null;
+        //return null;
     }
 
     private boolean isColorAvailable(ChessGame.TeamColor reqColor, GameData gameData, AuthData authData) {

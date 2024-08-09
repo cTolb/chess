@@ -21,7 +21,7 @@ public class UserServiceTest {
     }
 
     @BeforeEach
-    public void beforeEach() throws ServerException {
+    public void beforeEach() throws DataAccessException {
         new ClearService(dataAccess).clear();
     }
 

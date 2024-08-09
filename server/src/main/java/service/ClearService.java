@@ -2,6 +2,7 @@ package service;
 
 import dataaccess.DataAccess;
 import dataaccess.DataAccessException;
+import responses.ClearResponse;
 
 public class ClearService {
     private final DataAccess dataAccess;
@@ -9,13 +10,14 @@ public class ClearService {
         this.dataAccess = dataAccess;
     }
 
-    public void clear() throws ServerException {
+    public ClearResponse clear() throws DataAccessException {
         try {
             dataAccess.getAuthDao().clear();
             dataAccess.getUserDao().clear();
             dataAccess.getGameDao().clear();
+            return new ClearResponse(null);
         } catch (DataAccessException e) {
-            throw new ServerException(e.getMessage());
+            return new ClearResponse("Error: unauthorized");
         }
     }
 }
