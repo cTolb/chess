@@ -27,7 +27,6 @@ public class Server {
         Spark.post("/game", new CreateHandler(data));
         Spark.put("/game", new JoinGameHandler(data));
         Spark.get("/game", new ListGamesHandler(data));
-        //Spark.exception(ServerException.class, this::exceptions);
 
         //This line initializes the server and can be removed once you have a functioning endpoint 
         //Spark.init();
@@ -40,13 +39,5 @@ public class Server {
         Spark.stop();
         Spark.awaitStop();
     }
-
-    /*public void exceptions(ServerException ex, Request req, Response res) {
-        res.status(ex.Code());
-        Spark.exception(RequestException.class, new ServerExceptionHandler<>(HttpURLConnection.HTTP_BAD_REQUEST));
-        Spark.exception(TakenException.class, new ServerExceptionHandler<>(HttpURLConnection.HTTP_FORBIDDEN));
-        Spark.exception(ServerException.class, new ServerExceptionHandler<>(HttpURLConnection.HTTP_INTERNAL_ERROR));
-        Spark.exception(UnauthorizedException.class, new ServerExceptionHandler<>(HttpURLConnection.HTTP_UNAUTHORIZED));
-    }*/
 
 }
