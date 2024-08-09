@@ -2,6 +2,9 @@ package handlers;
 
 import com.google.gson.Gson;
 import dataaccess.DataAccess;
+import dataaccess.DataAccessException;
+import model.AuthData;
+import model.RegisterResponse;
 import model.UserData;
 import service.ServerException;
 import service.UserService;
@@ -18,14 +21,32 @@ public class RegisterHandler implements Route {
         this.dataAccess = dataAccess;
     }
     @Override
-    public Object handle(Request request, Response response) throws ServerException {
+    public Object handle(Request request, Response response) throws ServerException, DataAccessException {
         Gson gson = new Gson();
 
         UserData requestObject = gson.fromJson(request.body(), UserData.class);
-        Object responseObject = new UserService(dataAccess).register(requestObject);
+        RegisterResponse responseObject = new UserService(dataAccess).register(requestObject);
+        //System.out.println(responseObject.toString());
 
-        response.status(HttpURLConnection.HTTP_OK);
+        AuthData authData;
+        if (responseObject.message() == null) {
+            response.status(200);
+        }
+        else if (responseObject.message().equals("Error: UserData can not be null")) {
+            response.status(400);
+            return gson.toJson(responseObject);
+        }
+        else if (responseObject.message().equals("Error: username is already taken")) {
+            response.status(403);
+            return gson.toJson(responseObject);
+        }
+        else {
+            response.status(500);
+            return gson.toJson(responseObject);
+        }
 
-        return gson.toJson(responseObject);
+        authData = responseObject.authData();
+
+        return gson.toJson(authData);
     }
 }

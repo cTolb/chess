@@ -20,7 +20,7 @@ public class GameService {
             checkAuth(authToken);
 
             if (request.gameName() == null) {
-                throw new RequestException("Error: game name can not be null");
+                throw new ServerException("Error: game name can not be null");
             }
             GameData addGame = new GameData(0, null, null, request.gameName(), new ChessGame());
             addGame = dataAccess.getGameDao().addGame(addGame);
@@ -34,19 +34,19 @@ public class GameService {
     public Object joinGame(JoinGameRequest request, String authToken) throws ServerException{
         try {
             if (request.playerColor() == null) {
-                throw new RequestException("Error: player color can not be null");
+                throw new ServerException("Error: player color can not be null");
             }
 
             GameData gameData = dataAccess.getGameDao().getGame(request.gameID());
             if (gameData == null) {
-                throw new RequestException("Error: bad request");
+                throw new ServerException("Error: bad request");
             }
 
             AuthData authData = checkAuth(authToken);
             ChessGame.TeamColor requestTeamColor = request.playerColor();
 
             if (isColorAvailable(requestTeamColor, gameData, authData)) {
-                throw new TakenException("Error: color already taken");
+                throw new ServerException("Error: color already taken");
             }
 
             if (requestTeamColor == ChessGame.TeamColor.WHITE) {
@@ -93,7 +93,7 @@ public class GameService {
         try {
             AuthData authData = dataAccess.getAuthDao().getAuthorization(authToken);
             if (authData == null) {
-                throw new UnauthorizedException("Error: unauthorized");
+                throw new ServerException("Error: unauthorized");
             }
             return authData;
         } catch (DataAccessException e) {

@@ -15,7 +15,7 @@ public class ClearService {
             dataAccess.getUserDao().clear();
             dataAccess.getGameDao().clear();
         } catch (DataAccessException e) {
-            throw new ServerException(e);
+            throw new ServerException(e.getMessage());
         }
     }
 }

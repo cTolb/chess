@@ -1,14 +1,12 @@
 package service;
 
 public class ServerException extends Exception {
-    public ServerException() {
-    }
 
     public ServerException(String message) {
         super(message);
     }
 
-    public ServerException(Throwable cause) {
-        super(cause);
+    public ServerException(Throwable message) {
+        super(message);
     }
 }

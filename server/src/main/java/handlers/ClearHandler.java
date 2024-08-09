@@ -23,7 +23,7 @@ public class ClearHandler implements Route {
         Gson gson = new Gson();
 
         new ClearService(dataAccess).clear();
-        response.status(HttpURLConnection.HTTP_OK);
+        response.status(200);
 
         return gson.toJson(null);
     }

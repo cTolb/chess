@@ -2,6 +2,8 @@ package handlers;
 
 import com.google.gson.Gson;
 import dataaccess.DataAccess;
+import model.AuthData;
+import model.LoginResponse;
 import model.UserData;
 import service.ServerException;
 import service.UserService;
@@ -22,9 +24,24 @@ public class LoginHandler implements Route {
 
         UserData requestObject = gson.fromJson(request.body(), UserData.class);
 
-        Object resultObject = new UserService(dataAccess).loginUser(requestObject);
-        response.status(HttpURLConnection.HTTP_OK);
+        LoginResponse responseObject = new UserService(dataAccess).loginUser(requestObject);
+        AuthData authData;
+        if (responseObject.message() == null) {
+            response.status(200);
+        }
+        else if (responseObject.message().equals("Error: username is incorrect")
+                || responseObject.message().equals("Error: Wrong Password")) {
+            response.status(401);
+            return gson.toJson(responseObject);
+        }
+        else {
+            response.status(500);
+            return gson.toJson(responseObject);
+        }
 
-        return gson.toJson(resultObject);
+        authData = responseObject.authData();
+
+        return gson.toJson(authData);
+
     }
 }
