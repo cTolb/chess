@@ -3,6 +3,7 @@ package handlers;
 import com.google.gson.Gson;
 import dataaccess.DataAccess;
 import model.GameData;
+import responses.CreateGameResponse;
 import service.GameService;
 import spark.Request;
 import spark.Response;
@@ -24,9 +25,25 @@ public class CreateHandler implements Route {
 
         GameData requestObject = gson.fromJson(request.body(), GameData.class);
 
-        Object responseObject = new GameService(dataAccess).createGame(requestObject, authToken);
-        response.status(HttpURLConnection.HTTP_OK);
+        CreateGameResponse responseObject = new GameService(dataAccess).createGame(requestObject, authToken);
 
-        return gson.toJson(responseObject);
+        if (responseObject.message() == null) {
+            response.status(200);
+            GameData game = responseObject.gameData();
+            return gson.toJson(game);
+        }
+        else if (responseObject.message().equals("Error: bad request")) {
+            response.status(400);
+            return gson.toJson(responseObject);
+        }
+        else if (responseObject.message().equals("Error: unauthorized")){
+            response.status(401);
+            return gson.toJson(responseObject);
+        }
+        else {
+            response.status(500);
+            return gson.toJson(responseObject);
+        }
+        //return gson.toJson(null);
     }
 }

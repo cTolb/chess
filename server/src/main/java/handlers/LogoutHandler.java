@@ -2,12 +2,11 @@ package handlers;
 
 import com.google.gson.Gson;
 import dataaccess.DataAccess;
+import responses.LogoutResponse;
 import service.UserService;
 import spark.Request;
 import spark.Response;
 import spark.Route;
-
-import java.net.HttpURLConnection;
 
 public class LogoutHandler implements Route {
     private final DataAccess dataAccess;
@@ -20,8 +19,19 @@ public class LogoutHandler implements Route {
         Gson gson = new Gson();
         String authToken = request.headers("authorization");
 
-        new UserService(dataAccess).logoutUser(authToken);
-        response.status(HttpURLConnection.HTTP_OK);
+
+        LogoutResponse responseObject = new UserService(dataAccess).logoutUser(authToken);
+        if (responseObject.message() == null) {
+            response.status(200);
+        }
+        else if (responseObject.message().equals("Error: unauthorized")) {
+            response.status(401);
+            return gson.toJson(responseObject);
+        }
+        else {
+            response.status(500);
+            return gson.toJson((responseObject));
+        }
 
         return gson.toJson(null);
     }

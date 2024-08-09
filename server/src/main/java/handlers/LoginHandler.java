@@ -3,15 +3,13 @@ package handlers;
 import com.google.gson.Gson;
 import dataaccess.DataAccess;
 import model.AuthData;
-import model.LoginResponse;
+import responses.LoginResponse;
 import model.UserData;
 import service.ServerException;
 import service.UserService;
 import spark.Request;
 import spark.Response;
 import spark.Route;
-
-import java.net.HttpURLConnection;
 
 public class LoginHandler implements Route {
     private final DataAccess dataAccess;

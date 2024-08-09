@@ -4,14 +4,9 @@ import dataaccess.AuthDao;
 import dataaccess.DataAccess;
 import dataaccess.DataAccessException;
 import dataaccess.GameDao;
-import model.AuthData;
-import model.RegisterResponse;
+import responses.RegisterResponse;
 import model.UserData;
-import org.eclipse.jetty.server.Authentication;
 import org.junit.jupiter.api.*;
-import service.ClearService;
-import service.ServerException;
-import service.UserService;
 
 public class UserServiceTest {
     private static DataAccess dataAccess;

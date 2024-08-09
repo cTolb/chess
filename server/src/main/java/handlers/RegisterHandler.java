@@ -4,15 +4,13 @@ import com.google.gson.Gson;
 import dataaccess.DataAccess;
 import dataaccess.DataAccessException;
 import model.AuthData;
-import model.RegisterResponse;
+import responses.RegisterResponse;
 import model.UserData;
 import service.ServerException;
 import service.UserService;
 import spark.Request;
 import spark.Response;
 import spark.Route;
-
-import java.net.HttpURLConnection;
 
 public class RegisterHandler implements Route {
     private final DataAccess dataAccess;

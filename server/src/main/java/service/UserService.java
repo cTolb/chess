@@ -3,7 +3,10 @@ package service;
 import dataaccess.DataAccess;
 import dataaccess.DataAccessException;
 import model.*;
-import server.Server;
+import requests.LoginRequest;
+import responses.LoginResponse;
+import responses.LogoutResponse;
+import responses.RegisterResponse;
 
 import java.util.UUID;
 
@@ -29,16 +32,17 @@ public class UserService {
         return new RegisterResponse(addAuth, null);
     }
 
-    public void logoutUser(String authToken) throws ServerException {
+    public LogoutResponse logoutUser(String authToken) throws ServerException {
         try {
             AuthData delete = dataAccess.getAuthDao().getAuthorization(authToken);
             if (delete == null) {
-                throw new ServerException("Error: unauthorized");
+                return new LogoutResponse("Error: unauthorized");
             }
             dataAccess.getAuthDao().deleteAuth(authToken);
         } catch (DataAccessException e) {
             throw new ServerException(e);
         }
+        return new LogoutResponse(null);
     }
     public LoginResponse loginUser(UserData userData) throws ServerException {
         try {
