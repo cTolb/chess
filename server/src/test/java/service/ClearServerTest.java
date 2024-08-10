@@ -1,30 +1,28 @@
 package service;
 
 import chess.ChessGame;
-import dataaccess.DataAccess;
+import dataaccess.memory.MemoryDataAccess;
 import dataaccess.DataAccessException;
 import model.AuthData;
 import model.GameData;
 import model.UserData;
-import org.eclipse.jetty.server.Authentication;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import responses.ClearResponse;
-import responses.RegisterResponse;
 
 public class ClearServerTest {
-    private static DataAccess dataAccess;
+    private static MemoryDataAccess memoryDataAccess;
 
     @BeforeAll
     public static void beforeAll(){
-        dataAccess = new DataAccess();
+        memoryDataAccess = new MemoryDataAccess();
     }
 
     @BeforeEach
     public void beforeEach() throws DataAccessException {
-        new ClearService(dataAccess).clear();
+        new ClearService(memoryDataAccess).clear();
     }
 
     @Test
@@ -33,11 +31,11 @@ public class ClearServerTest {
         GameData gameData = new GameData(0, null, null, "game1", new ChessGame());
         AuthData authData = new AuthData("authToken", userData.username());
 
-        dataAccess.getGameDao().addGame(gameData);
-        dataAccess.getUserDao().addUser(userData);
-        dataAccess.getAuthDao().addAuth(authData);
+        memoryDataAccess.getGameDao().addGame(gameData);
+        memoryDataAccess.getUserDao().addUser(userData);
+        memoryDataAccess.getAuthDao().addAuth(authData);
 
-        ClearResponse clearResponse = new ClearService(dataAccess).clear();
+        ClearResponse clearResponse = new ClearService(memoryDataAccess).clear();
 
         Assertions.assertNull(clearResponse.message());
     }

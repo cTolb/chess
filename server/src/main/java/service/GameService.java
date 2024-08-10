@@ -1,7 +1,7 @@
 package service;
 
 import chess.ChessGame;
-import dataaccess.DataAccess;
+import dataaccess.memory.MemoryDataAccess;
 import dataaccess.DataAccessException;
 import model.AuthData;
 import model.GameData;
@@ -11,10 +11,10 @@ import responses.JoinGameResponse;
 import responses.ListGameResponse;
 
 public class GameService {
-    private final DataAccess dataAccess;
+    private final MemoryDataAccess memoryDataAccess;
 
-    public GameService(DataAccess dataAccess) {
-        this.dataAccess = dataAccess;
+    public GameService(MemoryDataAccess memoryDataAccess) {
+        this.memoryDataAccess = memoryDataAccess;
     }
 
     public CreateGameResponse createGame(GameData request, String authToken) {
@@ -27,9 +27,9 @@ public class GameService {
                 return new CreateGameResponse(null, "Error: bad request");
             }
             GameData addGame = new GameData(0, null, null, request.gameName(), new ChessGame());
-            int newID = dataAccess.getGameDao().addGame(addGame);
+            int newID = memoryDataAccess.getGameDao().addGame(addGame);
 
-            GameData game = dataAccess.getGameDao().getGame(newID);
+            GameData game = memoryDataAccess.getGameDao().getGame(newID);
             return new CreateGameResponse(game.gameID(), null);
         } catch (DataAccessException e) {
             return new CreateGameResponse(null, e.getMessage());
@@ -42,7 +42,7 @@ public class GameService {
                 return new JoinGameResponse("Error: bad request");
             }
 
-            GameData gameData = dataAccess.getGameDao().getGame(request.gameID());
+            GameData gameData = memoryDataAccess.getGameDao().getGame(request.gameID());
             if (gameData == null) {
                 return new JoinGameResponse("Error: bad request");
             }
@@ -51,7 +51,7 @@ public class GameService {
                 return new JoinGameResponse("Error: unauthorized");
             }
 
-            AuthData authData = dataAccess.getAuthDao().getAuthorization(authToken);
+            AuthData authData = memoryDataAccess.getAuthDao().getAuthorization(authToken);
             ChessGame.TeamColor requestTeamColor = request.playerColor();
             if (isColorAvailable(requestTeamColor, gameData, authData)) {
                 return new JoinGameResponse("Error: color already taken");
@@ -64,7 +64,7 @@ public class GameService {
                 gameData = new GameData(gameData.gameID(), gameData.whiteUsername(), authData.username(), gameData.gameName(), gameData.game());
             }
 
-            dataAccess.getGameDao().updateGames(gameData);
+            memoryDataAccess.getGameDao().updateGames(gameData);
         } catch (DataAccessException e) {
             return new JoinGameResponse(e.getMessage());
         }
@@ -78,7 +78,7 @@ public class GameService {
                 return new ListGameResponse(null, "Error: unauthorized");
             }
             else {
-                return new ListGameResponse(dataAccess.getGameDao().getAllGames(), null);
+                return new ListGameResponse(memoryDataAccess.getGameDao().getAllGames(), null);
             }
         } catch (DataAccessException e) {
             return new ListGameResponse(null, e.getMessage());
@@ -99,7 +99,7 @@ public class GameService {
     }
 
     private boolean isValidAuth(String authToken) throws DataAccessException {
-        AuthData authData = dataAccess.getAuthDao().getAuthorization(authToken);
+        AuthData authData = memoryDataAccess.getAuthDao().getAuthorization(authToken);
         return authData != null;
     }
 }

@@ -1,7 +1,7 @@
 package handlers;
 
 import com.google.gson.Gson;
-import dataaccess.DataAccess;
+import dataaccess.memory.MemoryDataAccess;
 import model.AuthData;
 import responses.LoginResponse;
 import model.UserData;
@@ -11,9 +11,9 @@ import spark.Response;
 import spark.Route;
 
 public class LoginHandler implements Route {
-    private final DataAccess dataAccess;
-    public LoginHandler(DataAccess dataAccess) {
-        this.dataAccess = dataAccess;
+    private final MemoryDataAccess memoryDataAccess;
+    public LoginHandler(MemoryDataAccess memoryDataAccess) {
+        this.memoryDataAccess = memoryDataAccess;
     }
     @Override
     public Object handle(Request request, Response response) throws Exception{
@@ -21,7 +21,7 @@ public class LoginHandler implements Route {
 
         UserData requestObject = gson.fromJson(request.body(), UserData.class);
 
-        LoginResponse responseObject = new UserService(dataAccess).loginUser(requestObject);
+        LoginResponse responseObject = new UserService(memoryDataAccess).loginUser(requestObject);
         AuthData authData;
         if (responseObject.message() == null) {
             response.status(200);

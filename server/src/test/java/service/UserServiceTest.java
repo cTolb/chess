@@ -1,6 +1,6 @@
 package service;
 
-import dataaccess.DataAccess;
+import dataaccess.memory.MemoryDataAccess;
 import dataaccess.DataAccessException;
 import responses.LoginResponse;
 import responses.LogoutResponse;
@@ -9,23 +9,23 @@ import model.UserData;
 import org.junit.jupiter.api.*;
 
 public class UserServiceTest {
-    private static DataAccess dataAccess;
+    private static MemoryDataAccess memoryDataAccess;
 
     @BeforeAll
     public static void beforeAll() {
-        dataAccess = new DataAccess();
+        memoryDataAccess = new MemoryDataAccess();
     }
 
     @BeforeEach
     public void beforeEach() throws DataAccessException {
-        new ClearService(dataAccess).clear();
+        new ClearService(memoryDataAccess).clear();
     }
 
     @Test
     public void goodRegister() {
         //Create and register a new user
         UserData existingUser = new UserData("existingUser", "existingPassword", "existing@byu.edu");
-        RegisterResponse response = new UserService(dataAccess).register(existingUser);
+        RegisterResponse response = new UserService(memoryDataAccess).register(existingUser);
 
         //Check that response from service matches what was submitted
         String authToken = response.authData().authToken();
@@ -37,10 +37,10 @@ public class UserServiceTest {
     public void badRegister() {
         //register a user
         UserData user1 = new UserData("username1", "userPassword1", "email1@byu.edu");
-        new UserService(dataAccess).register(user1);
+        new UserService(memoryDataAccess).register(user1);
 
         //Attempt to re-register a user
-        RegisterResponse response = new UserService(dataAccess).register(user1);
+        RegisterResponse response = new UserService(memoryDataAccess).register(user1);
 
         Assertions.assertNotNull(response.message());
     }
@@ -49,10 +49,10 @@ public class UserServiceTest {
     public void goodLogin() {
         //create and register a new user
         UserData user = new UserData("specialUsername*", "specialPassword*", "special@email.com");
-        new UserService(dataAccess).register(user);
+        new UserService(memoryDataAccess).register(user);
 
         //log in the registered user
-        LoginResponse response = new UserService(dataAccess).loginUser(user);
+        LoginResponse response = new UserService(memoryDataAccess).loginUser(user);
         Assertions.assertNotNull(response.authData().authToken());
         Assertions.assertEquals(response.authData().username(), user.username());
     }
@@ -61,11 +61,11 @@ public class UserServiceTest {
     public void badLogin() {
         //Register a good user
         UserData goodUser = new UserData("specialUsername*", "specialPassword*", "special@email.com");
-        new UserService(dataAccess).register(goodUser);
+        new UserService(memoryDataAccess).register(goodUser);
 
         //Try to login a user with a different username than is registered
         UserData badUser = new UserData("specialUsername", "specialPassword*", "special@email.com");
-        LoginResponse response = new UserService(dataAccess).loginUser(badUser);
+        LoginResponse response = new UserService(memoryDataAccess).loginUser(badUser);
 
         Assertions.assertNotNull(response.message());
     }
@@ -74,14 +74,14 @@ public class UserServiceTest {
     public void goodLogout() {
         //create and register a new user
         UserData user = new UserData("specialUsername*", "specialPassword*", "special@email.com");
-        new UserService(dataAccess).register(user);
+        new UserService(memoryDataAccess).register(user);
 
         //log in the registered user
-        LoginResponse loginResponse = new UserService(dataAccess).loginUser(user);
+        LoginResponse loginResponse = new UserService(memoryDataAccess).loginUser(user);
         String authToken = loginResponse.authData().authToken();
 
         //Logout user
-        LogoutResponse logoutResponse = new UserService(dataAccess).logoutUser(authToken);
+        LogoutResponse logoutResponse = new UserService(memoryDataAccess).logoutUser(authToken);
 
         Assertions.assertNull(logoutResponse.message());
     }
@@ -90,14 +90,14 @@ public class UserServiceTest {
     public void badLogout() {
         //create and register a new user
         UserData user = new UserData("specialUsername*", "specialPassword*", "special@email.com");
-        new UserService(dataAccess).register(user);
+        new UserService(memoryDataAccess).register(user);
 
         //log in the registered user
-        LoginResponse loginResponse = new UserService(dataAccess).loginUser(user);
+        LoginResponse loginResponse = new UserService(memoryDataAccess).loginUser(user);
         String authToken = loginResponse.authData().authToken();
 
         //Logout User with wrong authToken
-        LogoutResponse logoutResponse = new UserService(dataAccess).logoutUser("authToken");
+        LogoutResponse logoutResponse = new UserService(memoryDataAccess).logoutUser("authToken");
 
         Assertions.assertNotNull(logoutResponse.message());
     }

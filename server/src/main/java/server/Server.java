@@ -1,10 +1,8 @@
 package server;
 
-import dataaccess.DataAccess;
+import dataaccess.memory.MemoryDataAccess;
 import handlers.*;
 import spark.*;
-
-import java.net.HttpURLConnection;
 
 public class Server {
 
@@ -13,7 +11,7 @@ public class Server {
 
         Spark.staticFiles.location("web");
 
-        DataAccess data = new DataAccess();
+        MemoryDataAccess data = new MemoryDataAccess();
 
         //Register your endpoints and handle exceptions here.
         Spark.post("/user", new RegisterHandler(data));

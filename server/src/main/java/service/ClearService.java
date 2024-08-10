@@ -1,20 +1,20 @@
 package service;
 
-import dataaccess.DataAccess;
+import dataaccess.memory.MemoryDataAccess;
 import dataaccess.DataAccessException;
 import responses.ClearResponse;
 
 public class ClearService {
-    private final DataAccess dataAccess;
-    public ClearService(DataAccess dataAccess) {
-        this.dataAccess = dataAccess;
+    private final MemoryDataAccess memoryDataAccess;
+    public ClearService(MemoryDataAccess memoryDataAccess) {
+        this.memoryDataAccess = memoryDataAccess;
     }
 
     public ClearResponse clear() throws DataAccessException {
         try {
-            dataAccess.getAuthDao().clear();
-            dataAccess.getUserDao().clear();
-            dataAccess.getGameDao().clear();
+            memoryDataAccess.getAuthDao().clear();
+            memoryDataAccess.getUserDao().clear();
+            memoryDataAccess.getGameDao().clear();
             return new ClearResponse(null);
         } catch (DataAccessException e) {
             return new ClearResponse(e.getMessage());
