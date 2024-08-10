@@ -13,14 +13,10 @@ import org.junit.jupiter.api.*;
 
 public class UserServiceTest {
     private static DataAccess dataAccess;
-    private static GameDao gameDao;
-    private static AuthDao authDao;
 
     @BeforeAll
     public static void beforeAll() {
         dataAccess = new DataAccess();
-        gameDao = dataAccess.getGameDao();
-        authDao = dataAccess.getAuthDao();
     }
 
     @BeforeEach
