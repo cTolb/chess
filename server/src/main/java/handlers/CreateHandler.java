@@ -1,6 +1,7 @@
 package handlers;
 
 import com.google.gson.Gson;
+import dataaccess.DataAccess;
 import dataaccess.memory.MemoryDataAccess;
 import model.GameData;
 import responses.CreateGameResponse;
@@ -11,10 +12,10 @@ import spark.Route;
 
 
 public class CreateHandler implements Route {
-    private final MemoryDataAccess memoryDataAccess;
+    private final DataAccess dataAccess;
 
-    public CreateHandler(MemoryDataAccess memoryDataAccess) {
-        this.memoryDataAccess = memoryDataAccess;
+    public CreateHandler(DataAccess dataAccess) {
+        this.dataAccess = dataAccess;
     }
 
     @Override
@@ -24,7 +25,7 @@ public class CreateHandler implements Route {
 
         GameData requestObject = gson.fromJson(request.body(), GameData.class);
 
-        CreateGameResponse responseObject = new GameService(memoryDataAccess).createGame(requestObject, authToken);
+        CreateGameResponse responseObject = new GameService(dataAccess).createGame(requestObject, authToken);
 
         if (responseObject.message() == null) {
             response.status(200);

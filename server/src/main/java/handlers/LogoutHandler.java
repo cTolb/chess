@@ -1,6 +1,7 @@
 package handlers;
 
 import com.google.gson.Gson;
+import dataaccess.DataAccess;
 import dataaccess.memory.MemoryDataAccess;
 import responses.LogoutResponse;
 import service.UserService;
@@ -9,9 +10,9 @@ import spark.Response;
 import spark.Route;
 
 public class LogoutHandler implements Route {
-    private final MemoryDataAccess memoryDataAccess;
-    public LogoutHandler(MemoryDataAccess memoryDataAccess) {
-        this.memoryDataAccess = memoryDataAccess;
+    private final DataAccess dataAccess;
+    public LogoutHandler(DataAccess dataAccess) {
+        this.dataAccess = dataAccess;
     }
 
     @Override
@@ -20,7 +21,7 @@ public class LogoutHandler implements Route {
         String authToken = request.headers("authorization");
 
 
-        LogoutResponse responseObject = new UserService(memoryDataAccess).logoutUser(authToken);
+        LogoutResponse responseObject = new UserService(dataAccess).logoutUser(authToken);
         if (responseObject.message() == null) {
             response.status(200);
         }

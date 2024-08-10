@@ -1,6 +1,7 @@
 package handlers;
 
 import com.google.gson.Gson;
+import dataaccess.DataAccess;
 import dataaccess.memory.MemoryDataAccess;
 import responses.ListGameResponse;
 import service.GameService;
@@ -10,9 +11,9 @@ import spark.Route;
 
 public class ListGamesHandler implements Route {
 
-    private final MemoryDataAccess memoryDataAccess;
-    public ListGamesHandler(MemoryDataAccess memoryDataAccess) {
-        this.memoryDataAccess = memoryDataAccess;
+    private final DataAccess dataAccess;
+    public ListGamesHandler(DataAccess dataAccess) {
+        this.dataAccess = dataAccess;
     }
 
     @Override
@@ -20,7 +21,7 @@ public class ListGamesHandler implements Route {
         Gson gson = new Gson();
         String authToken = request.headers("authorization");
 
-        ListGameResponse resultObject = new GameService(memoryDataAccess).listGames(authToken);
+        ListGameResponse resultObject = new GameService(dataAccess).listGames(authToken);
 
         if (resultObject.message() == null) {
             response.status(200);

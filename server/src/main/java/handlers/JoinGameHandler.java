@@ -1,6 +1,7 @@
 package handlers;
 
 import com.google.gson.Gson;
+import dataaccess.DataAccess;
 import dataaccess.memory.MemoryDataAccess;
 import requests.JoinGameRequest;
 import responses.JoinGameResponse;
@@ -10,9 +11,9 @@ import spark.Response;
 import spark.Route;
 
 public class JoinGameHandler implements Route {
-    private final MemoryDataAccess memoryDataAccess;
-    public JoinGameHandler(MemoryDataAccess memoryDataAccess) {
-        this.memoryDataAccess = memoryDataAccess;
+    private final DataAccess dataAccess;
+    public JoinGameHandler(DataAccess dataAccess) {
+        this.dataAccess = dataAccess;
     }
     @Override
     public Object handle(Request request, Response response) throws Exception {
@@ -20,7 +21,7 @@ public class JoinGameHandler implements Route {
         String authToken = request.headers("authorization");
 
         JoinGameRequest requestObject = gson.fromJson(request.body(), JoinGameRequest.class);
-        JoinGameResponse resultObject = new GameService(memoryDataAccess).joinGame(requestObject, authToken);
+        JoinGameResponse resultObject = new GameService(dataAccess).joinGame(requestObject, authToken);
         if (resultObject == null) {
             response.status(200);
         }

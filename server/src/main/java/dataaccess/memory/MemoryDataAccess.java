@@ -1,11 +1,11 @@
 package dataaccess.memory;
 
 import dataaccess.AuthDaoInterface;
-import dataaccess.DataAccessInterface;
+import dataaccess.DataAccess;
 import dataaccess.GameDaoInterface;
 import dataaccess.UserDaoInterface;
 
-public class MemoryDataAccess implements DataAccessInterface {
+public class MemoryDataAccess implements DataAccess {
     private final AuthDaoInterface authDao;
     private final UserDaoInterface userDao;
     private final GameDaoInterface gameDao;

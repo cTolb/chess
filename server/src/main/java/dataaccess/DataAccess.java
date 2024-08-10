@@ -1,6 +1,6 @@
 package dataaccess;
 
-public interface DataAccessInterface {
+public interface DataAccess {
     AuthDaoInterface getAuthDao();
     UserDaoInterface getUserDao();
     GameDaoInterface getGameDao();
