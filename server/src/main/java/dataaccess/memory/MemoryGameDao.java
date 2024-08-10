@@ -1,11 +1,11 @@
-package dataaccess;
+package dataaccess.memory;
 
+import dataaccess.DataAccessException;
 import model.GameData;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 
-public class GameDao {
+public class MemoryGameDao {
     private final HashMap<Integer, GameData> games = new HashMap<>();
     private int id = 1000;
     public void clear() throws DataAccessException {

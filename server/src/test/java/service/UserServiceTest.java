@@ -1,10 +1,7 @@
 package service;
 
-import dataaccess.AuthDao;
 import dataaccess.DataAccess;
 import dataaccess.DataAccessException;
-import dataaccess.GameDao;
-import org.eclipse.jetty.server.Authentication;
 import responses.LoginResponse;
 import responses.LogoutResponse;
 import responses.RegisterResponse;

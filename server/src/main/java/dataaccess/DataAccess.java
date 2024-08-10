@@ -1,26 +1,30 @@
 package dataaccess;
 
+import dataaccess.memory.MemoryAuthDao;
+import dataaccess.memory.MemoryGameDao;
+import dataaccess.memory.MemoryUserDao;
+
 public class DataAccess {
-    private final AuthDao authDao;
-    private final UserDao userDao;
-    private final GameDao gameDao;
+    private final MemoryAuthDao memoryAuthDao;
+    private final MemoryUserDao memoryUserDao;
+    private final MemoryGameDao memoryGameDao;
 
     public DataAccess() {
-        authDao = new AuthDao();
-        userDao = new UserDao();
-        gameDao = new GameDao();
+        memoryAuthDao = new MemoryAuthDao();
+        memoryUserDao = new MemoryUserDao();
+        memoryGameDao = new MemoryGameDao();
     }
 
 
-    public AuthDao getAuthDao() {
-        return authDao;
+    public MemoryAuthDao getAuthDao() {
+        return memoryAuthDao;
     }
 
-    public UserDao getUserDao() {
-        return userDao;
+    public MemoryUserDao getUserDao() {
+        return memoryUserDao;
     }
 
-    public GameDao getGameDao() {
-        return gameDao;
+    public MemoryGameDao getGameDao() {
+        return memoryGameDao;
     }
 }

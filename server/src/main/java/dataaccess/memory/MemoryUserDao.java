@@ -1,11 +1,12 @@
-package dataaccess;
+package dataaccess.memory;
 
+import dataaccess.DataAccessException;
 import requests.LoginRequest;
 import model.UserData;
 
 import java.util.HashMap;
 
-public class UserDao {
+public class MemoryUserDao {
     private final HashMap<String, UserData> users = new HashMap<>();
     public void clear() throws DataAccessException {
         users.clear();

@@ -1,9 +1,10 @@
-package dataaccess;
+package dataaccess.memory;
 
+import dataaccess.DataAccessException;
 import model.AuthData;
 import java.util.HashMap;
 
-public class AuthDao {
+public class MemoryAuthDao {
     private final HashMap<String, AuthData> authTokens = new HashMap<>();
 
     public void addAuth(AuthData authData) throws DataAccessException {
