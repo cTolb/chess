@@ -8,8 +8,6 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
-import java.net.HttpURLConnection;
-
 public class ListGamesHandler implements Route {
 
     private final DataAccess dataAccess;

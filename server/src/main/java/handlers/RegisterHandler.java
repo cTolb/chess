@@ -2,11 +2,9 @@ package handlers;
 
 import com.google.gson.Gson;
 import dataaccess.DataAccess;
-import dataaccess.DataAccessException;
 import model.AuthData;
 import responses.RegisterResponse;
 import model.UserData;
-import service.ServerException;
 import service.UserService;
 import spark.Request;
 import spark.Response;
@@ -19,7 +17,7 @@ public class RegisterHandler implements Route {
         this.dataAccess = dataAccess;
     }
     @Override
-    public Object handle(Request request, Response response) throws ServerException, DataAccessException {
+    public Object handle(Request request, Response response) throws Exception {
         Gson gson = new Gson();
 
         UserData requestObject = gson.fromJson(request.body(), UserData.class);

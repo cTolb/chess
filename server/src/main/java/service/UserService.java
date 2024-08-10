@@ -17,22 +17,26 @@ public class UserService {
         this.dataAccess = dataAccess;
     }
 
-    public RegisterResponse register(UserData userData) throws  DataAccessException {
-        if (userData == null || userData.username() == null || userData.password() == null || userData.email() == null) {
-            return new RegisterResponse(null, "Error: UserData can not be null");
-        }
-        if (dataAccess.getUserDao().getUser(userData.username()) != null) {
-            return new RegisterResponse(null, "Error: username is already taken");
-        }
-        dataAccess.getUserDao().addUser(userData);
-        String authToken = createAuthToken();
-        AuthData addAuth = new AuthData(authToken, userData.username());
-        dataAccess.getAuthDao().addAuth(addAuth);
+    public RegisterResponse register(UserData userData) {
+        try {
+            if (userData == null || userData.username() == null || userData.password() == null || userData.email() == null) {
+                return new RegisterResponse(null, "Error: UserData can not be null");
+            }
+            if (dataAccess.getUserDao().getUser(userData.username()) != null) {
+                return new RegisterResponse(null, "Error: username is already taken");
+            }
+            dataAccess.getUserDao().addUser(userData);
+            String authToken = createAuthToken();
+            AuthData addAuth = new AuthData(authToken, userData.username());
+            dataAccess.getAuthDao().addAuth(addAuth);
 
-        return new RegisterResponse(addAuth, null);
+            return new RegisterResponse(addAuth, null);
+        } catch (DataAccessException e) {
+            return new RegisterResponse(null, e.getMessage());
+        }
     }
 
-    public LogoutResponse logoutUser(String authToken) throws ServerException {
+    public LogoutResponse logoutUser(String authToken) {
         try {
             AuthData delete = dataAccess.getAuthDao().getAuthorization(authToken);
             if (delete == null) {
@@ -40,11 +44,12 @@ public class UserService {
             }
             dataAccess.getAuthDao().deleteAuth(authToken);
         } catch (DataAccessException e) {
-            throw new ServerException(e);
+            return new LogoutResponse(e.getMessage());
         }
         return new LogoutResponse(null);
     }
-    public LoginResponse loginUser(UserData userData) throws ServerException {
+
+    public LoginResponse loginUser(UserData userData) {
         try {
             if (!dataAccess.getUserDao().userExists(userData.username())) {
                 return new LoginResponse(null,"Error: username is incorrect");
@@ -60,10 +65,9 @@ public class UserService {
             return new LoginResponse(addAuth, null);
 
         } catch (DataAccessException e) {
-            throw new ServerException(e);
+            return new LoginResponse(null, e.getMessage());
         }
     }
-
 
     private String createAuthToken() {
         return UUID.randomUUID().toString();

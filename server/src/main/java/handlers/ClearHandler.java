@@ -4,16 +4,10 @@ import com.google.gson.Gson;
 import dataaccess.DataAccess;
 import dataaccess.DataAccessException;
 import responses.ClearResponse;
-import responses.LogoutResponse;
 import service.ClearService;
-import service.ServerException;
-import service.UserService;
 import spark.Request;
 import spark.Response;
 import spark.Route;
-
-import java.net.HttpURLConnection;
-
 
 public class ClearHandler implements Route {
     private final DataAccess dataAccess;

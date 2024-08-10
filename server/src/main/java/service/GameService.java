@@ -10,6 +10,7 @@ import responses.CreateGameResponse;
 import responses.JoinGameResponse;
 import responses.ListGameResponse;
 
+import javax.xml.crypto.Data;
 import java.util.List;
 
 public class GameService {
@@ -19,7 +20,8 @@ public class GameService {
         this.dataAccess = dataAccess;
     }
 
-    public CreateGameResponse createGame(GameData request, String authToken) throws DataAccessException {
+    public CreateGameResponse createGame(GameData request, String authToken) {
+        try {
             if (!isValidAuth(authToken)) {
                 return new CreateGameResponse(null, "Error: unauthorized");
             }
@@ -31,9 +33,12 @@ public class GameService {
             addGame = dataAccess.getGameDao().addGame(addGame);
 
             return new CreateGameResponse(addGame, null);
+        } catch (DataAccessException e) {
+            return new CreateGameResponse(null, e.getMessage());
+        }
     }
 
-    public JoinGameResponse joinGame(JoinGameRequest request, String authToken) throws ServerException{
+    public JoinGameResponse joinGame(JoinGameRequest request, String authToken) {
         try {
             if (request.playerColor() == null) {
                 return new JoinGameResponse("Error: bad request");
@@ -63,13 +68,13 @@ public class GameService {
 
             dataAccess.getGameDao().updateGames(gameData);
         } catch (DataAccessException e) {
-            throw new ServerException(e);
+            return new JoinGameResponse(e.getMessage());
         }
 
         return null;
     }
 
-    public ListGameResponse listGames(String authToken) throws ServerException {
+    public ListGameResponse listGames(String authToken) {
         try {
             if (!isValidAuth(authToken)) {
                 return new ListGameResponse(null, "Error: unauthorized");

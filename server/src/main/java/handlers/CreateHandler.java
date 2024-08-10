@@ -9,7 +9,6 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
-import java.net.HttpURLConnection;
 
 public class CreateHandler implements Route {
     private final DataAccess dataAccess;
@@ -44,6 +43,5 @@ public class CreateHandler implements Route {
             response.status(500);
             return gson.toJson(responseObject);
         }
-        //return gson.toJson(null);
     }
 }

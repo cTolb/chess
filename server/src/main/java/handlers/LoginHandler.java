@@ -5,7 +5,6 @@ import dataaccess.DataAccess;
 import model.AuthData;
 import responses.LoginResponse;
 import model.UserData;
-import service.ServerException;
 import service.UserService;
 import spark.Request;
 import spark.Response;
@@ -17,7 +16,7 @@ public class LoginHandler implements Route {
         this.dataAccess = dataAccess;
     }
     @Override
-    public Object handle(Request request, Response response) throws ServerException {
+    public Object handle(Request request, Response response) throws Exception{
         Gson gson = new Gson();
 
         UserData requestObject = gson.fromJson(request.body(), UserData.class);

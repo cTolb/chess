@@ -17,7 +17,7 @@ public class ClearService {
             dataAccess.getGameDao().clear();
             return new ClearResponse(null);
         } catch (DataAccessException e) {
-            return new ClearResponse("Error: unauthorized");
+            return new ClearResponse(e.getMessage());
         }
     }
 }

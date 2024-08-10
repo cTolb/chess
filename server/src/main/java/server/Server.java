@@ -2,10 +2,6 @@ package server;
 
 import dataaccess.DataAccess;
 import handlers.*;
-//import service.RequestException;
-import service.ServerException;
-//import service.TakenException;
-//import service.UnauthorizedException;
 import spark.*;
 
 import java.net.HttpURLConnection;

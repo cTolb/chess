@@ -9,8 +9,6 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
-import java.net.HttpURLConnection;
-
 public class JoinGameHandler implements Route {
     private final DataAccess dataAccess;
     public JoinGameHandler(DataAccess dataAccess) {
