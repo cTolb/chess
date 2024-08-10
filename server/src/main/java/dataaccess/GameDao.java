@@ -20,14 +20,14 @@ public class GameDao {
         return games.values();
     }
 
-    public GameData addGame(GameData game) throws DataAccessException {
+    public int addGame(GameData game) throws DataAccessException {
         if (game.game() == null) {
             throw new DataAccessException("Game can not be null");
         }
         id++;
         GameData newGame = new GameData(id, game.whiteUsername(), game.blackUsername(), game.gameName(), game.game());
         games.put(id, newGame);
-        return newGame;
+        return id;
     }
 
     public void updateGames(GameData game) throws DataAccessException {

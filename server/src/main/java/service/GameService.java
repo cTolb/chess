@@ -10,9 +10,6 @@ import responses.CreateGameResponse;
 import responses.JoinGameResponse;
 import responses.ListGameResponse;
 
-import javax.xml.crypto.Data;
-import java.util.List;
-
 public class GameService {
     private final DataAccess dataAccess;
 
@@ -30,9 +27,10 @@ public class GameService {
                 return new CreateGameResponse(null, "Error: bad request");
             }
             GameData addGame = new GameData(0, null, null, request.gameName(), new ChessGame());
-            addGame = dataAccess.getGameDao().addGame(addGame);
+            int newID = dataAccess.getGameDao().addGame(addGame);
 
-            return new CreateGameResponse(addGame, null);
+            GameData game = dataAccess.getGameDao().getGame(newID);
+            return new CreateGameResponse(game.gameID(), null);
         } catch (DataAccessException e) {
             return new CreateGameResponse(null, e.getMessage());
         }

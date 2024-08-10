@@ -2,5 +2,5 @@ package responses;
 
 import model.GameData;
 
-public record CreateGameResponse(GameData gameData, String message) {
+public record CreateGameResponse(Integer gameID, String message) {
 }

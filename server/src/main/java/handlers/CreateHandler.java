@@ -28,8 +28,8 @@ public class CreateHandler implements Route {
 
         if (responseObject.message() == null) {
             response.status(200);
-            GameData game = responseObject.gameData();
-            return gson.toJson(game);
+            //GameData game = responseObject.gameID();
+            return gson.toJson(responseObject);
         }
         else if (responseObject.message().equals("Error: bad request")) {
             response.status(400);
