@@ -6,12 +6,12 @@ import model.AuthData;
 
 public class SQLAuthDao implements AuthDaoInterface {
     @Override
-    public void addAuth(AuthData authData) throws DataAccessException {
+    public void clear() throws DataAccessException {
 
     }
 
     @Override
-    public void clear() throws DataAccessException {
+    public void addAuth(AuthData authData) throws DataAccessException {
 
     }
 

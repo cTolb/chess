@@ -1,10 +1,12 @@
 package server;
 
 import dataaccess.DataAccess;
-import dataaccess.memory.MemoryDataAccess;
+import dataaccess.DataAccessException;
 import dataaccess.sql.SQLDataAccess;
 import handlers.*;
 import spark.*;
+
+import javax.xml.crypto.Data;
 
 public class Server {
 
@@ -13,7 +15,12 @@ public class Server {
 
         Spark.staticFiles.location("web");
 
-        DataAccess data = new MemoryDataAccess();
+        DataAccess data;
+        try {
+            data = new SQLDataAccess();
+        } catch (DataAccessException e) {
+            throw new RuntimeException(e);
+        }
 
         //Register your endpoints and handle exceptions here.
         Spark.post("/user", new RegisterHandler(data));
@@ -24,7 +31,7 @@ public class Server {
         Spark.put("/game", new JoinGameHandler(data));
         Spark.get("/game", new ListGamesHandler(data));
 
-        //This line initializes the server and can be removed once you have a functioning endpoint 
+        //This line initializes the server and can be removed once you have a functioning endpoint
         //Spark.init();
 
         Spark.awaitInitialization();
