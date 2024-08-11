@@ -1,9 +1,14 @@
 package dataaccess.sql;
 
+import chess.ChessGame;
+import com.google.gson.Gson;
 import dataaccess.*;
 
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 
 import static dataaccess.sql.DatabaseManager.getConnection;
 import static java.sql.Statement.RETURN_GENERATED_KEYS;
@@ -37,22 +42,30 @@ public class SQLDataAccess implements DataAccess {
     }
 
     public static int executeUpdate(String statement, Object... params) throws DataAccessException {
-        try (var con = DatabaseManager.getConnection()){
+        try (var con = DatabaseManager.getConnection()) {
             try (var prepStatement = con.prepareStatement(statement, RETURN_GENERATED_KEYS)) {
                 for (int i = 0; i < params.length; i++) {
-                    var param = params[i];
-                    if (param instanceof String p) prepStatement.setString(i + 1, p);
-                    else if (param instanceof Integer p) prepStatement.setInt(i + 1, p);
-                    else if (param == null) prepStatement.setNull(i + 1, NULL);
+                    Object param = params[i];
+                    switch (param) {
+                        case String p -> prepStatement.setString(i + 1, p);
+                        case Integer p -> prepStatement.setInt(i + 1, p);
+                        case ChessGame p -> prepStatement.setString(i + 1, new Gson().toJson(p));
+                        case null -> prepStatement.setNull(i + 1, Types.NULL);
+                        default -> throw new DataAccessException("Unexpected datatype: " + param.getClass());
+                    }
                 }
+
                 prepStatement.executeUpdate();
 
                 var rs = prepStatement.getGeneratedKeys();
+
                 if (rs.next()) {
                     return rs.getInt(1);
+                } else {
+                    return 0;
                 }
+
             }
-            return 0;
         } catch (SQLException e) {
             throw new DataAccessException(String.format("executeUpdate error: %s, %s", statement, e.getMessage()));
         }
