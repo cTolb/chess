@@ -23,7 +23,20 @@ public class SQLUserDao implements UserDaoInterface {
 
     @Override
     public void addUser(UserData user) throws DataAccessException {
+        var con = DatabaseManager.getConnection();
+        try {
+            String statement = "INSERT INTO users (username, password, email) VALUES (?, ?, ?);";
 
+            var prepStatement = con.prepareStatement(statement);
+            prepStatement.setString(1, user.username());
+            prepStatement.setString(2, user.password());
+            prepStatement.setString(3, user.email());
+
+            prepStatement.executeUpdate();
+            con.close();
+        } catch (SQLException e) {
+            throw new DataAccessException(e.getMessage());
+        }
     }
 
     @Override

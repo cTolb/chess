@@ -36,7 +36,7 @@ public class SQLDataAccess implements DataAccess {
         return gameDao;
     }
 
-    public int executeUpdate(String statement, Object... params) throws Exception {
+    public static int executeUpdate(String statement, Object... params) throws DataAccessException {
         try (var con = DatabaseManager.getConnection()){
             try (var prepStatement = con.prepareStatement(statement, RETURN_GENERATED_KEYS)) {
                 for (int i = 0; i < params.length; i++) {

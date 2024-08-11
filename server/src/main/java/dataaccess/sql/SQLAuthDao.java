@@ -21,12 +21,47 @@ public class SQLAuthDao implements AuthDaoInterface {
 
     @Override
     public void addAuth(AuthData authData) throws DataAccessException {
+        var con = DatabaseManager.getConnection();
+        try {
+            String statement = "INSERT INTO auths (authToken, username) VALUES (?, ?);";
 
+            var prepStatement = con.prepareStatement(statement);
+
+            prepStatement.setString(1, authData.authToken());
+            prepStatement.setString(2, authData.username());
+            prepStatement.executeUpdate();
+
+            con.close();
+
+        } catch (SQLException e) {
+            throw new DataAccessException(e.getMessage());
+        }
     }
 
     @Override
     public AuthData getAuthorization(String authToken) throws DataAccessException {
-        return null;
+        var con = DatabaseManager.getConnection();
+        try {
+            String statement = "SELECT * FROM auths WHERE authToken = ?;";
+
+            var prepStatement = con.prepareStatement(statement);
+
+            prepStatement.setString(1, authToken);
+            var rs = prepStatement.executeQuery();
+                String token = null;
+                String username = null;
+                while (rs.next()) {
+                    token = rs.getString("authToken");
+                    username = rs.getString("username");
+                }
+
+            con.close();
+            return new AuthData(token, username);
+
+        } catch (SQLException e) {
+            throw new DataAccessException(e.getMessage());
+        }
+        //return null;
     }
 
     @Override
