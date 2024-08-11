@@ -3,6 +3,8 @@ package dataaccess.sql;
 import dataaccess.AuthDaoInterface;
 import dataaccess.DataAccessException;
 import model.AuthData;
+
+import javax.xml.crypto.Data;
 import java.sql.*;
 
 public class SQLAuthDao implements AuthDaoInterface {
@@ -48,24 +50,36 @@ public class SQLAuthDao implements AuthDaoInterface {
 
             prepStatement.setString(1, authToken);
             var rs = prepStatement.executeQuery();
-                String token = null;
-                String username = null;
-                while (rs.next()) {
-                    token = rs.getString("authToken");
-                    username = rs.getString("username");
-                }
+            String token = null;
+            String username = null;
+            while (rs.next()) {
+                token = rs.getString("authToken");
+                username = rs.getString("username");
+            }
 
             con.close();
+
+            if (token == null) {
+                return null;
+            }
             return new AuthData(token, username);
 
         } catch (SQLException e) {
             throw new DataAccessException(e.getMessage());
         }
-        //return null;
     }
 
     @Override
     public void deleteAuth(String authToken) throws DataAccessException {
-
+        var con = DatabaseManager.getConnection();
+        try {
+            String statement = "DELETE FROM auths WHERE authToken = ?;";
+            var prepStatement = con.prepareStatement(statement);
+            prepStatement.setString(1, authToken);
+            prepStatement.executeUpdate();
+            con.close();
+        } catch (SQLException e) {
+            throw new DataAccessException(e.getMessage());
+        }
     }
 }
