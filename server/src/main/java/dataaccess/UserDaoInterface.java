@@ -7,7 +7,7 @@ public interface UserDaoInterface {
     void clear() throws DataAccessException;
     void addUser(UserData user) throws DataAccessException;
 
-    UserData getUser(String username);
+    UserData getUser(String username) throws DataAccessException;
     boolean valid(LoginRequest request) throws DataAccessException;
     boolean userExists(String username) throws DataAccessException;
 }
