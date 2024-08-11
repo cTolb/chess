@@ -23,7 +23,6 @@ public class RegisterHandler implements Route {
 
         UserData requestObject = gson.fromJson(request.body(), UserData.class);
         RegisterResponse responseObject = new UserService(dataAccess).register(requestObject);
-        //System.out.println(responseObject.toString());
 
         AuthData authData;
         if (responseObject.message() == null) {
