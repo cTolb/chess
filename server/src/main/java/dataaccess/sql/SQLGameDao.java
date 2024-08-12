@@ -41,6 +41,7 @@ public class SQLGameDao implements GameDaoInterface {
                     return readGame(returnStatement);
                 }
             }
+            con.close();
         } catch (SQLException e) {
             throw new DataAccessException(e.getMessage());
         }
@@ -69,11 +70,12 @@ public class SQLGameDao implements GameDaoInterface {
             String statement = "SELECT * FROM games;";
             var prepStatement = con.prepareStatement(statement);
 
-                var returnStatement = prepStatement.executeQuery();
-                while (returnStatement.next()) {
-                    games.add(readGame(returnStatement));
-                }
+            var returnStatement = prepStatement.executeQuery();
+            while (returnStatement.next()) {
+                games.add(readGame(returnStatement));
+            }
 
+            con.close();
         } catch (SQLException e) {
             throw new DataAccessException(e.getMessage());
         }
@@ -104,7 +106,6 @@ public class SQLGameDao implements GameDaoInterface {
         if (foundGame == null) {
             throw new DataAccessException("game does not exist");
         }
-        var con = DatabaseManager.getConnection();
         var statement = "UPDATE games SET whiteUsername = ? , blackUsername = ? , game = ? WHERE gameID = ?;";
         SQLDataAccess.executeUpdate(statement, game.whiteUsername(), game.blackUsername(), game.game(), game.gameID());
 

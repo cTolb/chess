@@ -6,7 +6,6 @@ import model.UserData;
 import org.mindrot.jbcrypt.BCrypt;
 import requests.LoginRequest;
 
-import javax.xml.crypto.Data;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -54,6 +53,7 @@ public class SQLUserDao implements UserDaoInterface {
                     return readUser(returnStatement);
                 }
             }
+            con.close();
         } catch (SQLException e) {
             throw new DataAccessException(e.getMessage());
         }
@@ -85,6 +85,7 @@ public class SQLUserDao implements UserDaoInterface {
                     return found != null && checkPassword(request.password(), hashedPassword);
                 }
             }
+            con.close();
         } catch (SQLException e) {
             throw new DataAccessException(e.getMessage());
         }
@@ -97,8 +98,7 @@ public class SQLUserDao implements UserDaoInterface {
 
     @Override
     public boolean userExists(String username) throws DataAccessException {
-        var con = DatabaseManager.getConnection();
-        try {
+        try (var con = DatabaseManager.getConnection() ){
             String statement = "SELECT * FROM users WHERE username=?";
             var prepStatement = con.prepareStatement(statement);
             prepStatement.setString(1, username);
