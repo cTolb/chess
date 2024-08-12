@@ -12,7 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import responses.ClearResponse;
 
-public class ClearServerTest {
+public class ClearServiceTest {
     private static MemoryDataAccess memoryDataAccess;
 
     @BeforeAll
