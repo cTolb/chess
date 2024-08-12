@@ -15,8 +15,7 @@ public class SQLUserDaoTest {
 
     @BeforeAll
     public static void beforeAll() throws DataAccessException {
-        DataAccess dataAccess = new SQLDataAccess();
-        userDao = dataAccess.getUserDao();
+        userDao = new SQLDataAccess().getUserDao();
         userDao.clear();
     }
 
@@ -64,6 +63,11 @@ public class SQLUserDaoTest {
 
         //Assert that get returns the correct user
         Assertions.assertEquals(user1.username(), userDao.getUser(user1.username()).username());
+        Assertions.assertEquals(user1.password(), userDao.getUser(user1.username()).password());
+        Assertions.assertEquals(user1.email(), userDao.getUser(user1.username()).email());
+        Assertions.assertEquals(user3.username(), userDao.getUser(user3.username()).username());
+        Assertions.assertEquals(user3.password(), userDao.getUser(user3.username()).password());
+        Assertions.assertEquals(user3.email(), userDao.getUser(user3.username()).email());
     }
 
     @Test

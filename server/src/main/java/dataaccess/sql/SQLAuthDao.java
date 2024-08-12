@@ -4,7 +4,6 @@ import dataaccess.AuthDaoInterface;
 import dataaccess.DataAccessException;
 import model.AuthData;
 
-import javax.xml.crypto.Data;
 import java.sql.*;
 
 public class SQLAuthDao implements AuthDaoInterface {
