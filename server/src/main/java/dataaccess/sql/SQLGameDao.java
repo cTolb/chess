@@ -13,6 +13,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Collection;
+import java.util.HashSet;
 
 public class SQLGameDao implements GameDaoInterface {
     @Override
@@ -62,7 +63,21 @@ public class SQLGameDao implements GameDaoInterface {
 
     @Override
     public Collection<GameData> getAllGames() throws DataAccessException {
-        return null;
+        Collection<GameData> games = new HashSet<>();
+        var con = DatabaseManager.getConnection();
+        try {
+            String statement = "SELECT * FROM games;";
+            var prepStatement = con.prepareStatement(statement);
+
+                var returnStatement = prepStatement.executeQuery();
+                while (returnStatement.next()) {
+                    games.add(readGame(returnStatement));
+                }
+
+        } catch (SQLException e) {
+            throw new DataAccessException(e.getMessage());
+        }
+        return games;
     }
 
     @Override
@@ -90,18 +105,9 @@ public class SQLGameDao implements GameDaoInterface {
             throw new DataAccessException("game does not exist");
         }
         var con = DatabaseManager.getConnection();
-        try {
-            var statement = "UPDATE games SET whiteUsername = ? , blackUsername = ? , game = ? WHERE gameID = ?;";
-            var prepStatement = con.prepareStatement(statement);
-            prepStatement.setString(1, "whiteUsername");
-            prepStatement.setString(2, "blackUsername");
-            prepStatement.setString(3, new Gson().toJson(game.gameID()));
-            prepStatement.setInt(4, game.gameID());
-            prepStatement.executeUpdate();
+        var statement = "UPDATE games SET whiteUsername = ? , blackUsername = ? , game = ? WHERE gameID = ?;";
+        SQLDataAccess.executeUpdate(statement, game.whiteUsername(), game.blackUsername(), game.game(), game.gameID());
 
-        } catch (SQLException e) {
-            throw new DataAccessException(e.getMessage());
-        }
     }
 
 }

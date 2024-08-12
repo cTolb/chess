@@ -59,14 +59,11 @@ public class GameService {
 
             if (requestTeamColor == ChessGame.TeamColor.WHITE) {
                 dataAccess.getGameDao().updateGames(gameData.setWhiteUsername(authData.username()));
-                //gameData = new GameData(gameData.gameID(), authData.username(), gameData.blackUsername(), gameData.gameName(), gameData.game());
             }
             if (requestTeamColor == ChessGame.TeamColor.BLACK) {
                 dataAccess.getGameDao().updateGames(gameData.setBlackUsername(authData.username()));
-                //gameData = new GameData(gameData.gameID(), gameData.whiteUsername(), authData.username(), gameData.gameName(), gameData.game());
             }
 
-            //dataAccess.getGameDao().updateGames(gameData);
         } catch (DataAccessException e) {
             return new JoinGameResponse(e.getMessage());
         }
