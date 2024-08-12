@@ -97,9 +97,9 @@ public class SQLDataAccess implements DataAccess {
 
         String gamesString = "CREATE TABLE IF NOT EXISTS games (" +
                 "gameID INT NOT NULL AUTO_INCREMENT, " +
-                "gameName VARCHAR(250) NOT NULL, " +
                 "whiteUsername VARCHAR(250), " +
                 "blackUsername VARCHAR(250), " +
+                "gameName VARCHAR(250) NOT NULL, " +
                 "game LONGTEXT NOT NULL, " +
                 "PRIMARY KEY (gameID));";
 

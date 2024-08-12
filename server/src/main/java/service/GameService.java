@@ -47,25 +47,26 @@ public class GameService {
             if (gameData == null) {
                 return new JoinGameResponse("Error: bad request");
             }
-
-            if (!isValidAuth(authToken)) {
+            AuthData authData = dataAccess.getAuthDao().getAuthorization(authToken);
+            if (authData == null) {
                 return new JoinGameResponse("Error: unauthorized");
             }
 
-            AuthData authData = dataAccess.getAuthDao().getAuthorization(authToken);
             ChessGame.TeamColor requestTeamColor = request.playerColor();
             if (isColorAvailable(requestTeamColor, gameData, authData)) {
                 return new JoinGameResponse("Error: color already taken");
             }
 
             if (requestTeamColor == ChessGame.TeamColor.WHITE) {
-                gameData = new GameData(gameData.gameID(), authData.username(), gameData.blackUsername(), gameData.gameName(), gameData.game());
+                dataAccess.getGameDao().updateGames(gameData.setWhiteUsername(authData.username()));
+                //gameData = new GameData(gameData.gameID(), authData.username(), gameData.blackUsername(), gameData.gameName(), gameData.game());
             }
             if (requestTeamColor == ChessGame.TeamColor.BLACK) {
-                gameData = new GameData(gameData.gameID(), gameData.whiteUsername(), authData.username(), gameData.gameName(), gameData.game());
+                dataAccess.getGameDao().updateGames(gameData.setBlackUsername(authData.username()));
+                //gameData = new GameData(gameData.gameID(), gameData.whiteUsername(), authData.username(), gameData.gameName(), gameData.game());
             }
 
-            dataAccess.getGameDao().updateGames(gameData);
+            //dataAccess.getGameDao().updateGames(gameData);
         } catch (DataAccessException e) {
             return new JoinGameResponse(e.getMessage());
         }

@@ -2,6 +2,7 @@ package server;
 
 import dataaccess.DataAccess;
 import dataaccess.DataAccessException;
+import dataaccess.memory.MemoryDataAccess;
 import dataaccess.sql.SQLDataAccess;
 import handlers.*;
 import spark.*;
@@ -21,6 +22,7 @@ public class Server {
         } catch (DataAccessException e) {
             throw new RuntimeException(e);
         }
+        //data = new MemoryDataAccess();
 
         //Register your endpoints and handle exceptions here.
         Spark.post("/user", new RegisterHandler(data));
