@@ -1,11 +1,10 @@
 package client;
 
-import java.awt.desktop.QuitEvent;
 import java.util.Objects;
 import java.util.Scanner;
 
 public class Repl {
-    private ChessClient client;
+    private final ChessClient client;
 
     public Repl(String serverURL) {
         client = new ChessClient();
@@ -23,7 +22,7 @@ public class Repl {
 
                 try {
                     result = client.eval(line);
-                    System.out.println(result);
+                    //System.out.println(result);
                 } catch (Exception ex) {
                     System.out.println(ex.getMessage());
                 }

@@ -22,10 +22,10 @@ public class UserService {
     public RegisterResponse register(UserData userData) {
         try {
             if (userData == null || userData.username() == null || userData.password() == null || userData.email() == null) {
-                return new RegisterResponse(null, "Error: UserData can not be null");
+                return new RegisterResponse(null,null, "Error: UserData can not be null");
             }
             if (dataAccess.getUserDao().getUser(userData.username()) != null) {
-                return new RegisterResponse(null, "Error: username is already taken");
+                return new RegisterResponse(null,null, "Error: username is already taken");
             }
 
             String hashedPassword = hashPassword(userData.password());
@@ -35,9 +35,9 @@ public class UserService {
             AuthData addAuth = new AuthData(authToken, userData.username());
             dataAccess.getAuthDao().addAuth(addAuth);
 
-            return new RegisterResponse(addAuth, null);
+            return new RegisterResponse(authToken, userData.username(), null);
         } catch (DataAccessException e) {
-            return new RegisterResponse(null, e.getMessage());
+            return new RegisterResponse(null,null, e.getMessage());
         }
     }
 

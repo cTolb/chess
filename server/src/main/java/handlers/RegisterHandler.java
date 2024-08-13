@@ -40,8 +40,9 @@ public class RegisterHandler implements Route {
             response.status(500);
             return gson.toJson(responseObject);
         }
-
-        authData = responseObject.authData();
+        String authToken = responseObject.authToken();
+        String username = responseObject.username();
+        authData = new AuthData(authToken, username);
 
         return gson.toJson(authData);
     }

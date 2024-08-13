@@ -73,7 +73,6 @@ public class ServerFacade {
 
             http.connect();
             throwIfNotSuccessful(http);
-            //System.out.println(readBody(http, responseClass));
             return readBody(http, responseClass);
         } catch (Exception ex) {
             throw new Exception(ex.getMessage());

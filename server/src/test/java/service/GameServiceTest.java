@@ -35,7 +35,7 @@ public class GameServiceTest {
 
         //Register and create game
         RegisterResponse registerResponse = new UserService(memoryDataAccess).register(newUser);
-        CreateGameResponse createResponse = new GameService(memoryDataAccess).createGame(newGame, registerResponse.authData().authToken());
+        CreateGameResponse createResponse = new GameService(memoryDataAccess).createGame(newGame, registerResponse.authToken());
 
         Assertions.assertNull(createResponse.message());
     }
@@ -60,10 +60,10 @@ public class GameServiceTest {
 
         //Register and create game
         RegisterResponse registerResponse = new UserService(memoryDataAccess).register(newUser);
-        CreateGameResponse createResponse = new GameService(memoryDataAccess).createGame(newGame, registerResponse.authData().authToken());
+        CreateGameResponse createResponse = new GameService(memoryDataAccess).createGame(newGame, registerResponse.authToken());
 
         //Join game
-        String authToken = registerResponse.authData().authToken();
+        String authToken = registerResponse.authToken();
         JoinGameRequest newRequest = new JoinGameRequest(ChessGame.TeamColor.WHITE, createResponse.gameID());
         JoinGameResponse joinGameResponse = new GameService(memoryDataAccess).joinGame(newRequest, authToken);
 
@@ -78,7 +78,7 @@ public class GameServiceTest {
 
         //Register and create game
         RegisterResponse registerResponse = new UserService(memoryDataAccess).register(newUser);
-        CreateGameResponse createResponse = new GameService(memoryDataAccess).createGame(newGame, registerResponse.authData().authToken());
+        CreateGameResponse createResponse = new GameService(memoryDataAccess).createGame(newGame, registerResponse.authToken());
 
         //Join game
         JoinGameRequest newRequest = new JoinGameRequest(ChessGame.TeamColor.WHITE, createResponse.gameID());
@@ -95,8 +95,8 @@ public class GameServiceTest {
 
         //Register and create game
         RegisterResponse registerResponse = new UserService(memoryDataAccess).register(newUser);
-        String authToken = registerResponse.authData().authToken();
-        CreateGameResponse createResponse = new GameService(memoryDataAccess).createGame(newGame, registerResponse.authData().authToken());
+        String authToken = registerResponse.authToken();
+        new GameService(memoryDataAccess).createGame(newGame, registerResponse.authToken());
         ListGameResponse listGameResponse = new GameService(memoryDataAccess).listGames(authToken);
 
         Assertions.assertNull(listGameResponse.message());
@@ -110,7 +110,7 @@ public class GameServiceTest {
 
         //Register and create game
         RegisterResponse registerResponse = new UserService(memoryDataAccess).register(newUser);
-        CreateGameResponse createResponse = new GameService(memoryDataAccess).createGame(newGame, registerResponse.authData().authToken());
+        new GameService(memoryDataAccess).createGame(newGame, registerResponse.authToken());
         ListGameResponse listGameResponse = new GameService(memoryDataAccess).listGames("authToken");
 
         Assertions.assertEquals(listGameResponse.message(), "Error: unauthorized");

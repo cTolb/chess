@@ -28,9 +28,9 @@ public class UserServiceTest {
         RegisterResponse response = new UserService(memoryDataAccess).register(existingUser);
 
         //Check that response from service matches what was submitted
-        String authToken = response.authData().authToken();
+        String authToken = response.authToken();
         Assertions.assertNotNull(authToken);
-        Assertions.assertEquals(existingUser.username(), response.authData().username());
+        Assertions.assertEquals(existingUser.username(), response.username());
     }
 
     @Test
@@ -49,7 +49,8 @@ public class UserServiceTest {
     public void goodLogin() {
         //create and register a new user
         UserData user = new UserData("specialUsername*", "specialPassword*", "special@email.com");
-        new UserService(memoryDataAccess).register(user);
+        RegisterResponse registerResponse = new UserService(memoryDataAccess).register(user);
+        new UserService(memoryDataAccess).logoutUser(registerResponse.authToken());
 
         //log in the registered user
         LoginResponse response = new UserService(memoryDataAccess).loginUser(user);
@@ -74,11 +75,9 @@ public class UserServiceTest {
     public void goodLogout() {
         //create and register a new user
         UserData user = new UserData("specialUsername*", "specialPassword*", "special@email.com");
-        new UserService(memoryDataAccess).register(user);
+        RegisterResponse registerResponse = new UserService(memoryDataAccess).register(user);
 
-        //log in the registered user
-        LoginResponse loginResponse = new UserService(memoryDataAccess).loginUser(user);
-        String authToken = loginResponse.authToken();
+        String authToken = registerResponse.authToken();
 
         //Logout user
         LogoutResponse logoutResponse = new UserService(memoryDataAccess).logoutUser(authToken);
@@ -88,13 +87,8 @@ public class UserServiceTest {
 
     @Test
     public void badLogout() {
-        //create and register a new user
         UserData user = new UserData("specialUsername*", "specialPassword*", "special@email.com");
         new UserService(memoryDataAccess).register(user);
-
-        //log in the registered user
-        LoginResponse loginResponse = new UserService(memoryDataAccess).loginUser(user);
-        String authToken = loginResponse.authToken();
 
         //Logout User with wrong authToken
         LogoutResponse logoutResponse = new UserService(memoryDataAccess).logoutUser("authToken");

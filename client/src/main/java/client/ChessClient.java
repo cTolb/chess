@@ -4,8 +4,10 @@ import model.GameData;
 import model.UserData;
 import requests.LoginRequest;
 import responses.LoginResponse;
+import responses.RegisterResponse;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class ChessClient {
     private final ServerFacade facade;
@@ -31,10 +33,10 @@ public class ChessClient {
 
             State currentUI = this.state;
             currentUI = switch (command) {
-                case "help" -> this.help();
+                //case "help" -> this.help();
                 //case "quit" -> this.quit();
                 case "login" -> this.login(params);
-                //case "register" -> this.register(params);
+                case "register" -> this.register(params);
                 /*case "logout" -> this.logout();
                 case "list" -> this.list();
                 case "join" -> this.join(params);
@@ -43,7 +45,7 @@ public class ChessClient {
                 case "redraw" -> this.redraw();
                 case "leave" -> this.leave();
                 case "highlight" -> this.hightlight();*/
-                default -> throw new IllegalStateException("Unexpected value: " + command);
+                default -> this.help();
             };
             setState(currentUI);
             return currentUI;
@@ -58,16 +60,52 @@ public class ChessClient {
         return getState();
     }
 
-    /*public State register(String... params) throws Exception {
+    public State register(String... params) throws Exception {
         if (this.state != State.PRELOGIN) {
             throw new Exception("User is already logged in");
         }
 
         UserData userData;
         if (params.length != 3) {
-            
+            throw new Exception("The wrong number of parameters were given");
+        } else {
+            userData = new UserData(params[0], params[1], params[2]);
         }
-    }*/
+
+        RegisterResponse response = null;
+        try {
+            response = facade.register(userData);
+        } catch (Exception e) {
+            if (e.getMessage().equals("400")){
+                throw new Exception("Error: bad request");
+            }
+            else if (e.getMessage().equals("403")) {
+                throw new Exception("Error: username already taken");
+            }
+            else if (e.getMessage().equals("500")){
+                throw new Exception("Error: unexpected error please try again.");
+            }
+        }
+
+        State newState = null;
+
+        if (response.authToken().length() > 1) {
+            System.out.println("Welcome to the chess server " + response.username() + "! Pick a command:");
+            String username = response.username();
+            String authToken = response.authToken();
+            setPlayerName(username);
+            setPlayerAuthToken(authToken);
+            newState = State.POSTLOGIN;
+        } else {
+            newState = State.PRELOGIN;
+            System.out.println("Unsuccessful registration: " + response.message());
+        }
+
+        setState(newState);
+        this.options();
+
+        return newState;
+    }
 
     public State login(String... params) throws Exception {
         if(this.state != State.PRELOGIN) {
@@ -117,11 +155,11 @@ public class ChessClient {
         }
         else if (this.state == State.POSTLOGIN) {
             currentMenu = """
-                    - join <GAMEID> <BLACK|WHITE> - to join a game as the color selected
+                    - join <GAMENUMBER> <BLACK|WHITE> - to join a game as the color selected
                     - create <GAMENAME> - to create a new game
                     - list - to see all created games
                     - help - for other information
-                    - logout - to sigh out of your account
+                    - logout - to sign out of your account
                     """;
         }
         else if (this.state == State.GAMEPLAY) {
