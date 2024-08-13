@@ -53,8 +53,8 @@ public class UserServiceTest {
 
         //log in the registered user
         LoginResponse response = new UserService(memoryDataAccess).loginUser(user);
-        Assertions.assertNotNull(response.authData().authToken());
-        Assertions.assertEquals(response.authData().username(), user.username());
+        Assertions.assertNotNull(response.authToken());
+        Assertions.assertEquals(response.username(), user.username());
     }
 
     @Test
@@ -78,7 +78,7 @@ public class UserServiceTest {
 
         //log in the registered user
         LoginResponse loginResponse = new UserService(memoryDataAccess).loginUser(user);
-        String authToken = loginResponse.authData().authToken();
+        String authToken = loginResponse.authToken();
 
         //Logout user
         LogoutResponse logoutResponse = new UserService(memoryDataAccess).logoutUser(authToken);
@@ -94,7 +94,7 @@ public class UserServiceTest {
 
         //log in the registered user
         LoginResponse loginResponse = new UserService(memoryDataAccess).loginUser(user);
-        String authToken = loginResponse.authData().authToken();
+        String authToken = loginResponse.authToken();
 
         //Logout User with wrong authToken
         LogoutResponse logoutResponse = new UserService(memoryDataAccess).logoutUser("authToken");

@@ -57,20 +57,21 @@ public class UserService {
     public LoginResponse loginUser(UserData userData) {
         try {
             if (!dataAccess.getUserDao().userExists(userData.username())) {
-                return new LoginResponse(null,"Error: username is incorrect");
+                return new LoginResponse(null,null,"Error: username is incorrect");
             }
             LoginRequest request = new LoginRequest(userData.username(), userData.password());
             if (!dataAccess.getUserDao().valid(request)) {
-                return new LoginResponse(null, "Error: Wrong Password");
+                return new LoginResponse(null, null,"Error: Wrong Password");
             }
 
             String authToken = createAuthToken();
             AuthData addAuth = new AuthData(authToken, userData.username());
+            System.out.println(addAuth);
             dataAccess.getAuthDao().addAuth(addAuth);
-            return new LoginResponse(addAuth, null);
+            return new LoginResponse(addAuth.username(), addAuth.authToken(), null);
 
         } catch (DataAccessException e) {
-            return new LoginResponse(null, e.getMessage());
+            return new LoginResponse(null, null, e.getMessage());
         }
     }
 

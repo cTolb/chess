@@ -36,8 +36,9 @@ public class LoginHandler implements Route {
             response.status(500);
             return gson.toJson(responseObject);
         }
-
-        authData = responseObject.authData();
+        String authToken = responseObject.authToken();
+        String userName = responseObject.username();
+        authData = new AuthData(authToken, userName);
 
         return gson.toJson(authData);
 

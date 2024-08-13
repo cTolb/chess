@@ -1,18 +1,21 @@
 package client;
 
 import org.junit.jupiter.api.*;
+import responses.ClearResponse;
 import server.Server;
 
 
 public class ServerFacadeTests {
 
     private static Server server;
+    static ServerFacade facade;
 
     @BeforeAll
     public static void init() {
         server = new Server();
         var port = server.run(0);
         System.out.println("Started test HTTP server on " + port);
+        facade = new ServerFacade(0);
     }
 
     @AfterAll
@@ -24,6 +27,19 @@ public class ServerFacadeTests {
     @Test
     public void sampleTest() {
         Assertions.assertTrue(true);
+    }
+
+    @Test
+    public void goodLogin() {
+
+    }
+
+    private void clear() {
+        try {
+            ClearResponse response = facade.clear();
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
     }
 
 }
