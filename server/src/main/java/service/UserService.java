@@ -21,16 +21,29 @@ public class UserService {
 
     public RegisterResponse register(UserData userData) {
         try {
-            if (userData == null || userData.username() == null || userData.password() == null || userData.email() == null) {
+            //Check to see if any provided information is null
+            if (userData == null) {
                 return new RegisterResponse(null,null, "Error: UserData can not be null");
             }
+            if (userData.username() == null) {
+                return new RegisterResponse(null,null, "Error: UserData can not be null");
+            }
+            if (userData.password() == null){
+                return new RegisterResponse(null,null, "Error: UserData can not be null");
+            }
+            if (userData.email() == null) {
+                return new RegisterResponse(null,null, "Error: UserData can not be null");
+            }
+
+            //Check to see if the user is already registered
             if (dataAccess.getUserDao().getUser(userData.username()) != null) {
                 return new RegisterResponse(null,null, "Error: username is already taken");
             }
 
-            String hashedPassword = hashPassword(userData.password());
-            UserData hashedUser = new UserData(userData.username(), hashedPassword, userData.email());
+            //String hashedPassword = hashPassword(userData.password());
+            UserData hashedUser = new UserData(userData.username(), hashPassword(userData.password()), userData.email());
             dataAccess.getUserDao().addUser(hashedUser);
+
             String authToken = createAuthToken();
             AuthData addAuth = new AuthData(authToken, userData.username());
             dataAccess.getAuthDao().addAuth(addAuth);
