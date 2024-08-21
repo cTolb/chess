@@ -1,5 +1,6 @@
 package service;
 
+import com.mysql.cj.log.Log;
 import dataaccess.DataAccess;
 import dataaccess.memory.MemoryDataAccess;
 import dataaccess.DataAccessException;
@@ -55,6 +56,7 @@ public class UserService {
     }
 
     public LogoutResponse logoutUser(String authToken) {
+        LogoutResponse response = new LogoutResponse(null);
         try {
             AuthData delete = dataAccess.getAuthDao().getAuthorization(authToken);
             if (delete == null) {
@@ -64,7 +66,7 @@ public class UserService {
         } catch (DataAccessException e) {
             return new LogoutResponse(e.getMessage());
         }
-        return new LogoutResponse(null);
+        return response;
     }
 
     public LoginResponse loginUser(UserData userData) {

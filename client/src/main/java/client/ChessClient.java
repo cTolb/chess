@@ -4,6 +4,7 @@ import model.GameData;
 import model.UserData;
 import requests.LoginRequest;
 import responses.LoginResponse;
+import responses.LogoutResponse;
 import responses.RegisterResponse;
 
 import java.util.ArrayList;
@@ -37,8 +38,8 @@ public class ChessClient {
                 //case "quit" -> this.quit();
                 case "login" -> this.login(params);
                 case "register" -> this.register(params);
-                /*case "logout" -> this.logout();
-                case "list" -> this.list();
+                case "logout" -> this.logout();
+                /*case "list" -> this.list();
                 case "join" -> this.join(params);
                 case "create" -> this.create(params);
                 case "observe" -> this.observe(params);
@@ -143,6 +144,24 @@ public class ChessClient {
         return newState;
     }
 
+    public State logout() throws Exception {
+        if (this.state != State.POSTLOGIN) {
+            throw new Exception("User is not logged in");
+        }
+
+        State newState = getState();
+        try {
+            facade.logout(getPlayerAuthToken());
+            newState = State.PRELOGIN;
+            setState(newState);
+            System.out.println("You have been logged out");
+            this.options();
+
+        } catch (Exception ex) {
+            throw new Exception("Error logging out, please try again");
+        }
+        return newState;
+    }
     public void options() throws Exception {
         String currentMenu = null;
         if (this.state == State.PRELOGIN) {
