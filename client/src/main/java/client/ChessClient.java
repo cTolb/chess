@@ -3,12 +3,13 @@ package client;
 import model.GameData;
 import model.UserData;
 import requests.LoginRequest;
+import responses.ListGameResponse;
 import responses.LoginResponse;
 import responses.LogoutResponse;
 import responses.RegisterResponse;
 
 import java.util.ArrayList;
-import java.util.Objects;
+import java.util.Collection;
 
 public class ChessClient {
     private final ServerFacade facade;
@@ -34,18 +35,15 @@ public class ChessClient {
 
             State currentUI = this.state;
             currentUI = switch (command) {
-                //case "help" -> this.help();
+                case "help" -> this.help();
                 //case "quit" -> this.quit();
                 case "login" -> this.login(params);
                 case "register" -> this.register(params);
                 case "logout" -> this.logout();
-                /*case "list" -> this.list();
-                case "join" -> this.join(params);
-                case "create" -> this.create(params);
-                case "observe" -> this.observe(params);
-                case "redraw" -> this.redraw();
-                case "leave" -> this.leave();
-                case "highlight" -> this.hightlight();*/
+                case "list" -> this.list();
+                //case "join" -> this.join(params);
+                /*case "create" -> this.create(params);
+                case "observe" -> this.observe(params);*/
                 default -> this.help();
             };
             setState(currentUI);
@@ -162,6 +160,30 @@ public class ChessClient {
         }
         return newState;
     }
+
+    public State list() throws Exception{
+        State currentState = getState();
+        if (currentState != State.POSTLOGIN) {
+            throw new Exception("You must be logged in to see games");
+        }
+
+        try {
+            ListGameResponse response = facade.listGame(getPlayerAuthToken());
+            gameDataList = new ArrayList<>(response.games());
+            System.out.print("");
+            System.out.println("ALL GAMES:");
+            for (int i = 0; i < gameDataList.size(); i++){
+                int gameNumber = i + 1;
+                System.out.println("GAME NUMBER: " + gameNumber);
+                System.out.println("GAME NAME: " + gameDataList.get(i).gameName());
+                System.out.println("WHITE USERNAME: " + gameDataList.get(i).whiteUsername() + ", BLACK USERNAME: " + gameDataList.get(i).blackUsername() + "\n");
+            }
+        } catch (Exception ex) {
+            throw new Exception(ex.getMessage());
+        }
+
+        return getState();
+    }
     public void options() throws Exception {
         String currentMenu = null;
         if (this.state == State.PRELOGIN) {
@@ -176,7 +198,7 @@ public class ChessClient {
             currentMenu = """
                     - join <GAMENUMBER> <BLACK|WHITE> - to join a game as the color selected
                     - create <GAMENAME> - to create a new game
-                    - list - to see all created games
+                    - list - see all games
                     - help - for other information
                     - logout - to sign out of your account
                     """;
