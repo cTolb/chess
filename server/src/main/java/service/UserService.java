@@ -41,7 +41,6 @@ public class UserService {
                 return new RegisterResponse(null,null, "Error: username is already taken");
             }
 
-            //String hashedPassword = hashPassword(userData.password());
             UserData hashedUser = new UserData(userData.username(), hashPassword(userData.password()), userData.email());
             dataAccess.getUserDao().addUser(hashedUser);
 

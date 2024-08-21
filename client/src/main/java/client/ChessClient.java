@@ -1,21 +1,21 @@
 package client;
 
+import chess.ChessGame;
 import model.GameData;
 import model.UserData;
 import requests.LoginRequest;
-import responses.ListGameResponse;
-import responses.LoginResponse;
-import responses.LogoutResponse;
-import responses.RegisterResponse;
+import responses.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 
 public class ChessClient {
     private final ServerFacade facade;
     private final String serverURL = null;
     private State state = State.PRELOGIN;
     private ArrayList<GameData> gameDataList;
+    private HashMap<Integer, String> gameInfo = new HashMap<>();
     private String playerName;
     private String playerAuthToken;
 
@@ -41,9 +41,9 @@ public class ChessClient {
                 case "register" -> this.register(params);
                 case "logout" -> this.logout();
                 case "list" -> this.list();
-                //case "join" -> this.join(params);
-                /*case "create" -> this.create(params);
-                case "observe" -> this.observe(params);*/
+                case "join" -> this.join(params);
+                case "create" -> this.create(params);
+                //case "observe" -> this.observe(params);
                 default -> this.help();
             };
             setState(currentUI);
@@ -176,12 +176,48 @@ public class ChessClient {
                 int gameNumber = i + 1;
                 System.out.println("GAME NUMBER: " + gameNumber);
                 System.out.println("GAME NAME: " + gameDataList.get(i).gameName());
-                System.out.println("WHITE USERNAME: " + gameDataList.get(i).whiteUsername() + ", BLACK USERNAME: " + gameDataList.get(i).blackUsername() + "\n");
+                System.out.print("WHITE USERNAME: " + gameDataList.get(i).whiteUsername() + ", ");
+                System.out.println("BLACK USERNAME: " + gameDataList.get(i).blackUsername() + "\n");
+
+                gameInfo.put(gameNumber, gameDataList.get(i).gameName());
             }
         } catch (Exception ex) {
             throw new Exception(ex.getMessage());
         }
 
+        return getState();
+    }
+
+    public State join(String... params) throws Exception {
+        State currentState = getState();
+        if (currentState != State.POSTLOGIN) {
+            throw new Exception("User must be logged in to join a game");
+        }
+        return getState();
+    }
+
+    public State create(String... params) throws Exception {
+        State currentState = getState();
+        if (currentState != State.POSTLOGIN) {
+            throw new Exception("User must be logged in to create a game");
+        }
+
+        if (params.length != 1) {
+            throw new Exception("The wrong number of parameters were provided");
+        }
+
+        try {
+            GameData newGame = new GameData(0, null, null, params[0], new ChessGame());
+            CreateGameResponse response = facade.createGame(getPlayerAuthToken(), newGame);
+
+            if (response.message() == null) {
+                System.out.println(params[0] + " has been created.");
+                this.options();
+            }
+
+        } catch (Exception ex) {
+            throw new Exception(ex.getMessage());
+        }
         return getState();
     }
     public void options() throws Exception {
@@ -196,8 +232,8 @@ public class ChessClient {
         }
         else if (this.state == State.POSTLOGIN) {
             currentMenu = """
-                    - join <GAMENUMBER> <BLACK|WHITE> - to join a game as the color selected
-                    - create <GAMENAME> - to create a new game
+                    - join <GAME NUMBER> <BLACK or WHITE> - to join a game as the color selected
+                    - create <GAME NAME> - to create a new game
                     - list - see all games
                     - help - for other information
                     - logout - to sign out of your account
