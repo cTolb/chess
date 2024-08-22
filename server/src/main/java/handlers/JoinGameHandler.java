@@ -22,7 +22,7 @@ public class JoinGameHandler implements Route {
 
         JoinGameRequest requestObject = gson.fromJson(request.body(), JoinGameRequest.class);
         JoinGameResponse resultObject = new GameService(dataAccess).joinGame(requestObject, authToken);
-        if (resultObject == null) {
+        if (resultObject.message() == null) {
             response.status(200);
         }
         else if (resultObject.message().equals("Error: bad request")) {

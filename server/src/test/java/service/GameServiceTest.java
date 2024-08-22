@@ -67,7 +67,7 @@ public class GameServiceTest {
         JoinGameRequest newRequest = new JoinGameRequest(ChessGame.TeamColor.WHITE, createResponse.gameID());
         JoinGameResponse joinGameResponse = new GameService(memoryDataAccess).joinGame(newRequest, authToken);
 
-        Assertions.assertNull(joinGameResponse);
+        Assertions.assertNull(joinGameResponse.message());
     }
 
     @Test

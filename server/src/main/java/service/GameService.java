@@ -64,11 +64,11 @@ public class GameService {
                 dataAccess.getGameDao().updateGames(gameData.setBlackUsername(authData.username()));
             }
 
+            return new JoinGameResponse(null);
+
         } catch (DataAccessException e) {
             return new JoinGameResponse(e.getMessage());
         }
-
-        return null;
     }
 
     public ListGameResponse listGames(String authToken) {

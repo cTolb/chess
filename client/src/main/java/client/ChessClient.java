@@ -3,6 +3,7 @@ package client;
 import chess.ChessGame;
 import model.GameData;
 import model.UserData;
+import requests.JoinGameRequest;
 import requests.LoginRequest;
 import responses.*;
 
@@ -73,7 +74,10 @@ public class ChessClient {
         }
     }
 
-    private State quit() {
+    private State quit() throws Exception {
+        if (getState() != State.PRELOGIN) {
+            throw new Exception("You must be logged out to quit.");
+        }
         setState(State.QUIT);
         return getState();
     }
@@ -204,16 +208,37 @@ public class ChessClient {
             throw new Exception("The wrong number of parameters were given. Please try again.");
         }
 
-        int gameNumber = Integer.parseInt(params[0]);
+        Integer gameNumber = Integer.valueOf(params[0]);
 
-        if (gameNumber < gameInfo.size() || gameNumber > gameInfo.size()) {
+        if (!gameInfo.containsKey(gameNumber)) {
             throw new Exception("Game number not found, please try again");
         }
 
         int gameID = gameInfo.get(gameNumber);
         String requestedColor = params[1].toUpperCase();
+        ChessGame.TeamColor color = null;
 
+        if (requestedColor.equals("BLACK")) {
+            color = ChessGame.TeamColor.BLACK;
+        }
+        else if (requestedColor.equals("WHITE")) {
+            color = ChessGame.TeamColor.WHITE;
+        }
+        else {
+            throw new Exception("Team color not valid, please try again.");
+        }
 
+        JoinGameRequest request = new JoinGameRequest(color, gameID);
+
+        try {
+            JoinGameResponse response = facade.joinGame(getPlayerAuthToken(), request);
+
+            if (response.message() == null) {
+                System.out.println("You have joined the game!");
+            }
+        } catch (Exception ex) {
+            throw new Exception("Something went wrong");
+        }
 
         return getState();
     }
