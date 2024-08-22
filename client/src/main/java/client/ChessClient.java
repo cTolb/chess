@@ -7,20 +7,41 @@ import requests.LoginRequest;
 import responses.*;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 
 public class ChessClient {
     private final ServerFacade facade;
     private final String serverURL = null;
     private State state = State.PRELOGIN;
-    private ArrayList<GameData> gameDataList;
-    private HashMap<Integer, String> gameInfo = new HashMap<>();
+    private HashMap<Integer, Integer> gameInfo = new HashMap<>();
     private String playerName;
     private String playerAuthToken;
 
     ChessClient() {
         facade = new ServerFacade("http://localhost:8080");
+    }
+
+    private void setState(State state) {
+        this.state = state;
+    }
+    public State getState() {
+        return this.state;
+    }
+
+    private void setPlayerName(String username) {
+        this.playerName = username;
+    }
+
+    private String getPlayerName() {
+        return this.playerName;
+    }
+
+    private void setPlayerAuthToken(String authToken) {
+        this.playerAuthToken = authToken;
+    }
+
+    private String getPlayerAuthToken() {
+        return this.playerAuthToken;
     }
 
     public State eval(String input) throws Exception {
@@ -35,15 +56,14 @@ public class ChessClient {
 
             State currentUI = this.state;
             currentUI = switch (command) {
-                case "help" -> this.help();
-                //case "quit" -> this.quit();
+                case "quit" -> this.quit();
                 case "login" -> this.login(params);
                 case "register" -> this.register(params);
-                case "logout" -> this.logout();
                 case "list" -> this.list();
                 case "join" -> this.join(params);
                 case "create" -> this.create(params);
                 //case "observe" -> this.observe(params);
+                case "logout" -> this.logout();
                 default -> this.help();
             };
             setState(currentUI);
@@ -53,13 +73,18 @@ public class ChessClient {
         }
     }
 
-    public State help() throws Exception {
+    private State quit() {
+        setState(State.QUIT);
+        return getState();
+    }
+
+    private State help() throws Exception {
         System.out.println("These are the current options: ");
         this.options();
         return getState();
     }
 
-    public State register(String... params) throws Exception {
+    private State register(String... params) throws Exception {
         if (this.state != State.PRELOGIN) {
             throw new Exception("User is already logged in");
         }
@@ -106,14 +131,14 @@ public class ChessClient {
         return newState;
     }
 
-    public State login(String... params) throws Exception {
+    private State login(String... params) throws Exception {
         if(this.state != State.PRELOGIN) {
             throw new Exception("Already logged in");
         }
 
         LoginRequest userData;
-        if(params.length < 2) {
-            throw new Exception("Missing parameters");
+        if(params.length != 2) {
+            throw new Exception("The wrong number of parameters were given");
         } else {
             userData = new LoginRequest(params[0], params[1]);
         }
@@ -142,7 +167,83 @@ public class ChessClient {
         return newState;
     }
 
-    public State logout() throws Exception {
+    private State list() throws Exception{
+        State currentState = getState();
+        if (currentState != State.POSTLOGIN) {
+            throw new Exception("You must be logged in to see games");
+        }
+
+        try {
+            ListGameResponse response = facade.listGame(getPlayerAuthToken());
+            ArrayList<GameData> gameDataList = new ArrayList<>(response.games());
+            System.out.print("");
+            System.out.println("ALL GAMES:");
+            for (int i = 0; i < gameDataList.size(); i++){
+                int gameNumber = i + 1;
+                System.out.println("GAME NUMBER: " + gameNumber);
+                System.out.println("GAME NAME: " + gameDataList.get(i).gameName());
+                System.out.print("WHITE USERNAME: " + gameDataList.get(i).whiteUsername() + ", ");
+                System.out.println("BLACK USERNAME: " + gameDataList.get(i).blackUsername() + "\n");
+
+                gameInfo.put(gameNumber, gameDataList.get(i).gameID());
+            }
+        } catch (Exception ex) {
+            throw new Exception(ex.getMessage());
+        }
+
+        return getState();
+    }
+
+    private State join(String... params) throws Exception {
+        State currentState = getState();
+        if (currentState != State.POSTLOGIN) {
+            throw new Exception("User must be logged in to join a game");
+        }
+
+        if (params.length != 2) {
+            throw new Exception("The wrong number of parameters were given. Please try again.");
+        }
+
+        int gameNumber = Integer.parseInt(params[0]);
+
+        if (gameNumber < gameInfo.size() || gameNumber > gameInfo.size()) {
+            throw new Exception("Game number not found, please try again");
+        }
+
+        int gameID = gameInfo.get(gameNumber);
+        String requestedColor = params[1].toUpperCase();
+
+
+
+        return getState();
+    }
+
+    private State create(String... params) throws Exception {
+        State currentState = getState();
+        if (currentState != State.POSTLOGIN) {
+            throw new Exception("User must be logged in to create a game");
+        }
+
+        if (params.length != 1) {
+            throw new Exception("The wrong number of parameters were provided");
+        }
+
+        try {
+            GameData newGame = new GameData(0, null, null, params[0], new ChessGame());
+            CreateGameResponse response = facade.createGame(getPlayerAuthToken(), newGame);
+
+            if (response.message() == null) {
+                System.out.println(params[0] + " has been created.\n");
+                this.options();
+            }
+
+        } catch (Exception ex) {
+            throw new Exception(ex.getMessage());
+        }
+        return getState();
+    }
+
+    private State logout() throws Exception {
         if (this.state != State.POSTLOGIN) {
             throw new Exception("User is not logged in");
         }
@@ -161,65 +262,6 @@ public class ChessClient {
         return newState;
     }
 
-    public State list() throws Exception{
-        State currentState = getState();
-        if (currentState != State.POSTLOGIN) {
-            throw new Exception("You must be logged in to see games");
-        }
-
-        try {
-            ListGameResponse response = facade.listGame(getPlayerAuthToken());
-            gameDataList = new ArrayList<>(response.games());
-            System.out.print("");
-            System.out.println("ALL GAMES:");
-            for (int i = 0; i < gameDataList.size(); i++){
-                int gameNumber = i + 1;
-                System.out.println("GAME NUMBER: " + gameNumber);
-                System.out.println("GAME NAME: " + gameDataList.get(i).gameName());
-                System.out.print("WHITE USERNAME: " + gameDataList.get(i).whiteUsername() + ", ");
-                System.out.println("BLACK USERNAME: " + gameDataList.get(i).blackUsername() + "\n");
-
-                gameInfo.put(gameNumber, gameDataList.get(i).gameName());
-            }
-        } catch (Exception ex) {
-            throw new Exception(ex.getMessage());
-        }
-
-        return getState();
-    }
-
-    public State join(String... params) throws Exception {
-        State currentState = getState();
-        if (currentState != State.POSTLOGIN) {
-            throw new Exception("User must be logged in to join a game");
-        }
-        return getState();
-    }
-
-    public State create(String... params) throws Exception {
-        State currentState = getState();
-        if (currentState != State.POSTLOGIN) {
-            throw new Exception("User must be logged in to create a game");
-        }
-
-        if (params.length != 1) {
-            throw new Exception("The wrong number of parameters were provided");
-        }
-
-        try {
-            GameData newGame = new GameData(0, null, null, params[0], new ChessGame());
-            CreateGameResponse response = facade.createGame(getPlayerAuthToken(), newGame);
-
-            if (response.message() == null) {
-                System.out.println(params[0] + " has been created.");
-                this.options();
-            }
-
-        } catch (Exception ex) {
-            throw new Exception(ex.getMessage());
-        }
-        return getState();
-    }
     public void options() throws Exception {
         String currentMenu = null;
         if (this.state == State.PRELOGIN) {
@@ -246,28 +288,5 @@ public class ChessClient {
             throw new Exception("state is not valid");
         }
         System.out.println(currentMenu);
-    }
-
-    public void setState(State state) {
-        this.state = state;
-    }
-    public State getState() {
-        return this.state;
-    }
-
-    public void setPlayerName(String username) {
-        this.playerName = username;
-    }
-
-    public String getPlayerName() {
-        return this.playerName;
-    }
-
-    public void setPlayerAuthToken(String authToken) {
-        this.playerAuthToken = authToken;
-    }
-
-    public String getPlayerAuthToken() {
-        return this.playerAuthToken;
     }
 }
