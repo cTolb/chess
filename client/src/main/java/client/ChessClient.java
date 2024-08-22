@@ -180,16 +180,20 @@ public class ChessClient {
         try {
             ListGameResponse response = facade.listGame(getPlayerAuthToken());
             ArrayList<GameData> gameDataList = new ArrayList<>(response.games());
-            System.out.print("");
-            System.out.println("ALL GAMES:");
-            for (int i = 0; i < gameDataList.size(); i++){
-                int gameNumber = i + 1;
-                System.out.println("GAME NUMBER: " + gameNumber);
-                System.out.println("GAME NAME: " + gameDataList.get(i).gameName());
-                System.out.print("WHITE USERNAME: " + gameDataList.get(i).whiteUsername() + ", ");
-                System.out.println("BLACK USERNAME: " + gameDataList.get(i).blackUsername() + "\n");
 
-                gameInfo.put(gameNumber, gameDataList.get(i).gameID());
+            if (gameDataList.isEmpty()) {
+                System.out.println("There are no games created. Please create a game inorder to play.");
+            } else {
+                System.out.println("ALL GAMES:");
+                for (int i = 0; i < gameDataList.size(); i++) {
+                    int gameNumber = i + 1;
+                    System.out.println("GAME NUMBER: " + gameNumber);
+                    System.out.println("GAME NAME: " + gameDataList.get(i).gameName());
+                    System.out.print("WHITE USERNAME: " + gameDataList.get(i).whiteUsername() + ", ");
+                    System.out.println("BLACK USERNAME: " + gameDataList.get(i).blackUsername() + "\n");
+
+                    gameInfo.put(gameNumber, gameDataList.get(i).gameID());
+                }
             }
         } catch (Exception ex) {
             throw new Exception(ex.getMessage());
