@@ -88,7 +88,7 @@ public class ChessClient {
             this.options();
             return getState();
         } catch (Exception e) {
-            throw new Exception("Something went wrong. Please try again.");
+            throw new Exception(e.getMessage());
         }
     }
 
@@ -178,7 +178,7 @@ public class ChessClient {
             ArrayList<GameData> gameDataList = new ArrayList<>(response.games());
 
             if (gameDataList.isEmpty()) {
-                System.out.println("There are no games created. Please create a game inorder to play.");
+                System.out.println("There are no games created. Please create a game to play.");
             } else {
                 System.out.println("ALL GAMES:");
                 for (int i = 0; i < gameDataList.size(); i++) {
@@ -192,7 +192,7 @@ public class ChessClient {
                 }
             }
         } catch (Exception e) {
-            throw new Exception("Something went wrong. Please try again.");
+            throw new Exception(e.getMessage());
         }
 
         return getState();
