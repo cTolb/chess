@@ -69,8 +69,8 @@ public class ChessClient {
             };
             setState(currentUI);
             return currentUI;
-        } catch (Exception ex) {
-            throw new Exception(ex.getMessage());
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
         }
     }
 
@@ -82,20 +82,24 @@ public class ChessClient {
         return getState();
     }
 
-    private State help() throws Exception {
-        System.out.println("These are the current options: ");
-        this.options();
-        return getState();
+    private State help() throws Exception{
+        try {
+            System.out.println("These are the current options: ");
+            this.options();
+            return getState();
+        } catch (Exception e) {
+            throw new Exception("Something went wrong. Please try again.");
+        }
     }
 
     private State register(String... params) throws Exception {
         if (this.state != State.PRELOGIN) {
-            throw new Exception("User is already logged in");
+            throw new Exception("User is already logged in.");
         }
 
         UserData userData;
         if (params.length != 3) {
-            throw new Exception("The wrong number of parameters were given");
+            throw new Exception("The wrong number of parameters were given.");
         } else {
             userData = new UserData(params[0], params[1], params[2]);
         }
@@ -104,15 +108,7 @@ public class ChessClient {
         try {
             response = facade.register(userData);
         } catch (Exception e) {
-            if (e.getMessage().equals("400")){
-                throw new Exception("Error: bad request");
-            }
-            else if (e.getMessage().equals("403")) {
-                throw new Exception("Error: username already taken");
-            }
-            else if (e.getMessage().equals("500")){
-                throw new Exception("Error: unexpected error please try again.");
-            }
+            throw new Exception("Something went wrong. Please try again.");
         }
 
         State newState = null;
@@ -137,12 +133,12 @@ public class ChessClient {
 
     private State login(String... params) throws Exception {
         if(this.state != State.PRELOGIN) {
-            throw new Exception("Already logged in");
+            throw new Exception("Already logged in.");
         }
 
         LoginRequest userData;
         if(params.length != 2) {
-            throw new Exception("The wrong number of parameters were given");
+            throw new Exception("The wrong number of parameters were given.");
         } else {
             userData = new LoginRequest(params[0], params[1]);
         }
@@ -151,7 +147,7 @@ public class ChessClient {
         try {
             response = facade.login(userData);
         } catch (Exception ex){
-            throw new Exception("Username or password is incorrect");
+            throw new Exception("Username or password is incorrect.");
         }
 
         State newState = null;
@@ -174,7 +170,7 @@ public class ChessClient {
     private State list() throws Exception{
         State currentState = getState();
         if (currentState != State.POSTLOGIN) {
-            throw new Exception("You must be logged in to see games");
+            throw new Exception("You must be logged in to see games.");
         }
 
         try {
@@ -195,27 +191,37 @@ public class ChessClient {
                     gameInfo.put(gameNumber, gameDataList.get(i).gameID());
                 }
             }
-        } catch (Exception ex) {
-            throw new Exception(ex.getMessage());
+        } catch (Exception e) {
+            throw new Exception("Something went wrong. Please try again.");
         }
 
         return getState();
     }
 
     private State join(String... params) throws Exception {
+
+        if (params == null) {
+            throw new Exception("You must provide a game number and color.");
+        }
+
         State currentState = getState();
         if (currentState != State.POSTLOGIN) {
-            throw new Exception("User must be logged in to join a game");
+            throw new Exception("User must be logged in to join a game.");
         }
 
         if (params.length != 2) {
             throw new Exception("The wrong number of parameters were given. Please try again.");
         }
 
-        Integer gameNumber = Integer.valueOf(params[0]);
+        int gameNumber = 0;
+        try {
+            gameNumber = Integer.parseInt(params[0]);
+        } catch (NumberFormatException e) {
+            throw new Exception("The first input after \"join\" must be a number.");
+        }
 
         if (!gameInfo.containsKey(gameNumber)) {
-            throw new Exception("Game number not found, please try again");
+            throw new Exception("Game number not found. Please list the games and try again.");
         }
 
         int gameID = gameInfo.get(gameNumber);
@@ -229,7 +235,7 @@ public class ChessClient {
             color = ChessGame.TeamColor.WHITE;
         }
         else {
-            throw new Exception("Team color not valid, please try again.");
+            throw new Exception("Team color not valid. Please try again.");
         }
 
         JoinGameRequest request = new JoinGameRequest(color, gameID);
@@ -240,8 +246,8 @@ public class ChessClient {
             if (response.message() == null) {
                 System.out.println("You have joined the game!");
             }
-        } catch (Exception ex) {
-            throw new Exception("Something went wrong");
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
         }
 
         return getState();
@@ -250,11 +256,11 @@ public class ChessClient {
     private State create(String... params) throws Exception {
         State currentState = getState();
         if (currentState != State.POSTLOGIN) {
-            throw new Exception("User must be logged in to create a game");
+            throw new Exception("User must be logged in to create a game.");
         }
 
         if (params.length != 1) {
-            throw new Exception("The wrong number of parameters were provided");
+            throw new Exception("The wrong number of parameters were provided.");
         }
 
         try {
@@ -266,15 +272,15 @@ public class ChessClient {
                 this.options();
             }
 
-        } catch (Exception ex) {
-            throw new Exception(ex.getMessage());
+        } catch (Exception e) {
+            throw new Exception("Something went wrong. Please try again.");
         }
         return getState();
     }
 
     private State logout() throws Exception {
         if (this.state != State.POSTLOGIN) {
-            throw new Exception("User is not logged in");
+            throw new Exception("User is not logged in.");
         }
 
         State newState = getState();
@@ -282,11 +288,11 @@ public class ChessClient {
             facade.logout(getPlayerAuthToken());
             newState = State.PRELOGIN;
             setState(newState);
-            System.out.println("You have been logged out");
+            System.out.println("You have been logged out.");
             this.options();
 
-        } catch (Exception ex) {
-            throw new Exception("Error logging out, please try again");
+        } catch (Exception e) {
+            throw new Exception("Error logging out. Please try again.");
         }
         return newState;
     }
@@ -305,16 +311,17 @@ public class ChessClient {
             currentMenu = """
                     - join <GAME NUMBER> <BLACK or WHITE> - to join a game as the color selected
                     - create <GAME NAME> - to create a new game
+                    - observe <GAME NUMBER> - to observe a game
                     - list - see all games
                     - help - for other information
                     - logout - to sign out of your account
                     """;
         }
         else if (this.state == State.GAMEPLAY) {
-            currentMenu = "not yet implemented";
+            currentMenu = "Gameplay is not yet implemented.";
         }
         else {
-            throw new Exception("state is not valid");
+            throw new Exception("State is not valid.");
         }
         System.out.println(currentMenu);
     }
