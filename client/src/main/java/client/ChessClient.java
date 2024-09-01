@@ -302,7 +302,6 @@ public class ChessClient {
             setState(State.PRELOGIN);
             System.out.println(SET_TEXT_COLOR_GREEN + "You have been logged out." + RESET_TEXT_COLOR);
             System.out.print(helpMenu());
-
         } catch (Exception e) {
             throw new Exception(SET_TEXT_COLOR_RED + "Error logging out. Please try again." + RESET_TEXT_COLOR);
         }
