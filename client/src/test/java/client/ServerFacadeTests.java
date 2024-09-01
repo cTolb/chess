@@ -1,9 +1,10 @@
 package client;
 
+import model.UserData;
 import org.junit.jupiter.api.*;
 import responses.ClearResponse;
+import responses.RegisterResponse;
 import server.Server;
-
 
 public class ServerFacadeTests {
 
@@ -13,9 +14,9 @@ public class ServerFacadeTests {
     @BeforeAll
     public static void init() {
         server = new Server();
-        var port = server.run(0);
+        var port = server.run(8080);
         System.out.println("Started test HTTP server on " + port);
-        facade = new ServerFacade(0);
+        facade = new ServerFacade(8080);
     }
 
     @AfterAll
@@ -23,23 +24,16 @@ public class ServerFacadeTests {
         server.stop();
     }
 
-
-    @Test
-    public void sampleTest() {
-        Assertions.assertTrue(true);
+    @BeforeEach
+    public void clear() throws Exception{
+        facade.clear();
     }
 
     @Test
-    public void goodLogin() {
+    public void goodRegister() throws Exception{
+        RegisterResponse response = facade.register(new UserData("username", "password", "email"));
 
-    }
-
-    private void clear() {
-        try {
-            ClearResponse response = facade.clear();
-        } catch (Exception ex) {
-            System.out.println(ex.getMessage());
-        }
+        Assertions.assertTrue(response.message() == null);
     }
 
 }
