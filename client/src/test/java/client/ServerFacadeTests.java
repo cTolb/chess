@@ -33,7 +33,7 @@ public class ServerFacadeTests {
     public void goodRegister() throws Exception{
         RegisterResponse response = facade.register(new UserData("username", "password", "email"));
 
-        Assertions.assertTrue(response.message() == null);
+        Assertions.assertNull(response.message());
     }
 
 }
