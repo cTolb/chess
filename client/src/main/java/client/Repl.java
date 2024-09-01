@@ -3,17 +3,19 @@ package client;
 import java.util.Objects;
 import java.util.Scanner;
 
+import static ui.EscapeSequences.SET_TEXT_COLOR_WHITE;
+
 public class Repl {
     private final ChessClient client;
 
     public Repl(String serverURL) {
-        client = new ChessClient();
+        client = new ChessClient(serverURL);
     }
 
     public void run() {
         try {
-            System.out.println("Welcome to the chess server! Please enter a command; ");
-            client.options();
+            System.out.println(STR."\{SET_TEXT_COLOR_WHITE}Welcome to the chess server! Please enter a command; ");
+            System.out.print(client.helpMenu());
 
             Scanner scanner = new Scanner(System.in);
             State result = null;
