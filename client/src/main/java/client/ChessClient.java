@@ -78,7 +78,7 @@ public class ChessClient {
 
     private State quit() throws Exception {
         if (getState() != State.PRELOGIN) {
-            throw new Exception(STR."\{SET_TEXT_COLOR_RED}You must be logged out to quit.\{RESET_TEXT_COLOR}");
+            throw new Exception(SET_TEXT_COLOR_RED+ "You must be logged out to quit." + RESET_TEXT_COLOR);
         }
         setState(State.QUIT);
         return getState();
@@ -86,7 +86,7 @@ public class ChessClient {
 
     private State help() throws Exception{
         try {
-            System.out.println(STR."\{SET_TEXT_COLOR_WHITE}These are the current options: ");
+            System.out.println(SET_TEXT_COLOR_WHITE + "These are the current options: ");
             System.out.print(helpMenu() + RESET_TEXT_COLOR);
             return getState();
         } catch (Exception e) {
@@ -96,13 +96,13 @@ public class ChessClient {
 
     private State register(String... params) throws Exception {
         if (state != State.PRELOGIN) {
-            throw new Exception(STR."\{SET_TEXT_COLOR_RED}You must be logged out inorder to register a user." +
+            throw new Exception(SET_TEXT_COLOR_RED + "You must be logged out inorder to register a user." +
                     RESET_TEXT_COLOR);
         }
 
         UserData userData;
         if (params == null || params.length != 3) {
-            throw new Exception(STR."\{SET_TEXT_COLOR_RED}An incorrect number of information was given.\n" +
+            throw new Exception(SET_TEXT_COLOR_RED + "An incorrect number of information was given.\n" +
                     "You must provide a username, password, and email." + RESET_TEXT_COLOR);
         } else {
             userData = new UserData(params[0], params[1], params[2]);
@@ -113,28 +113,28 @@ public class ChessClient {
             response = facade.register(userData);
         } catch (Exception e) {
             if (e.getMessage().equals("400")) {
-                throw new Exception(STR."\{SET_TEXT_COLOR_RED}Error: bad request\{RESET_TEXT_COLOR}");
+                throw new Exception(SET_TEXT_COLOR_RED + "Error: bad request.");
             }
             else if (e.getMessage().equals("403")) {
-                throw new Exception(STR."\{SET_TEXT_COLOR_RED}Error: username is already taken\{RESET_TEXT_COLOR}");
+                throw new Exception(SET_TEXT_COLOR_RED + "Error: username is already taken." + RESET_TEXT_COLOR);
             }
             else if (e.getMessage().equals("500")) {
-                throw new Exception(STR."\{SET_TEXT_COLOR_RED}Error: something went wrong, please try again.\{RESET_TEXT_COLOR}");
+                throw new Exception(SET_TEXT_COLOR_RED + "Error: something went wrong, please try again." + RESET_TEXT_COLOR);
             }
             else {
-                throw new Exception(STR."\{SET_TEXT_COLOR_RED}Error: something went wrong, please try again.\{RESET_TEXT_COLOR}");
+                throw new Exception(SET_TEXT_COLOR_RED + "Error: something went wrong, please try again." + RESET_TEXT_COLOR);
             }
         }
 
         if (response.authToken().length() > 1) {
-            System.out.println(STR."\{SET_TEXT_COLOR_GREEN}Welcome to the chess server \{response.username()}!" +
+            System.out.println(SET_TEXT_COLOR_GREEN + "Welcome to the chess server " + response.username() + "!" +
                     " Please type a command:");
             setPlayerName(response.username());
             setPlayerAuthToken(response.authToken());
             setState(State.POSTLOGIN);
         } else {
             setState(State.PRELOGIN);
-            throw new Exception(STR."\{SET_TEXT_COLOR_RED}Unsuccessful registration: \{response.message()}");
+            throw new Exception(SET_TEXT_COLOR_RED + "Unsuccessful registration: " + response.message());
         }
 
         System.out.print(helpMenu() + RESET_TEXT_COLOR);
@@ -144,12 +144,12 @@ public class ChessClient {
 
     private State login(String... params) throws Exception {
         if(this.state != State.PRELOGIN) {
-            throw new Exception(STR."\{SET_TEXT_COLOR_RED}Already logged in.");
+            throw new Exception(SET_TEXT_COLOR_RED + "Already logged in.");
         }
 
         LoginRequest userData;
         if(params == null || params.length != 2) {
-            throw new Exception(STR."\{SET_TEXT_COLOR_RED}The wrong number of parameters were given.\n" +
+            throw new Exception(SET_TEXT_COLOR_RED + "The wrong number of parameters were given.\n" +
                     "You must provide a username and password." + RESET_TEXT_COLOR);
         } else {
             userData = new LoginRequest(params[0], params[1]);
@@ -159,18 +159,18 @@ public class ChessClient {
         try {
             response = facade.login(userData);
         } catch (Exception ex){
-            throw new Exception(STR."\{SET_TEXT_COLOR_RED}Username or password is incorrect.\{RESET_TEXT_COLOR}");
+            throw new Exception(SET_TEXT_COLOR_RED + "Username or password is incorrect." + RESET_TEXT_COLOR);
         }
         
         if(response.authToken().length() > 1) {
-            System.out.println(STR."\{SET_TEXT_COLOR_GREEN}Welcome back \{response.username()}! Pick a command:" +
+            System.out.println(SET_TEXT_COLOR_GREEN + "Welcome back " + response.username() + "! Pick a command:" +
                     RESET_TEXT_COLOR);
             setPlayerName(response.username());
             setPlayerAuthToken(response.authToken());
             setState(State.POSTLOGIN);
         } else {
             setState(State.PRELOGIN);
-            throw new Exception(STR."\{SET_TEXT_COLOR_RED}Unsuccessful login: \{response.message()}\{RESET_TEXT_COLOR}");
+            throw new Exception(SET_TEXT_COLOR_RED + "Unsuccessful login: " + response.message() + RESET_TEXT_COLOR);
         }
         
         System.out.print(helpMenu() + RESET_TEXT_COLOR);
@@ -181,7 +181,7 @@ public class ChessClient {
     private State list() throws Exception{
         State currentState = getState();
         if (currentState != State.POSTLOGIN) {
-            throw new Exception(STR."\{SET_TEXT_COLOR_RED}You must be logged in to see games.\{RESET_TEXT_COLOR}");
+            throw new Exception(SET_TEXT_COLOR_RED + "You must be logged in to see games." + RESET_TEXT_COLOR);
         }
 
         try {
@@ -189,16 +189,16 @@ public class ChessClient {
             ArrayList<GameData> gameDataList = new ArrayList<>(response.games());
 
             if (gameDataList.isEmpty()) {
-                throw new Exception(STR."\{SET_TEXT_COLOR_RED}There are no games created. Please create a game to play." +
+                throw new Exception(SET_TEXT_COLOR_RED + "There are no games created. Please create a game to play." +
                         RESET_TEXT_COLOR);
             } else {
-                System.out.println(STR."\{SET_TEXT_COLOR_BLUE}ALL GAMES:");
+                System.out.println(SET_TEXT_COLOR_BLUE + "ALL GAMES:");
                 for (int i = 0; i < gameDataList.size(); i++) {
                     int gameNumber = i + 1;
-                    System.out.println(STR."\{SET_TEXT_COLOR_WHITE}GAME NUMBER: \{gameNumber}");
-                    System.out.println(STR."GAME NAME: \{gameDataList.get(i).gameName()}");
-                    System.out.print(STR."WHITE USERNAME: \{gameDataList.get(i).whiteUsername()}, ");
-                    System.out.println(STR."BLACK USERNAME: \{gameDataList.get(i).blackUsername()}\n");
+                    System.out.println(SET_TEXT_COLOR_WHITE + "GAME NUMBER: " + gameNumber);
+                    System.out.println("GAME NAME: " + gameDataList.get(i).gameName());
+                    System.out.print("WHITE USERNAME: " + gameDataList.get(i).whiteUsername());
+                    System.out.println("BLACK USERNAME: " + gameDataList.get(i).blackUsername() + "\n");
 
                     gameInfo.put(gameNumber, gameDataList.get(i).gameID());
                 }
@@ -214,11 +214,11 @@ public class ChessClient {
 
         State currentState = getState();
         if (currentState != State.POSTLOGIN) {
-            throw new Exception(STR."\{SET_TEXT_COLOR_RED}User must be logged in to join a game.\{RESET_TEXT_COLOR}");
+            throw new Exception(SET_TEXT_COLOR_RED + "User must be logged in to join a game." + RESET_TEXT_COLOR);
         }
 
         if (params == null || params.length != 2) {
-            throw new Exception(STR."\{SET_TEXT_COLOR_RED}The wrong number of parameters were given.\n" +
+            throw new Exception(SET_TEXT_COLOR_RED + "The wrong number of parameters were given.\n" +
                     "You must provide a game number and team color." + RESET_TEXT_COLOR);
         }
 
@@ -226,11 +226,11 @@ public class ChessClient {
         try {
             gameNumber = Integer.parseInt(params[0]);
         } catch (NumberFormatException e) {
-            throw new Exception(STR."\{SET_TEXT_COLOR_RED}The first input after \"join\" must be a number.\{RESET_TEXT_COLOR}");
+            throw new Exception(SET_TEXT_COLOR_RED + "The first input after \"join\" must be a number." + RESET_TEXT_COLOR);
         }
 
         if (!gameInfo.containsKey(gameNumber)) {
-            throw new Exception(STR."\{SET_TEXT_COLOR_RED}Game number not found. Please list the games and try again." +
+            throw new Exception(SET_TEXT_COLOR_RED + "Game number not found. Please list the games and try again." +
                     RESET_TEXT_COLOR);
         }
 
@@ -245,7 +245,7 @@ public class ChessClient {
             color = ChessGame.TeamColor.WHITE;
         }
         else {
-            throw new Exception(STR."\{SET_TEXT_COLOR_RED}Team color not valid. Please try again.\{RESET_TEXT_COLOR}");
+            throw new Exception(SET_TEXT_COLOR_RED + "Team color not valid. Please try again." + RESET_TEXT_COLOR);
         }
 
         JoinGameRequest request = new JoinGameRequest(color, gameID);
@@ -254,7 +254,7 @@ public class ChessClient {
             JoinGameResponse response = facade.joinGame(getPlayerAuthToken(), request);
 
             if (response.message() == null) {
-                System.out.println(STR."\{SET_TEXT_COLOR_GREEN}You have joined the game!");
+                System.out.println(SET_TEXT_COLOR_GREEN + "You have joined the game!");
             }
         } catch (Exception e) {
             throw new Exception(SET_TEXT_COLOR_RED + e.getMessage());
@@ -266,11 +266,11 @@ public class ChessClient {
     private State create(String... params) throws Exception {
         State currentState = getState();
         if (currentState != State.POSTLOGIN) {
-            throw new Exception(STR."\{SET_TEXT_COLOR_RED}User must be logged in to create a game.\{RESET_TEXT_COLOR}");
+            throw new Exception(SET_TEXT_COLOR_RED + "User must be logged in to create a game." + RESET_TEXT_COLOR);
         }
 
         if (params == null || params.length != 1) {
-            throw new Exception(STR."\{SET_TEXT_COLOR_RED}The wrong number of parameters were provided.\{RESET_TEXT_COLOR}");
+            throw new Exception(SET_TEXT_COLOR_RED + "The wrong number of parameters were provided." + RESET_TEXT_COLOR);
         }
 
         try {
@@ -278,12 +278,12 @@ public class ChessClient {
             CreateGameResponse response = facade.createGame(getPlayerAuthToken(), newGame);
 
             if (response.message() == null) {
-                System.out.println(STR."\{SET_TEXT_COLOR_GREEN}\{params[0]} has been created.\n\{RESET_TEXT_COLOR}");
+                System.out.println(SET_TEXT_COLOR_GREEN + params[0] + " has been created.\n" + RESET_TEXT_COLOR);
                 System.out.print(helpMenu());
             }
 
         } catch (Exception e) {
-            throw new Exception(STR."\{SET_TEXT_COLOR_RED}Something went wrong. Please try again.\{RESET_TEXT_COLOR}");
+            throw new Exception(SET_TEXT_COLOR_RED + "Something went wrong. Please try again." + RESET_TEXT_COLOR);
         }
         return getState();
     }
@@ -294,17 +294,17 @@ public class ChessClient {
 
     private State logout() throws Exception {
         if (this.state != State.POSTLOGIN) {
-            throw new Exception(STR."\{SET_TEXT_COLOR_RED}User is not logged in.\{RESET_TEXT_COLOR}");
+            throw new Exception(SET_TEXT_COLOR_RED + "User is not logged in." + RESET_TEXT_COLOR);
         }
 
         try {
             facade.logout(getPlayerAuthToken());
             setState(State.PRELOGIN);
-            System.out.println(STR."\{SET_TEXT_COLOR_GREEN}You have been logged out.\{RESET_TEXT_COLOR}");
+            System.out.println(SET_TEXT_COLOR_GREEN + "You have been logged out." + RESET_TEXT_COLOR);
             System.out.print(helpMenu());
 
         } catch (Exception e) {
-            throw new Exception(STR."\{SET_TEXT_COLOR_RED}Error logging out. Please try again.\{RESET_TEXT_COLOR}");
+            throw new Exception(SET_TEXT_COLOR_RED + "Error logging out. Please try again." + RESET_TEXT_COLOR);
         }
         return getState();
     }

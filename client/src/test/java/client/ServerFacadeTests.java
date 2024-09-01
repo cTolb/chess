@@ -36,4 +36,12 @@ public class ServerFacadeTests {
         Assertions.assertNull(response.message());
     }
 
+    @Test
+    public void badRegister() throws Exception{
+        facade.register(new UserData("username", "password", "email"));
+
+        Assertions.assertThrows(Exception.class, () -> facade.register(new UserData("username", "password", "email")));
+
+    }
+
 }
