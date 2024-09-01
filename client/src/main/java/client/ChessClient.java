@@ -65,7 +65,7 @@ public class ChessClient {
                 case "list" -> list();
                 case "join" -> join(params);
                 case "create" -> create(params);
-                //case "observe" -> observe(params);
+                case "observe" -> observe(params);
                 case "logout" -> logout();
                 default -> help();
             };
@@ -285,6 +285,10 @@ public class ChessClient {
         } catch (Exception e) {
             throw new Exception(STR."\{SET_TEXT_COLOR_RED}Something went wrong. Please try again.\{RESET_TEXT_COLOR}");
         }
+        return getState();
+    }
+
+    private State observe(String... params) throws Exception {
         return getState();
     }
 
