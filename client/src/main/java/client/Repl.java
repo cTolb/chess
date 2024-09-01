@@ -14,7 +14,7 @@ public class Repl {
 
     public void run() {
         try {
-            System.out.println(STR."\{SET_TEXT_COLOR_WHITE}Welcome to the chess server! Please enter a command; ");
+            System.out.println(SET_TEXT_COLOR_WHITE + "Welcome to the chess server! Please enter a command; ");
             System.out.print(client.helpMenu());
 
             Scanner scanner = new Scanner(System.in);
