@@ -255,6 +255,7 @@ public class ChessClient {
 
             if (response.message() == null) {
                 System.out.println(SET_TEXT_COLOR_GREEN + "You have joined the game!");
+                printBoard();
             }
         } catch (Exception e) {
             throw new Exception(SET_TEXT_COLOR_RED + e.getMessage());
@@ -331,11 +332,21 @@ public class ChessClient {
             System.out.print(SET_BG_COLOR_LIGHT_GREY);
             System.out.print(" " + i +" ");
             for (int j = 1; j <= 8; j++) {
-                if ((j + i) % 2 == 0) {
-                    System.out.print(SET_BG_COLOR_BLACK);
+                if (i % 2 != 0) {
+                    if (j % 2 != 0) {
+                        System.out.print(SET_BG_COLOR_BLACK);
+                    }
+                    else {
+                        System.out.print(SET_BG_COLOR_WHITE);
+                    }
                 }
                 else {
-                    System.out.print(SET_BG_COLOR_WHITE);
+                    if (j % 2 != 0) {
+                        System.out.print(SET_BG_COLOR_WHITE);
+                    }
+                    else {
+                        System.out.print(SET_BG_COLOR_BLACK);
+                    }
                 }
 
                 if (i == 1 || i == 2) {
@@ -414,11 +425,21 @@ public class ChessClient {
             System.out.print(SET_BG_COLOR_LIGHT_GREY);
             System.out.print(" " + i +" ");
             for (int j = 1; j <= 8; j++) {
-                if ((j + i) % 2 != 0) {
-                    System.out.print(SET_BG_COLOR_BLACK);
+                if (i % 2 != 0) {
+                    if (j % 2 != 0) {
+                        System.out.print(SET_BG_COLOR_WHITE);
+                    }
+                    else {
+                        System.out.print(SET_BG_COLOR_BLACK);
+                    }
                 }
                 else {
-                    System.out.print(SET_BG_COLOR_WHITE);
+                    if (j % 2 != 0) {
+                        System.out.print(SET_BG_COLOR_BLACK);
+                    }
+                    else {
+                        System.out.print(SET_BG_COLOR_WHITE);
+                    }
                 }
 
                 if (i == 1 || i == 2) {
