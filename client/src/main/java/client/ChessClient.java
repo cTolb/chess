@@ -10,7 +10,6 @@ import requests.JoinGameRequest;
 import requests.LoginRequest;
 import responses.*;
 import static ui.EscapeSequences.*;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -26,26 +25,21 @@ public class ChessClient {
     ChessClient(String serverURL) {
         facade = new ServerFacade(serverURL);
     }
-
     private void setState(State state) {
         this.state = state;
     }
     public State getState() {
         return this.state;
     }
-
     private void setPlayerName(String username) {
         this.playerName = username;
     }
-
     private String getPlayerName() {
         return this.playerName;
     }
-
     private void setPlayerAuthToken(String authToken) {
         this.playerAuthToken = authToken;
     }
-
     private String getPlayerAuthToken() {
         return this.playerAuthToken;
     }
@@ -139,6 +133,7 @@ public class ChessClient {
             setState(State.PRELOGIN);
             throw new Exception(SET_TEXT_COLOR_RED + "Unsuccessful registration: " + response.message());
         }
+
         System.out.print(helpMenu() + RESET_TEXT_COLOR);
         return getState();
     }
@@ -173,7 +168,6 @@ public class ChessClient {
             setState(State.PRELOGIN);
             throw new Exception(SET_TEXT_COLOR_RED + "Unsuccessful login: " + response.message() + RESET_TEXT_COLOR);
         }
-
         System.out.print(helpMenu() + RESET_TEXT_COLOR);
         return getState();
     }
@@ -243,10 +237,10 @@ public class ChessClient {
         else {
             throw new Exception(SET_TEXT_COLOR_RED + "Team color not valid. Please try again." + RESET_TEXT_COLOR);
         }
+
         JoinGameRequest request = new JoinGameRequest(color, gameID);
         try {
             JoinGameResponse response = facade.joinGame(getPlayerAuthToken(), request);
-
             if (response.message() == null) {
                 System.out.println(SET_TEXT_COLOR_GREEN + "You have joined the game!");
                 ChessBoard board = new ChessBoard();
@@ -254,7 +248,18 @@ public class ChessClient {
                 printBoard(board);
             }
         } catch (Exception e) {
-            throw new Exception(SET_TEXT_COLOR_RED + e.getMessage());
+            if (e.getMessage().equals("400")) {
+                throw new Exception(SET_TEXT_COLOR_RED + "Error: bad request.");
+            }
+            else if (e.getMessage().equals("403")) {
+                throw new Exception(SET_TEXT_COLOR_RED + "Error: That color is already taken." + RESET_TEXT_COLOR);
+            }
+            else if (e.getMessage().equals("500")) {
+                throw new Exception(SET_TEXT_COLOR_RED + "Error: something went wrong, please try again." + RESET_TEXT_COLOR);
+            }
+            else {
+                throw new Exception(SET_TEXT_COLOR_RED + "Error: something went wrong, please try again." + RESET_TEXT_COLOR);
+            }
         }
         return getState();
     }
@@ -285,15 +290,18 @@ public class ChessClient {
         if (currentState != State.POSTLOGIN){
             throw new Exception(SET_TEXT_COLOR_RED + "You must be logged in to observe a game." + RESET_TEXT_COLOR);
         }
+
         if (params == null || params.length != 1) {
             throw new Exception(SET_TEXT_COLOR_RED + "The wrong number of parameters were provided." + RESET_TEXT_COLOR);
         }
+
         int gameNumber = 0;
         try {
             gameNumber = Integer.parseInt(params[0]);
         } catch (NumberFormatException e) {
             throw new Exception(SET_TEXT_COLOR_RED + "The first input after \"observe\" must be a number." + RESET_TEXT_COLOR);
         }
+
         if (!gameInfo.containsKey(gameNumber)) {
             throw new Exception(SET_TEXT_COLOR_RED + "Game number not found. Please list the games and try again." +
                     RESET_TEXT_COLOR);
@@ -331,7 +339,6 @@ public class ChessClient {
                         System.out.print(SET_BG_COLOR_BLACK);
                     }
                 }
-
                 ChessPosition position = new ChessPosition(i, j);
                 ChessPiece piece = board.getPiece(position);
                 printCharacter(piece);
@@ -367,7 +374,6 @@ public class ChessClient {
                         System.out.print(SET_BG_COLOR_WHITE);
                     }
                 }
-
                 ChessPosition position = new ChessPosition(i, j);
                 ChessPiece piece = board.getPiece(position);
                 printCharacter(piece);
@@ -445,14 +451,12 @@ public class ChessClient {
         }else {
                 System.out.print("   ");
             }
-
     }
 
     private State logout() throws Exception {
         if (this.state != State.POSTLOGIN) {
             throw new Exception(SET_TEXT_COLOR_RED + "User is not logged in." + RESET_TEXT_COLOR);
         }
-
         try {
             facade.logout(getPlayerAuthToken());
             setState(State.PRELOGIN);
