@@ -198,7 +198,7 @@ public class ChessClient {
                     System.out.println(SET_TEXT_COLOR_WHITE + "GAME NUMBER: " + gameNumber);
                     System.out.println("GAME NAME: " + gameDataList.get(i).gameName());
                     System.out.print("WHITE USERNAME: " + gameDataList.get(i).whiteUsername());
-                    System.out.println("BLACK USERNAME: " + gameDataList.get(i).blackUsername() + "\n");
+                    System.out.println(" BLACK USERNAME: " + gameDataList.get(i).blackUsername() + "\n");
 
                     gameInfo.put(gameNumber, gameDataList.get(i).gameID());
                 }
@@ -289,7 +289,178 @@ public class ChessClient {
     }
 
     private State observe(String... params) throws Exception {
+        printBoard();
         return getState();
+    }
+
+    private void printBoard() {
+        printWhite();
+        printBlack();
+    }
+
+    private void printWhite() {
+        System.out.print(SET_BG_COLOR_LIGHT_GREY);
+        System.out.print(SET_TEXT_BOLD);
+        System.out.print(SET_TEXT_COLOR_WHITE);
+        System.out.print("    a  b  c  d  e  f  g  h    ");
+        System.out.println(RESET_BG_COLOR);
+        for (int i = 8; i >= 1; i--) {
+            System.out.print(SET_BG_COLOR_LIGHT_GREY);
+            System.out.print(" " + i +" ");
+            for (int j = 1; j <= 8; j++) {
+                if ((j + i) % 2 == 0) {
+                    System.out.print(SET_BG_COLOR_BLACK);
+                }
+                else {
+                    System.out.print(SET_BG_COLOR_WHITE);
+                }
+
+                if (i == 1 || i == 2) {
+                    System.out.print(SET_TEXT_COLOR_RED);
+                    if (i == 1) {
+                        if (j == 1 || j == 8) {
+                            System.out.print(" R ");
+                        }
+                        if (j == 2 || j == 7) {
+                            System.out.print(" N ");
+                        }
+                        if (j == 3 || j == 6) {
+                            System.out.print( " B ");
+                        }
+                        if (j == 4) {
+                            System.out.print(" Q ");
+                        }
+                        if (j == 5) {
+                            System.out.print(" K ");
+                        }
+                    }
+
+                    if (i == 2) {
+                        System.out.print(" P ");
+                    }
+                }
+
+                else if (i == 7 || i == 8) {
+                    System.out.print(SET_TEXT_COLOR_BLUE);
+                    if (i == 8) {
+                        if (j == 1 || j == 8) {
+                            System.out.print(" R ");
+                        }
+                        if (j == 2 || j == 7) {
+                            System.out.print(" N ");
+                        }
+                        if (j == 3 || j == 6) {
+                            System.out.print( " B ");
+                        }
+                        if (j == 4) {
+                            System.out.print(" Q ");
+                        }
+                        if (j == 5) {
+                            System.out.print(" K ");
+                        }
+                    }
+
+                    if (i == 7) {
+                        System.out.print(" P ");
+                    }
+                }
+                else {
+                    System.out.print("   ");
+                }
+            }
+            System.out.print(SET_BG_COLOR_LIGHT_GREY);
+            System.out.print(SET_TEXT_COLOR_WHITE);
+            System.out.print(" " + i + " ");
+            System.out.println(RESET_BG_COLOR);
+        }
+        System.out.print(SET_BG_COLOR_LIGHT_GREY);
+        System.out.print(SET_TEXT_COLOR_WHITE);
+        System.out.print("    a  b  c  d  e  f  g  h    ");
+        System.out.println(RESET_BG_COLOR);
+        System.out.println();
+
+    }
+
+    private void printBlack() {
+        System.out.print(SET_BG_COLOR_LIGHT_GREY);
+        System.out.print(SET_TEXT_BOLD);
+        System.out.print(SET_TEXT_COLOR_WHITE);
+        System.out.print("    h  g  f  e  d  c  b  a    ");
+        System.out.println(RESET_BG_COLOR);
+        for (int i = 1; i <= 8; i++) {
+            System.out.print(SET_BG_COLOR_LIGHT_GREY);
+            System.out.print(" " + i +" ");
+            for (int j = 1; j <= 8; j++) {
+                if ((j + i) % 2 != 0) {
+                    System.out.print(SET_BG_COLOR_BLACK);
+                }
+                else {
+                    System.out.print(SET_BG_COLOR_WHITE);
+                }
+
+                if (i == 1 || i == 2) {
+                    System.out.print(SET_TEXT_COLOR_RED);
+                    if (i == 1) {
+                        if (j == 1 || j == 8) {
+                            System.out.print(" R ");
+                        }
+                        if (j == 2 || j == 7) {
+                            System.out.print(" N ");
+                        }
+                        if (j == 3 || j == 6) {
+                            System.out.print( " B ");
+                        }
+                        if (j == 5) {
+                            System.out.print(" Q ");
+                        }
+                        if (j == 4) {
+                            System.out.print(" K ");
+                        }
+                    }
+
+                    if (i == 2) {
+                        System.out.print(" P ");
+                    }
+                }
+
+                else if (i == 7 || i == 8) {
+                    System.out.print(SET_TEXT_COLOR_BLUE);
+                    if (i == 8) {
+                        if (j == 1 || j == 8) {
+                            System.out.print(" R ");
+                        }
+                        if (j == 2 || j == 7) {
+                            System.out.print(" N ");
+                        }
+                        if (j == 3 || j == 6) {
+                            System.out.print( " B ");
+                        }
+                        if (j == 5) {
+                            System.out.print(" Q ");
+                        }
+                        if (j == 4) {
+                            System.out.print(" K ");
+                        }
+                    }
+
+                    if (i == 7) {
+                        System.out.print(" P ");
+                    }
+                }
+                else {
+                    System.out.print("   ");
+                }
+            }
+            System.out.print(SET_BG_COLOR_LIGHT_GREY);
+            System.out.print(SET_TEXT_COLOR_WHITE);
+            System.out.print(" " + i + " ");
+            System.out.println(RESET_BG_COLOR);
+        }
+        System.out.print(SET_BG_COLOR_LIGHT_GREY);
+        System.out.print(SET_TEXT_COLOR_WHITE);
+        System.out.print("    h  g  f  e  d  c  b  a    ");
+        System.out.println(RESET_BG_COLOR);
+        System.out.println();
     }
 
     private State logout() throws Exception {
