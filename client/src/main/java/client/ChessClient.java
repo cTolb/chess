@@ -139,9 +139,7 @@ public class ChessClient {
             setState(State.PRELOGIN);
             throw new Exception(SET_TEXT_COLOR_RED + "Unsuccessful registration: " + response.message());
         }
-
         System.out.print(helpMenu() + RESET_TEXT_COLOR);
-
         return getState();
     }
 
@@ -164,7 +162,7 @@ public class ChessClient {
         } catch (Exception ex){
             throw new Exception(SET_TEXT_COLOR_RED + "Username or password is incorrect." + RESET_TEXT_COLOR);
         }
-        
+
         if(response.authToken().length() > 1) {
             System.out.println(SET_TEXT_COLOR_GREEN + "Welcome back " + response.username() + "! Pick a command:" +
                     RESET_TEXT_COLOR);
@@ -175,9 +173,8 @@ public class ChessClient {
             setState(State.PRELOGIN);
             throw new Exception(SET_TEXT_COLOR_RED + "Unsuccessful login: " + response.message() + RESET_TEXT_COLOR);
         }
-        
-        System.out.print(helpMenu() + RESET_TEXT_COLOR);
 
+        System.out.print(helpMenu() + RESET_TEXT_COLOR);
         return getState();
     }
 
@@ -190,7 +187,6 @@ public class ChessClient {
         try {
             ListGameResponse response = facade.listGame(getPlayerAuthToken());
             ArrayList<GameData> gameDataList = new ArrayList<>(response.games());
-
             if (gameDataList.isEmpty()) {
                 throw new Exception(SET_TEXT_COLOR_RED + "There are no games created. Please create a game to play." +
                         RESET_TEXT_COLOR);
@@ -209,12 +205,10 @@ public class ChessClient {
         } catch (Exception e) {
             throw new Exception(SET_TEXT_COLOR_RED + e.getMessage());
         }
-
         return getState();
     }
 
     private State join(String... params) throws Exception {
-
         State currentState = getState();
         if (currentState != State.POSTLOGIN) {
             throw new Exception(SET_TEXT_COLOR_RED + "User must be logged in to join a game." + RESET_TEXT_COLOR);
@@ -240,7 +234,6 @@ public class ChessClient {
         int gameID = gameInfo.get(gameNumber);
         String requestedColor = params[1].toUpperCase();
         ChessGame.TeamColor color = null;
-
         if (requestedColor.equals("BLACK")) {
             color = ChessGame.TeamColor.BLACK;
         }
@@ -250,9 +243,7 @@ public class ChessClient {
         else {
             throw new Exception(SET_TEXT_COLOR_RED + "Team color not valid. Please try again." + RESET_TEXT_COLOR);
         }
-
         JoinGameRequest request = new JoinGameRequest(color, gameID);
-
         try {
             JoinGameResponse response = facade.joinGame(getPlayerAuthToken(), request);
 
@@ -265,7 +256,6 @@ public class ChessClient {
         } catch (Exception e) {
             throw new Exception(SET_TEXT_COLOR_RED + e.getMessage());
         }
-
         return getState();
     }
 
@@ -274,20 +264,16 @@ public class ChessClient {
         if (currentState != State.POSTLOGIN) {
             throw new Exception(SET_TEXT_COLOR_RED + "User must be logged in to create a game." + RESET_TEXT_COLOR);
         }
-
         if (params == null || params.length != 1) {
             throw new Exception(SET_TEXT_COLOR_RED + "The wrong number of parameters were provided." + RESET_TEXT_COLOR);
         }
-
         try {
             GameData newGame = new GameData(0, null, null, params[0], new ChessGame());
             CreateGameResponse response = facade.createGame(getPlayerAuthToken(), newGame);
-
             if (response.message() == null) {
                 System.out.println(SET_TEXT_COLOR_GREEN + params[0] + " has been created.\n" + RESET_TEXT_COLOR);
                 System.out.print(helpMenu());
             }
-
         } catch (Exception e) {
             throw new Exception(SET_TEXT_COLOR_RED + "Something went wrong. Please try again." + RESET_TEXT_COLOR);
         }
@@ -299,18 +285,15 @@ public class ChessClient {
         if (currentState != State.POSTLOGIN){
             throw new Exception(SET_TEXT_COLOR_RED + "You must be logged in to observe a game." + RESET_TEXT_COLOR);
         }
-
         if (params == null || params.length != 1) {
             throw new Exception(SET_TEXT_COLOR_RED + "The wrong number of parameters were provided." + RESET_TEXT_COLOR);
         }
-
         int gameNumber = 0;
         try {
             gameNumber = Integer.parseInt(params[0]);
         } catch (NumberFormatException e) {
             throw new Exception(SET_TEXT_COLOR_RED + "The first input after \"observe\" must be a number." + RESET_TEXT_COLOR);
         }
-
         if (!gameInfo.containsKey(gameNumber)) {
             throw new Exception(SET_TEXT_COLOR_RED + "Game number not found. Please list the games and try again." +
                     RESET_TEXT_COLOR);
@@ -320,7 +303,6 @@ public class ChessClient {
             board.resetBoard();
             printBoard(board);
         }
-
         return getState();
     }
 
@@ -330,11 +312,7 @@ public class ChessClient {
     }
 
     private void printWhite(ChessBoard board) {
-        System.out.print(SET_BG_COLOR_LIGHT_GREY);
-        System.out.print(SET_TEXT_BOLD);
-        System.out.print(SET_TEXT_COLOR_WHITE);
-        System.out.print("    a  b  c  d  e  f  g  h    ");
-        System.out.println(RESET_BG_COLOR);
+        printWhiteHeader();
         for (int i = 8; i >= 1; i--) {
             System.out.print(SET_BG_COLOR_LIGHT_GREY);
             System.out.print(" " + i +" ");
@@ -356,73 +334,19 @@ public class ChessClient {
 
                 ChessPosition position = new ChessPosition(i, j);
                 ChessPiece piece = board.getPiece(position);
-                if (piece != null) {
-                    if (piece.getPieceType() == ChessPiece.PieceType.ROOK) {
-                        if (piece.getTeamColor() == ChessGame.TeamColor.BLACK) {
-                            System.out.print(SET_TEXT_COLOR_BLUE + " R ");
-                        }
-                        if (piece.getTeamColor() == ChessGame.TeamColor.WHITE) {
-                            System.out.print(SET_TEXT_COLOR_RED + " R ");
-                        }
-                    } else if (piece.getPieceType() == ChessPiece.PieceType.KNIGHT) {
-                        if (piece.getTeamColor() == ChessGame.TeamColor.BLACK) {
-                            System.out.print(SET_TEXT_COLOR_BLUE + " N ");
-                        }
-                        if (piece.getTeamColor() == ChessGame.TeamColor.WHITE) {
-                            System.out.print(SET_TEXT_COLOR_RED + " N ");
-                        }
-                    } else if (piece.getPieceType() == ChessPiece.PieceType.BISHOP) {
-                        if (piece.getTeamColor() == ChessGame.TeamColor.BLACK) {
-                            System.out.print(SET_TEXT_COLOR_BLUE + " B ");
-                        }
-                        if (piece.getTeamColor() == ChessGame.TeamColor.WHITE) {
-                            System.out.print(SET_TEXT_COLOR_RED + " B ");
-                        }
-                    } else if (piece.getPieceType() == ChessPiece.PieceType.KING) {
-                        if (piece.getTeamColor() == ChessGame.TeamColor.BLACK) {
-                            System.out.print(SET_TEXT_COLOR_BLUE + " K ");
-                        }
-                        if (piece.getTeamColor() == ChessGame.TeamColor.WHITE) {
-                            System.out.print(SET_TEXT_COLOR_RED + " K ");
-                        }
-                    } else if (piece.getPieceType() == ChessPiece.PieceType.QUEEN) {
-                        if (piece.getTeamColor() == ChessGame.TeamColor.BLACK) {
-                            System.out.print(SET_TEXT_COLOR_BLUE + " Q ");
-                        }
-                        if (piece.getTeamColor() == ChessGame.TeamColor.WHITE) {
-                            System.out.print(SET_TEXT_COLOR_RED + " Q ");
-                        }
-                    } else if (piece.getPieceType() == ChessPiece.PieceType.PAWN) {
-                        if (piece.getTeamColor() == ChessGame.TeamColor.BLACK) {
-                            System.out.print(SET_TEXT_COLOR_BLUE + " P ");
-                        }
-                        if (piece.getTeamColor() == ChessGame.TeamColor.WHITE) {
-                            System.out.print(SET_TEXT_COLOR_RED + " P ");
-                        }
-                    }
-                } else {
-                    System.out.print("   ");
-                }
+                printCharacter(piece);
             }
             System.out.print(SET_BG_COLOR_LIGHT_GREY);
             System.out.print(SET_TEXT_COLOR_WHITE);
             System.out.print(" " + i + " ");
             System.out.println(RESET_BG_COLOR);
         }
-        System.out.print(SET_BG_COLOR_LIGHT_GREY);
-        System.out.print(SET_TEXT_COLOR_WHITE);
-        System.out.print("    a  b  c  d  e  f  g  h    ");
-        System.out.println(RESET_BG_COLOR);
+        printWhiteHeader();
         System.out.println();
-
     }
 
     private void printBlack(ChessBoard board) {
-        System.out.print(SET_BG_COLOR_LIGHT_GREY);
-        System.out.print(SET_TEXT_BOLD);
-        System.out.print(SET_TEXT_COLOR_WHITE);
-        System.out.print("    h  g  f  e  d  c  b  a    ");
-        System.out.println(RESET_BG_COLOR);
+        printBlackHeader();
         for (int i = 1; i <= 8; i++) {
             System.out.print(SET_BG_COLOR_LIGHT_GREY);
             System.out.print(" " + i +" ");
@@ -446,64 +370,82 @@ public class ChessClient {
 
                 ChessPosition position = new ChessPosition(i, j);
                 ChessPiece piece = board.getPiece(position);
-                if (piece != null) {
-                    if (piece.getPieceType() == ChessPiece.PieceType.ROOK) {
-                        if (piece.getTeamColor() == ChessGame.TeamColor.BLACK) {
-                            System.out.print(SET_TEXT_COLOR_BLUE + " R ");
-                        }
-                        if (piece.getTeamColor() == ChessGame.TeamColor.WHITE) {
-                            System.out.print(SET_TEXT_COLOR_RED + " R ");
-                        }
-                    } else if (piece.getPieceType() == ChessPiece.PieceType.KNIGHT) {
-                        if (piece.getTeamColor() == ChessGame.TeamColor.BLACK) {
-                            System.out.print(SET_TEXT_COLOR_BLUE + " N ");
-                        }
-                        if (piece.getTeamColor() == ChessGame.TeamColor.WHITE) {
-                            System.out.print(SET_TEXT_COLOR_RED + " N ");
-                        }
-                    } else if (piece.getPieceType() == ChessPiece.PieceType.BISHOP) {
-                        if (piece.getTeamColor() == ChessGame.TeamColor.BLACK) {
-                            System.out.print(SET_TEXT_COLOR_BLUE + " B ");
-                        }
-                        if (piece.getTeamColor() == ChessGame.TeamColor.WHITE) {
-                            System.out.print(SET_TEXT_COLOR_RED + " B ");
-                        }
-                    } else if (piece.getPieceType() == ChessPiece.PieceType.KING) {
-                        if (piece.getTeamColor() == ChessGame.TeamColor.BLACK) {
-                            System.out.print(SET_TEXT_COLOR_BLUE + " K ");
-                        }
-                        if (piece.getTeamColor() == ChessGame.TeamColor.WHITE) {
-                            System.out.print(SET_TEXT_COLOR_RED + " K ");
-                        }
-                    } else if (piece.getPieceType() == ChessPiece.PieceType.QUEEN) {
-                        if (piece.getTeamColor() == ChessGame.TeamColor.BLACK) {
-                            System.out.print(SET_TEXT_COLOR_BLUE + " Q ");
-                        }
-                        if (piece.getTeamColor() == ChessGame.TeamColor.WHITE) {
-                            System.out.print(SET_TEXT_COLOR_RED + " Q ");
-                        }
-                    } else if (piece.getPieceType() == ChessPiece.PieceType.PAWN) {
-                        if (piece.getTeamColor() == ChessGame.TeamColor.BLACK) {
-                            System.out.print(SET_TEXT_COLOR_BLUE + " P ");
-                        }
-                        if (piece.getTeamColor() == ChessGame.TeamColor.WHITE) {
-                            System.out.print(SET_TEXT_COLOR_RED + " P ");
-                        }
-                    }
-                } else {
-                    System.out.print("   ");
-                }
+                printCharacter(piece);
             }
             System.out.print(SET_BG_COLOR_LIGHT_GREY);
             System.out.print(SET_TEXT_COLOR_WHITE);
             System.out.print(" " + i + " ");
             System.out.println(RESET_BG_COLOR);
         }
+        printBlackHeader();
+        System.out.println();
+    }
+
+    private void printWhiteHeader() {
         System.out.print(SET_BG_COLOR_LIGHT_GREY);
+        System.out.print(SET_TEXT_BOLD);
+        System.out.print(SET_TEXT_COLOR_WHITE);
+        System.out.print("    a  b  c  d  e  f  g  h    ");
+        System.out.println(RESET_BG_COLOR);
+    }
+
+    private void printBlackHeader() {
+        System.out.print(SET_BG_COLOR_LIGHT_GREY);
+        System.out.print(SET_TEXT_BOLD);
         System.out.print(SET_TEXT_COLOR_WHITE);
         System.out.print("    h  g  f  e  d  c  b  a    ");
         System.out.println(RESET_BG_COLOR);
-        System.out.println();
+    }
+
+    private void printCharacter(ChessPiece piece) {
+        if(piece != null) {
+            if (piece.getPieceType() == ChessPiece.PieceType.ROOK) {
+                if (piece.getTeamColor() == ChessGame.TeamColor.BLACK) {
+                    System.out.print(SET_TEXT_COLOR_BLUE + " R ");
+                }
+                if (piece.getTeamColor() == ChessGame.TeamColor.WHITE) {
+                    System.out.print(SET_TEXT_COLOR_RED + " R ");
+                }
+            } else if (piece.getPieceType() == ChessPiece.PieceType.KNIGHT) {
+                if (piece.getTeamColor() == ChessGame.TeamColor.BLACK) {
+                    System.out.print(SET_TEXT_COLOR_BLUE + " N ");
+                }
+                if (piece.getTeamColor() == ChessGame.TeamColor.WHITE) {
+                    System.out.print(SET_TEXT_COLOR_RED + " N ");
+                }
+            } else if (piece.getPieceType() == ChessPiece.PieceType.BISHOP) {
+                if (piece.getTeamColor() == ChessGame.TeamColor.BLACK) {
+                    System.out.print(SET_TEXT_COLOR_BLUE + " B ");
+                }
+                if (piece.getTeamColor() == ChessGame.TeamColor.WHITE) {
+                    System.out.print(SET_TEXT_COLOR_RED + " B ");
+                }
+            } else if (piece.getPieceType() == ChessPiece.PieceType.KING) {
+                if (piece.getTeamColor() == ChessGame.TeamColor.BLACK) {
+                    System.out.print(SET_TEXT_COLOR_BLUE + " K ");
+                }
+                if (piece.getTeamColor() == ChessGame.TeamColor.WHITE) {
+                    System.out.print(SET_TEXT_COLOR_RED + " K ");
+                }
+            } else if (piece.getPieceType() == ChessPiece.PieceType.QUEEN) {
+                if (piece.getTeamColor() == ChessGame.TeamColor.BLACK) {
+                    System.out.print(SET_TEXT_COLOR_BLUE + " Q ");
+                }
+                if (piece.getTeamColor() == ChessGame.TeamColor.WHITE) {
+                    System.out.print(SET_TEXT_COLOR_RED + " Q ");
+                }
+            } else if (piece.getPieceType() == ChessPiece.PieceType.PAWN) {
+                if (piece.getTeamColor() == ChessGame.TeamColor.BLACK) {
+                    System.out.print(SET_TEXT_COLOR_BLUE + " P ");
+                }
+                if (piece.getTeamColor() == ChessGame.TeamColor.WHITE) {
+                    System.out.print(SET_TEXT_COLOR_RED + " P ");
+                }
+            }
+        }else {
+                System.out.print("   ");
+            }
+
     }
 
     private State logout() throws Exception {
