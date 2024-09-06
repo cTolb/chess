@@ -1,6 +1,9 @@
 package client;
 
+import chess.ChessBoard;
 import chess.ChessGame;
+import chess.ChessPiece;
+import chess.ChessPosition;
 import model.GameData;
 import model.UserData;
 import requests.JoinGameRequest;
@@ -255,7 +258,9 @@ public class ChessClient {
 
             if (response.message() == null) {
                 System.out.println(SET_TEXT_COLOR_GREEN + "You have joined the game!");
-                printBoard();
+                ChessBoard board = new ChessBoard();
+                board.resetBoard();
+                printBoard(board);
             }
         } catch (Exception e) {
             throw new Exception(SET_TEXT_COLOR_RED + e.getMessage());
@@ -311,18 +316,20 @@ public class ChessClient {
                     RESET_TEXT_COLOR);
         }
         else {
-            printBoard();
+            ChessBoard board = new ChessBoard();
+            board.resetBoard();
+            printBoard(board);
         }
 
         return getState();
     }
 
-    private void printBoard() {
-        printWhite();
-        printBlack();
+    private void printBoard(ChessBoard board) {
+        printWhite(board);
+        printBlack(board);
     }
 
-    private void printWhite() {
+    private void printWhite(ChessBoard board) {
         System.out.print(SET_BG_COLOR_LIGHT_GREY);
         System.out.print(SET_TEXT_BOLD);
         System.out.print(SET_TEXT_COLOR_WHITE);
@@ -335,70 +342,65 @@ public class ChessClient {
                 if (i % 2 != 0) {
                     if (j % 2 != 0) {
                         System.out.print(SET_BG_COLOR_BLACK);
-                    }
-                    else {
+                    } else {
                         System.out.print(SET_BG_COLOR_WHITE);
                     }
                 }
                 else {
                     if (j % 2 != 0) {
                         System.out.print(SET_BG_COLOR_WHITE);
-                    }
-                    else {
+                    } else {
                         System.out.print(SET_BG_COLOR_BLACK);
                     }
                 }
 
-                if (i == 1 || i == 2) {
-                    System.out.print(SET_TEXT_COLOR_RED);
-                    if (i == 1) {
-                        if (j == 1 || j == 8) {
-                            System.out.print(" R ");
+                ChessPosition position = new ChessPosition(i, j);
+                ChessPiece piece = board.getPiece(position);
+                if (piece != null) {
+                    if (piece.getPieceType() == ChessPiece.PieceType.ROOK) {
+                        if (piece.getTeamColor() == ChessGame.TeamColor.BLACK) {
+                            System.out.print(SET_TEXT_COLOR_BLUE + " R ");
                         }
-                        if (j == 2 || j == 7) {
-                            System.out.print(" N ");
+                        if (piece.getTeamColor() == ChessGame.TeamColor.WHITE) {
+                            System.out.print(SET_TEXT_COLOR_RED + " R ");
                         }
-                        if (j == 3 || j == 6) {
-                            System.out.print( " B ");
+                    } else if (piece.getPieceType() == ChessPiece.PieceType.KNIGHT) {
+                        if (piece.getTeamColor() == ChessGame.TeamColor.BLACK) {
+                            System.out.print(SET_TEXT_COLOR_BLUE + " N ");
                         }
-                        if (j == 4) {
-                            System.out.print(" Q ");
+                        if (piece.getTeamColor() == ChessGame.TeamColor.WHITE) {
+                            System.out.print(SET_TEXT_COLOR_RED + " N ");
                         }
-                        if (j == 5) {
-                            System.out.print(" K ");
+                    } else if (piece.getPieceType() == ChessPiece.PieceType.BISHOP) {
+                        if (piece.getTeamColor() == ChessGame.TeamColor.BLACK) {
+                            System.out.print(SET_TEXT_COLOR_BLUE + " B ");
+                        }
+                        if (piece.getTeamColor() == ChessGame.TeamColor.WHITE) {
+                            System.out.print(SET_TEXT_COLOR_RED + " B ");
+                        }
+                    } else if (piece.getPieceType() == ChessPiece.PieceType.KING) {
+                        if (piece.getTeamColor() == ChessGame.TeamColor.BLACK) {
+                            System.out.print(SET_TEXT_COLOR_BLUE + " K ");
+                        }
+                        if (piece.getTeamColor() == ChessGame.TeamColor.WHITE) {
+                            System.out.print(SET_TEXT_COLOR_RED + " K ");
+                        }
+                    } else if (piece.getPieceType() == ChessPiece.PieceType.QUEEN) {
+                        if (piece.getTeamColor() == ChessGame.TeamColor.BLACK) {
+                            System.out.print(SET_TEXT_COLOR_BLUE + " Q ");
+                        }
+                        if (piece.getTeamColor() == ChessGame.TeamColor.WHITE) {
+                            System.out.print(SET_TEXT_COLOR_RED + " Q ");
+                        }
+                    } else if (piece.getPieceType() == ChessPiece.PieceType.PAWN) {
+                        if (piece.getTeamColor() == ChessGame.TeamColor.BLACK) {
+                            System.out.print(SET_TEXT_COLOR_BLUE + " P ");
+                        }
+                        if (piece.getTeamColor() == ChessGame.TeamColor.WHITE) {
+                            System.out.print(SET_TEXT_COLOR_RED + " P ");
                         }
                     }
-
-                    if (i == 2) {
-                        System.out.print(" P ");
-                    }
-                }
-
-                else if (i == 7 || i == 8) {
-                    System.out.print(SET_TEXT_COLOR_BLUE);
-                    if (i == 8) {
-                        if (j == 1 || j == 8) {
-                            System.out.print(" R ");
-                        }
-                        if (j == 2 || j == 7) {
-                            System.out.print(" N ");
-                        }
-                        if (j == 3 || j == 6) {
-                            System.out.print( " B ");
-                        }
-                        if (j == 4) {
-                            System.out.print(" Q ");
-                        }
-                        if (j == 5) {
-                            System.out.print(" K ");
-                        }
-                    }
-
-                    if (i == 7) {
-                        System.out.print(" P ");
-                    }
-                }
-                else {
+                } else {
                     System.out.print("   ");
                 }
             }
@@ -415,7 +417,7 @@ public class ChessClient {
 
     }
 
-    private void printBlack() {
+    private void printBlack(ChessBoard board) {
         System.out.print(SET_BG_COLOR_LIGHT_GREY);
         System.out.print(SET_TEXT_BOLD);
         System.out.print(SET_TEXT_COLOR_WHITE);
@@ -424,8 +426,8 @@ public class ChessClient {
         for (int i = 1; i <= 8; i++) {
             System.out.print(SET_BG_COLOR_LIGHT_GREY);
             System.out.print(" " + i +" ");
-            for (int j = 1; j <= 8; j++) {
-                if (i % 2 != 0) {
+            for (int j = 8; j >= 1; j--) {
+                if (i % 2 == 0) {
                     if (j % 2 != 0) {
                         System.out.print(SET_BG_COLOR_WHITE);
                     }
@@ -442,56 +444,53 @@ public class ChessClient {
                     }
                 }
 
-                if (i == 1 || i == 2) {
-                    System.out.print(SET_TEXT_COLOR_RED);
-                    if (i == 1) {
-                        if (j == 1 || j == 8) {
-                            System.out.print(" R ");
+                ChessPosition position = new ChessPosition(i, j);
+                ChessPiece piece = board.getPiece(position);
+                if (piece != null) {
+                    if (piece.getPieceType() == ChessPiece.PieceType.ROOK) {
+                        if (piece.getTeamColor() == ChessGame.TeamColor.BLACK) {
+                            System.out.print(SET_TEXT_COLOR_BLUE + " R ");
                         }
-                        if (j == 2 || j == 7) {
-                            System.out.print(" N ");
+                        if (piece.getTeamColor() == ChessGame.TeamColor.WHITE) {
+                            System.out.print(SET_TEXT_COLOR_RED + " R ");
                         }
-                        if (j == 3 || j == 6) {
-                            System.out.print( " B ");
+                    } else if (piece.getPieceType() == ChessPiece.PieceType.KNIGHT) {
+                        if (piece.getTeamColor() == ChessGame.TeamColor.BLACK) {
+                            System.out.print(SET_TEXT_COLOR_BLUE + " N ");
                         }
-                        if (j == 5) {
-                            System.out.print(" Q ");
+                        if (piece.getTeamColor() == ChessGame.TeamColor.WHITE) {
+                            System.out.print(SET_TEXT_COLOR_RED + " N ");
                         }
-                        if (j == 4) {
-                            System.out.print(" K ");
+                    } else if (piece.getPieceType() == ChessPiece.PieceType.BISHOP) {
+                        if (piece.getTeamColor() == ChessGame.TeamColor.BLACK) {
+                            System.out.print(SET_TEXT_COLOR_BLUE + " B ");
+                        }
+                        if (piece.getTeamColor() == ChessGame.TeamColor.WHITE) {
+                            System.out.print(SET_TEXT_COLOR_RED + " B ");
+                        }
+                    } else if (piece.getPieceType() == ChessPiece.PieceType.KING) {
+                        if (piece.getTeamColor() == ChessGame.TeamColor.BLACK) {
+                            System.out.print(SET_TEXT_COLOR_BLUE + " K ");
+                        }
+                        if (piece.getTeamColor() == ChessGame.TeamColor.WHITE) {
+                            System.out.print(SET_TEXT_COLOR_RED + " K ");
+                        }
+                    } else if (piece.getPieceType() == ChessPiece.PieceType.QUEEN) {
+                        if (piece.getTeamColor() == ChessGame.TeamColor.BLACK) {
+                            System.out.print(SET_TEXT_COLOR_BLUE + " Q ");
+                        }
+                        if (piece.getTeamColor() == ChessGame.TeamColor.WHITE) {
+                            System.out.print(SET_TEXT_COLOR_RED + " Q ");
+                        }
+                    } else if (piece.getPieceType() == ChessPiece.PieceType.PAWN) {
+                        if (piece.getTeamColor() == ChessGame.TeamColor.BLACK) {
+                            System.out.print(SET_TEXT_COLOR_BLUE + " P ");
+                        }
+                        if (piece.getTeamColor() == ChessGame.TeamColor.WHITE) {
+                            System.out.print(SET_TEXT_COLOR_RED + " P ");
                         }
                     }
-
-                    if (i == 2) {
-                        System.out.print(" P ");
-                    }
-                }
-
-                else if (i == 7 || i == 8) {
-                    System.out.print(SET_TEXT_COLOR_BLUE);
-                    if (i == 8) {
-                        if (j == 1 || j == 8) {
-                            System.out.print(" R ");
-                        }
-                        if (j == 2 || j == 7) {
-                            System.out.print(" N ");
-                        }
-                        if (j == 3 || j == 6) {
-                            System.out.print( " B ");
-                        }
-                        if (j == 5) {
-                            System.out.print(" Q ");
-                        }
-                        if (j == 4) {
-                            System.out.print(" K ");
-                        }
-                    }
-
-                    if (i == 7) {
-                        System.out.print(" P ");
-                    }
-                }
-                else {
+                } else {
                     System.out.print("   ");
                 }
             }
