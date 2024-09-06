@@ -289,7 +289,30 @@ public class ChessClient {
     }
 
     private State observe(String... params) throws Exception {
-        printBoard();
+        State currentState = getState();
+        if (currentState != State.POSTLOGIN){
+            throw new Exception(SET_TEXT_COLOR_RED + "You must be logged in to observe a game." + RESET_TEXT_COLOR);
+        }
+
+        if (params == null || params.length != 1) {
+            throw new Exception(SET_TEXT_COLOR_RED + "The wrong number of parameters were provided." + RESET_TEXT_COLOR);
+        }
+
+        int gameNumber = 0;
+        try {
+            gameNumber = Integer.parseInt(params[0]);
+        } catch (NumberFormatException e) {
+            throw new Exception(SET_TEXT_COLOR_RED + "The first input after \"observe\" must be a number." + RESET_TEXT_COLOR);
+        }
+
+        if (!gameInfo.containsKey(gameNumber)) {
+            throw new Exception(SET_TEXT_COLOR_RED + "Game number not found. Please list the games and try again." +
+                    RESET_TEXT_COLOR);
+        }
+        else {
+            printBoard();
+        }
+
         return getState();
     }
 
